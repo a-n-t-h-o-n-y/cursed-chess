@@ -9,13 +9,13 @@
 #include <signals/signals.hpp>
 #include <string>
 
-class Chess_widget : public cppurses::Widget {
+using namespace cppurses;
+
+class Chess_widget : public Widget {
    public:
     Chess_widget() {
-        this->size_policy().vertical_policy = cppurses::Size_policy::Fixed;
-        this->geometry().set_height_hint(8);
-        this->size_policy().horizontal_policy = cppurses::Size_policy::Fixed;
-        this->geometry().set_width_hint(24);
+        this->set_vertical_policy(Size_policy::Fixed, 8);
+        this->set_horizontal_policy(Size_policy::Fixed, 24);
 
         // Slots
         make_move.track(this->destroyed);
@@ -45,8 +45,8 @@ class Chess_widget : public cppurses::Widget {
 
         next_player_move_.track(this->destroyed);
         next_player_move_ = [this] {
-            cppurses::System::send_event(this, cppurses::Paint_event());
-            cppurses::System::paint_engine()->flush(true);
+            System::send_event(this, Paint_event());
+            System::paint_engine()->flush(true);
             if (manager_.game_over()) {
                 return;
             }
@@ -71,15 +71,13 @@ class Chess_widget : public cppurses::Widget {
         manager_.move_made_sig.connect(next_player_move_);
     }
 
-    bool paint_event(const cppurses::Paint_event& event) override {
-        cppurses::Painter p{this};
-        // Paint Board
+    bool paint_event(const Paint_event& event) override {
+        Painter p{this};
         // Cell type 1
-        cppurses::Glyph_string cell1{"   ",
-                                     background(cppurses::Color::Light_gray)};
+        Glyph_string cell1{"   ", background(Color::Light_gray)};
 
         // Cell type 2
-        cppurses::Glyph_string cell2{"   ", background(cppurses::Color::Brown)};
+        Glyph_string cell2{"   ", background(Color::Brown)};
 
         // Paint
         for (int i{0}; i < 4; ++i) {
@@ -92,8 +90,7 @@ class Chess_widget : public cppurses::Widget {
         // Possible Moves
         if (show_moves_ && selected_piece_ != nullptr) {
             auto moves = manager_.get_moves(selected_piece_->get_position());
-            cppurses::Glyph_string highlight{
-                "   ", cppurses::background(cppurses::Color::Light_green)};
+            Glyph_string highlight{"   ", background(Color::Light_green)};
             for (const auto& move : moves) {
                 if (move.row > 0 && move.row < 9 && move.column > 0 &&
                     move.column < 9) {
@@ -107,11 +104,11 @@ class Chess_widget : public cppurses::Widget {
         const auto& pieces = manager_.get_pieces();
         for (const auto& piece : pieces) {
             // color
-            cppurses::Glyph visual{piece->get_display()};
+            Glyph visual{piece->get_display()};
             if (piece->get_side() == Side::Black) {
-                visual.brush().set_foreground(cppurses::Color::Black);
+                visual.brush().set_foreground(Color::Black);
             } else {
-                visual.brush().set_foreground(cppurses::Color::White);
+                visual.brush().set_foreground(Color::White);
             }
             // background color
             visual.brush().set_background(
@@ -123,7 +120,7 @@ class Chess_widget : public cppurses::Widget {
         return Widget::paint_event(event);
     }
 
-    bool mouse_press_event(const cppurses::Mouse_event& event) override {
+    bool mouse_press_event(const Mouse_event& event) override {
         auto loc_x = static_cast<int>(event.local_x());
         auto loc_y = static_cast<int>(event.local_y());
         auto board_index = screen_to_board_index(Position{loc_x, loc_y});
@@ -151,7 +148,7 @@ class Chess_widget : public cppurses::Widget {
 
     sig::Slot<void(Position, Position)> make_move;
     sig::Slot<void()> toggle_show_moves;
-    sig::Slot<void(cppurses::Push_button*)> reset_game;
+    sig::Slot<void(Push_button*)> reset_game;
     sig::Slot<void(Side, std::string)> change_ai;
     bool reset_first_click_{true};
 
@@ -176,54 +173,37 @@ class Chess_widget : public cppurses::Widget {
         return player_black_;
     }
 
-    cppurses::Color get_background(Position p) {
+    Color get_background(Position p) {
         if (show_moves_ && selected_piece_ != nullptr) {
             auto moves = manager_.get_moves(selected_piece_->get_position());
             auto iter = std::find(std::begin(moves), std::end(moves), p);
             if (iter != std::end(moves)) {
-                return cppurses::Color::Light_green;
+                return Color::Light_green;
             }
         }
         if (p.row % 2 == 0) {
             if (p.column % 2 == 0) {
-                return cppurses::Color::Brown;
+                return Color::Brown;
             }
-            return cppurses::Color::Light_gray;
+            return Color::Light_gray;
         }
         if (p.row % 2 != 0) {
             if (p.column % 2 == 0) {
-                return cppurses::Color::Light_gray;
+                return Color::Light_gray;
             }
-            return cppurses::Color::Brown;
+            return Color::Brown;
         }
-        return cppurses::Color::Orange;
+        return Color::Orange;
     }
 
     Position screen_to_board_index(Position i) {
-        // 8 - screen.y
         int row = 8 - i.column;
-
-        // floor(screen.x / 3) + 1
         int column = (i.row / 3) + 1;
         return Position{row, column};
     }
-    //   board                       screen
-    // 8  oxooxooxooxooxooxooxooxo   0 oxooxooxooxooxooxooxooxo
-    // 7  oxooxooxooxooxooxooxooxo   1 oxooxooxooxooxooxooxooxo
-    // 6  oxooxooxooxooxooxooxooxo   2 oxooxooxooxooxooxooxooxo
-    // 5  oxooxooxooxooxooxooxooxo   3 oxooxooxooxooxooxooxooxo
-    // 4  oxooxooxooxooxooxooxooxo   4 oxooxooxooxooxooxooxooxo
-    // 3  oxooxooxooxooxooxooxooxo   5 oxooxooxooxooxooxooxooxo
-    // 2  oxooxooxooxooxooxooxooxo   6 oxooxooxooxooxooxooxooxo
-    // 1  oxooxooxooxooxooxooxooxo   7 oxooxooxooxooxooxooxooxo
-    //     1  2  3  4  5  6  7  8       1  4  7  10 13 16 19 22
 
-    // column = x, row = y
     Position board_to_screen_index(Position i) {
-        // 8 - board.y
         int y = 8 - i.row;
-
-        // 1 + (board.x - 1) * 3
         int x = 1 + (i.column - 1) * 3;
         return Position{x, y};
     }

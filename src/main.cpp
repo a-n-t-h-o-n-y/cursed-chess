@@ -10,8 +10,7 @@ using namespace cppurses;
 class Centered_title : public Widget {
    public:
     Centered_title(Glyph_string title) : title_{title} {
-        this->size_policy().vertical_policy = Size_policy::Fixed;
-        this->geometry().set_height_hint(1);
+        this->set_vertical_policy(Size_policy::Fixed, 1);
     }
 
     bool paint_event(const Paint_event& event) override {
@@ -34,8 +33,7 @@ class Command_line_input : public Textbox {
     Command_line_input() : Textbox("ᵗʸᵖᵉ 'ʰᵉᶫᵖ'") {
         this->set_background(Color::White);
         this->set_foreground(Color::Gray);
-        this->size_policy().vertical_policy = Size_policy::Fixed;
-        this->geometry().set_height_hint(1);
+        this->set_vertical_policy(Size_policy::Fixed, 1);
         this->disable_word_wrap();
     }
 
@@ -99,10 +97,8 @@ class Command_line_input : public Textbox {
 class Command_line_widget : public Vertical_layout {
    public:
     Command_line_widget() {
-        this->size_policy().horizontal_policy = Size_policy::Maximum;
-        this->geometry().set_width_hint(21);
-        this->size_policy().vertical_policy = Size_policy::Fixed;
-        this->geometry().set_height_hint(12);
+        this->set_horizontal_policy(Size_policy::Maximum, 21);
+        this->set_vertical_policy(Size_policy::Fixed, 12);
 
         title_.set_foreground(Color::Black);
         title_.set_background(Color::Light_gray);
@@ -152,10 +148,8 @@ class Command_line_widget : public Vertical_layout {
 class Rows_listing : public Text_display {
    public:
     Rows_listing() : Text_display{"⁸⁷⁶⁵⁴³²¹"} {
-        this->size_policy().horizontal_policy = Size_policy::Fixed;
-        this->geometry().set_width_hint(1);
-        this->size_policy().vertical_policy = Size_policy::Fixed;
-        this->geometry().set_height_hint(8);
+        this->set_horizontal_policy(Size_policy::Fixed, 1);
+        this->set_vertical_policy(Size_policy::Fixed, 8);
         this->set_foreground(Color::Gray);
         this->set_background(Color::White);
         this->disable_word_wrap();
@@ -165,10 +159,8 @@ class Rows_listing : public Text_display {
 class Columns_listing : public Text_display {
    public:
     Columns_listing() : Text_display{"  ᵃ  ᵇ  ᶜ  ᵈ  ᵉ  ᶠ  ᵍ  ʰ"} {
-        this->size_policy().horizontal_policy = Size_policy::Fixed;
-        this->geometry().set_width_hint(26);
-        this->size_policy().vertical_policy = Size_policy::Fixed;
-        this->geometry().set_height_hint(1);
+        this->set_horizontal_policy(Size_policy::Fixed, 26);
+        this->set_vertical_policy(Size_policy::Fixed, 1);
         this->set_foreground(Color::Gray);
         this->set_background(Color::White);
         this->disable_word_wrap();
@@ -179,10 +171,8 @@ class Log_widget : public Vertical_layout {
    public:
     Log_widget() {
         this->set_focus_policy(Focus_policy::Strong);
-        this->size_policy().horizontal_policy = Size_policy::Maximum;
-        this->geometry().set_width_hint(21);
-        this->size_policy().vertical_policy = Size_policy::Fixed;
-        this->geometry().set_height_hint(12);
+        this->set_horizontal_policy(Size_policy::Maximum, 21);
+        this->set_vertical_policy(Size_policy::Fixed, 12);
 
         this->set_background(Color::White);
         this->set_foreground(Color::Dark_gray);
@@ -193,8 +183,7 @@ class Log_widget : public Vertical_layout {
         log_.set_foreground(Color::White);
         log_.set_background(Color::Gray);
 
-        status_bar_.size_policy().vertical_policy = Size_policy::Fixed;
-        status_bar_.geometry().set_height_hint(1);
+        status_bar_.set_vertical_policy(Size_policy::Fixed, 1);
         status_bar_.set_background(Color::White);
         status_bar_.set_foreground(Color::Gray);
         status_bar_.disable_word_wrap();
@@ -250,22 +239,17 @@ class Log_widget : public Vertical_layout {
 class Settings : public Horizontal_layout {
    public:
     Settings() {
-        this->size_policy().vertical_policy = Size_policy::Preferred;
-        this->geometry().set_height_hint(0);
+        this->set_vertical_policy(Size_policy::Preferred, 0);
 
-        vert_layout1_.size_policy().horizontal_policy = Size_policy::Fixed;
-        vert_layout1_.geometry().set_width_hint(12);
+        vert_layout1_.set_horizontal_policy(Size_policy::Fixed, 12);
 
-        vert_layout2_.size_policy().horizontal_policy = Size_policy::Fixed;
-        vert_layout2_.geometry().set_width_hint(13);
+        vert_layout2_.set_horizontal_policy(Size_policy::Fixed, 13);
 
-        reset_button_.size_policy().vertical_policy = Size_policy::Fixed;
-        reset_button_.geometry().set_height_hint(1);
+        reset_button_.set_vertical_policy(Size_policy::Fixed, 1);
         reset_button_.set_background(Color::Dark_gray);
         reset_button_.set_foreground(Color::White);
 
-        exit_button_.size_policy().vertical_policy = Size_policy::Fixed;
-        exit_button_.geometry().set_height_hint(1);
+        exit_button_.set_vertical_policy(Size_policy::Fixed, 1);
         exit_button_.set_background(Color::Light_gray);
         exit_button_.set_foreground(Color::White);
 
@@ -275,10 +259,8 @@ class Settings : public Horizontal_layout {
         moves_checkbox_.set_background(Color::Light_gray);
         moves_checkbox_.set_foreground(Color::White);
 
-        seperator_.size_policy().horizontal_policy = Size_policy::Fixed;
-        seperator_.geometry().set_width_hint(1);
-        seperator_.size_policy().vertical_policy = Size_policy::Fixed;
-        seperator_.geometry().set_height_hint(2);
+        seperator_.set_horizontal_policy(Size_policy::Fixed, 1);
+        seperator_.set_vertical_policy(Size_policy::Fixed, 2);
         seperator_.set_background(Color::Black);
         seperator_.set_foreground(Color::Light_gray);
         Glyph a{"├", background(Color::Dark_gray), foreground(Color::White)};
@@ -330,13 +312,11 @@ int main() {
     auto& command_line = hl.make_child<Command_line_widget>();
 
     auto& vl = hl.make_child<Vertical_layout>();
-    vl.size_policy().horizontal_policy = Size_policy::Fixed;
-    vl.geometry().set_width_hint(26);
+    vl.set_horizontal_policy(Size_policy::Fixed, 26);
     vl.make_child<Columns_listing>();
 
     auto& top_layout = vl.make_child<Horizontal_layout>();
-    top_layout.size_policy().vertical_policy = Size_policy::Fixed;
-    top_layout.geometry().set_height_hint(8);
+    top_layout.set_vertical_policy(Size_policy::Fixed, 8);
 
     top_layout.make_child<Rows_listing>();
     auto& chessboard = top_layout.make_child<Chess_widget>();
