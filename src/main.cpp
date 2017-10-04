@@ -1,19 +1,20 @@
+#include <algorithm>
+#include <cctype>
+#include <cppurses/cppurses.hpp>
+#include <signals/signals.hpp>
 #include "chess_widget.hpp"
 #include "piece.hpp"
 #include "player.hpp"
-#include <algorithm>
-#include <cppurses/cppurses.hpp>
-#include <signals/signals.hpp>
-#include <cctype>
 using namespace cppurses;
 
 class Centered_title : public Widget {
    public:
     Centered_title(Glyph_string title) : title_{title} {
-        this->set_vertical_policy(Size_policy::Fixed, 1);
+        this->height_policy.type(Size_policy::Fixed);
+        this->height_policy.hint(1);
     }
 
-    bool paint_event(const Paint_event& event) override {
+    bool paint_event() override {
         Painter p{this};
         auto sz = static_cast<int>(title_.size());
         auto start = (static_cast<int>(this->width()) - sz) / 2;
@@ -21,7 +22,7 @@ class Centered_title : public Widget {
             start = 0;
         }
         p.put(title_, start, 0);
-        return Widget::paint_event(event);
+        return Widget::paint_event();
     }
 
    private:
@@ -31,14 +32,15 @@ class Centered_title : public Widget {
 class Command_line_input : public Textbox {
    public:
     Command_line_input() : Textbox("ᵗʸᵖᵉ 'ʰᵉᶫᵖ'") {
-        this->set_background(Color::White);
-        this->set_foreground(Color::Gray);
-        this->set_vertical_policy(Size_policy::Fixed, 1);
+        set_background(*this, Color::White);
+        set_foreground(*this, Color::Gray);
+        this->height_policy.type(Size_policy::Fixed);
+        this->height_policy.hint(1);
         this->disable_word_wrap();
     }
 
-    bool key_press_event(const Key_event& event) override {
-        if (event.key_code() == Key::Enter) {
+    bool key_press_event(Key key, char symbol) override {
+        if (key == Key::Enter) {
             command_given(this->contents());
             auto command_text = this->contents().str();
             if (command_text == "help") {
@@ -71,19 +73,25 @@ class Command_line_input : public Textbox {
                 move_made(pos1, pos2);
             }
             this->clear();
-            this->move_cursor(0, 0);
+            move_cursor(*this, 0, 0);
             return true;
         }
-        return Textbox::key_press_event(event);
+        return Textbox::key_press_event(key, symbol);
     }
 
-    bool mouse_press_event(const Mouse_event& event) override {
+    bool mouse_press_event(Mouse_button button,
+                           std::size_t global_x,
+                           std::size_t global_y,
+                           std::size_t local_x,
+                           std::size_t local_y,
+                           std::uint8_t device_id) override {
         if (first_click_) {
             first_click_ = false;
             this->clear();
         }
-        return Textbox::mouse_press_event(event);
-        // return true;
+        return Textbox::mouse_press_event(
+            Mouse_button button, std::size_t global_x, std::size_t global_y,
+            std::size_t local_x, std::size_t local_y, std::uint8_t device_id);
     }
 
     sig::Signal<void(Position, Position)> move_made;
@@ -326,10 +334,10 @@ int main() {
 
     auto& log = hl.make_child<Log_widget>();
 
-    command_line.move_made.connect(chessboard.make_move);
-    command_line.player_change.connect(chessboard.change_ai);
-    settings.show_moves_toggled.connect(chessboard.toggle_show_moves);
-    settings.call_reset_game.connect(chessboard.reset_game);
+    command_line.move_made.connect(slot::make_move(chessboard));
+    command_line.player_change.connect(slot::change_ai(chessboard));
+    settings.show_moves_toggled.connect(slot::toggle_show_moves(chessboard));
+    settings.call_reset_game.connect(slot::reset_game(chessboard));
     chessboard.move_message.connect(log.append_message);
     chessboard.status_message.connect(log.set_status);
 
