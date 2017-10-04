@@ -1,15 +1,15 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "manager.hpp"
+#include "chess_engine.hpp"
 
 class Player {
    public:
-    Player(Manager* manager) : manager_{manager} {}
+    Player(Chess_engine* Chess_engine) : Chess_engine_{Chess_engine} {}
     virtual void make_move() = 0;
 
    protected:
-    Manager* manager_;
+    Chess_engine* Chess_engine_;
 };
 
 #endif  // PLAYER_HPP

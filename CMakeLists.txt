@@ -10,8 +10,8 @@ set(CMAKE_CXX_FLAGS "-std=c++14 -g -Wall")
 
 include_directories("/usr/local/include/cppurses")
 
-set(sources "src/main.cpp")
+set(SOURCES "src/main.cpp" "src/chessboard_widget.cpp" "src/position.cpp")
 
-add_executable(chess ${sources})
+add_executable(chess ${SOURCES})
 
 target_link_libraries(chess /usr/local/lib64/libcppurses.a ncurses)

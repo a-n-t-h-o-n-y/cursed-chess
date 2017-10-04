@@ -1,7 +1,7 @@
 #ifndef PLAYER_RANDOM_AI_HPP
 #define PLAYER_RANDOM_AI_HPP
 
-#include "manager.hpp"
+#include "chess_engine.hpp"
 #include "player.hpp"
 #include <chrono>
 #include <random>
@@ -9,10 +9,10 @@
 
 class Player_random_ai : public Player {
    public:
-    Player_random_ai(Manager* manager) : Player(manager) {}
+    Player_random_ai(Chess_engine* Chess_engine) : Player(Chess_engine) {}
     void make_move() override {
         auto moves =
-            manager_->get_all_potential_moves(manager_->current_side());
+            Chess_engine_->get_all_potential_moves(Chess_engine_->current_side());
         if (moves.empty()) {
             return;
         }
@@ -21,7 +21,7 @@ class Player_random_ai : public Player {
         std::uniform_int_distribution<> dist(0, moves.size() - 1);
         auto& move_pair = moves.at(dist(gen));
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        manager_->make_move(move_pair.first, move_pair.second);
+        Chess_engine_->make_move(move_pair.first, move_pair.second);
     }
 };
 

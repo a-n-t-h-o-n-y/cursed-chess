@@ -1,6 +1,7 @@
-#ifndef CHESS_WIDGET_HPP
-#define CHESS_WIDGET_HPP
-#include "manager.hpp"
+#ifndef CHESSBOARD_WIDGET_HPP
+#define CHESSBOARD_WIDGET_HPP
+#include "chess_engine.hpp"
+#include "position.hpp"
 #include "player.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
@@ -12,9 +13,9 @@
 
 using namespace cppurses;
 
-class Chess_widget : public Widget {
+class Chessboard_widget : public Widget {
    public:
-    Chess_widget();
+    Chessboard_widget();
 
     void make_move(Position one, Position two);
     void toggle_show_moves();
@@ -23,8 +24,10 @@ class Chess_widget : public Widget {
     void next_player_move();
 
     // Signals
-    sig::Signal<void(std::string)>& move_message{manager_.move_message_sig};
-    sig::Signal<void(std::string)>& status_message{manager_.status_message_sig};
+    sig::Signal<void(std::string)>& move_message{
+        Chess_engine_.move_message_sig};
+    sig::Signal<void(std::string)>& status_message{
+        Chess_engine_.status_message_sig};
 
    protected:
     bool paint_event() override;
@@ -36,7 +39,7 @@ class Chess_widget : public Widget {
                            std::uint8_t device_id) override;
 
    private:
-    Manager manager_;
+    Chess_engine Chess_engine_;
     Position first_position_;
     Position second_position_;
     bool first_{true};
@@ -45,9 +48,9 @@ class Chess_widget : public Widget {
     bool reset_first_click_{true};
 
     std::unique_ptr<Player> player_white_{
-        std::make_unique<Player_human>(&manager_)};
+        std::make_unique<Player_human>(&Chess_engine_)};
     std::unique_ptr<Player> player_black_{
-        std::make_unique<Player_human>(&manager_)};
+        std::make_unique<Player_human>(&Chess_engine_)};
 
     std::unique_ptr<Player>& get_current_player();
     Color get_background(Position p);
@@ -59,12 +62,12 @@ class Chess_widget : public Widget {
 
 namespace slot {
 
-sig::Slot<void(Position, Position)> make_move(Chess_widget& cw);
-sig::Slot<void()> toggle_show_moves(Chess_widget& cw);
-sig::Slot<void(Push_button*)> reset_game(Chess_widget& cw);
-sig::Slot<void(Side, std::string)> change_ai(Chess_widget& cw);
-sig::Slot<void()> next_player_move(Chess_widget& cw);
+sig::Slot<void(Position, Position)> make_move(Chessboard_widget& cw);
+sig::Slot<void()> toggle_show_moves(Chessboard_widget& cw);
+sig::Slot<void(Push_button*)> reset_game(Chessboard_widget& cw);
+sig::Slot<void(Side, std::string)> change_ai(Chessboard_widget& cw);
+sig::Slot<void()> next_player_move(Chessboard_widget& cw);
 
 }  // namespace slot
 
-#endif  // CHESS_WIDGET_HPP
+#endif  // CHESSBOARD_WIDGET_HPP

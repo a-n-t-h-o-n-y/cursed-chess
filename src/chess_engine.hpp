@@ -1,5 +1,5 @@
-#ifndef MANAGER_HPP
-#define MANAGER_HPP
+#ifndef CHESS_ENGINE_HPP
+#define CHESS_ENGINE_HPP
 
 #include "piece.hpp"
 #include "piece_king.hpp"
@@ -18,9 +18,9 @@
 #include <vector>
 #include <utility>
 
-class Manager {
+class Chess_engine {
    public:
-    Manager() { this->reset_board(); }
+    Chess_engine() { this->reset_board(); }
     std::string status_string() const {
         // if any of current players pieces have moves that touch the opponents
         // king, then the message is "check"
@@ -125,7 +125,7 @@ class Manager {
     sig::Signal<void(std::string)> status_message_sig;
     sig::Signal<void()> move_made_sig;
 
-    friend class Chess_widget;
+    friend class Chessboard_widget;
 
    private:
     Side current_side_{Side::White};
@@ -268,4 +268,4 @@ class Manager {
     }
 };
 
-#endif  // MANAGER_HPP
+#endif  // CHESS_ENGINE_HPP
