@@ -43,7 +43,7 @@ class Command_line_input : public Textbox {
     bool key_press_event(Key key, char symbol) override {
         if (key == Key::Enter) {
             command_given(this->contents());
-            auto command_text = this->contents().str();
+            std::string command_text = this->contents().str();
             if (command_text == "help") {
                 command_given(
                     "~ᴹᵃᵏᵉ ᵐᵒᵛᵉ~\n⁽ᵖᵒˢ¹⁾⁽ᵖᵒˢ²⁾\nᵉˣ⁾ ᵉ²ᵉ⁴\n~ˢᵉᵗ ᵖᶫᵃʸᵉʳ ᴬᴵ~\nˢᵉᵗ "

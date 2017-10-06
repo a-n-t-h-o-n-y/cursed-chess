@@ -8,6 +8,6 @@ std::string to_text(const Position& pos) {
     return ss.str();
 }
 
-bool operator==(Position p1, Position p2) {
+bool operator==(const Position& p1, const Position& p2) {
     return p1.row == p2.row && p1.column == p2.column;
 }

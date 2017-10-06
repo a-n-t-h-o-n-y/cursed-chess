@@ -1,13 +1,20 @@
 #ifndef PIECE_HPP
 #define PIECE_HPP
 
-#include "position.hpp"
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <vector>
+#include "position.hpp"
 
-enum Side { White, Black, None };
+enum Color { None, White, Black };
+
+enum Figure { None, Bishop, King, Knight, Pawn, Queen, Rook };
+
+struct Piece {
+    Color side;
+    Figure figure;
+};
 
 class Piece {
    public:
