@@ -7,12 +7,12 @@
 #include <vector>
 #include "position.hpp"
 
-enum Color { None, White, Black };
+enum class Color { None, White, Black };
 
-enum Figure { None, Bishop, King, Knight, Pawn, Queen, Rook };
+enum class Figure { None, Bishop, King, Knight, Pawn, Queen, Rook };
 
 struct Piece {
-    Color side;
+    const Color side;
     Figure figure;
 };
 

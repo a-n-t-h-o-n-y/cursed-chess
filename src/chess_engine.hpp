@@ -3,6 +3,9 @@
 #include "piece.hpp"
 #include "position.hpp"
 
+#include "state.hpp"
+#include "rules.hpp"
+
 #include <signals/signal.hpp>
 
 #include <memory>

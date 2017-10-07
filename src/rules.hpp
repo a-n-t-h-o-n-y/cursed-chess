@@ -1,10 +1,11 @@
 #ifndef RULES_HPP
 #define RULES_HPP
-#include "move.hpp"
 #include "position.hpp"
-#include "state.hpp"
 
 #include <vector>
+
+class State;
+struct Move;
 
 class Rules {
    public:
