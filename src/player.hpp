@@ -1,15 +1,16 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+#include "move.hpp"
 
-#include "chess_engine.hpp"
+class Chess_engine;
 
 class Player {
    public:
-    Player(Chess_engine* Chess_engine) : Chess_engine_{Chess_engine} {}
-    virtual void make_move() = 0;
+    Player(const Chess_engine& engine) : engine_{engine} {}
+    virtual Move get_move() = 0;
 
    protected:
-    Chess_engine* Chess_engine_;
+    const Chess_engine& engine_;
 };
 
 #endif  // PLAYER_HPP

@@ -4,27 +4,27 @@
 
 namespace {
 
-Color side_at(const State& state, const Position& position) {
+Side side_at(const State& state, Position position) {
     return state.at(position).side;
 }
 
-Color opponent(Color side) {
+Side opponent(Side side) {
     switch (side) {
-        case Color::White:
-            return Color::Black;
+        case Side::White:
+            return Side::Black;
 
-        case Color::Black:
-            return Color::White;
+        case Side::Black:
+            return Side::White;
 
         default:
-            return Color::None;
+            return Side::None;
     }
+}
 
-    bool is_valid(const Position& p) {
-        bool row_valid{p.row >= 1 && p.row <= 9};
-        bool column_valid{p.column >= 1 && p.column <= 9};
-        return row_valid && column_valid;
-    }
+bool is_valid(Position p) {
+    bool row_valid{p.row >= 1 && p.row <= 8};
+    bool column_valid{p.column >= 1 && p.column <= 8};
+    return row_valid && column_valid;
 }
 
 }  // namespace
@@ -36,7 +36,7 @@ bool Rules::validate(const State& state, const Move& move) {
 }
 
 typename Rules::Positions Rules::get_valid_positions(const State& state,
-                                                     const Position& position) {
+                                                     Position position) {
     Piece piece{state.at(position)};
     switch (piece.figure) {
         case Figure::Bishop:
@@ -56,81 +56,83 @@ typename Rules::Positions Rules::get_valid_positions(const State& state,
 
         case Figure::Rook:
             return get_rook_moves(state, position);
+
+        case Figure::None:
+            return std::vector<Position>{};
     }
-    return std::vector<Position>{};
+}
+
+bool Rules::check(State& state) const {
+    return false;
+}
+
+bool Rules::checkmate(State& state) const {
+    return false;
 }
 
 // Piece Rules - - - - - - -
 // BISHOP - - - - - - -
 typename Rules::Positions Rules::get_bishop_moves(const State& state,
-                                                  const Position& position) {
+                                                  Position position) {
     Positions valid_moves;
-    Color bishop_side{side_at(state, position)};
+    Side bishop_side{side_at(state, position)};
 
     // Up-Left
     Position next{position};
     ++next.row;
     --next.column;
-    Color next_side{side_at(state, next)};
-    while (is_valid(next) && next_side != bishop_side) {
+    while (is_valid(next) && side_at(state, next) != bishop_side) {
         valid_moves.push_back(next);
-        if (next_side == opponent(bishop_side)) {
+        if (side_at(state, next) == opponent(bishop_side)) {
             break;
         }
         ++next.row;
         --next.column;
-        next_side = side_at(state, next);
     }
     // Up-Right
     next = position;
     ++next.row;
     ++next.column;
-    next_side = side_at(state, next);
-    while (is_valid(next) && next_side != bishop_side) {
+    while (is_valid(next) && side_at(state, next) != bishop_side) {
         valid_moves.push_back(next);
-        if (next_side == opponent(bishop_side)) {
+        if (side_at(state, next) == opponent(bishop_side)) {
             break;
         }
         ++next.row;
         ++next.column;
-        next_side = side_at(state, next);
     }
     // Down-Left
     next = position;
     --next.row;
     --next.column;
-    next_side = side_at(state, next);
-    while (is_valid(next) > 0 && next_side != bishop_side) {
+    while (is_valid(next) && side_at(state, next) != bishop_side) {
         valid_moves.push_back(next);
-        if (next_side == opponent(bishop_side)) {
+        if (side_at(state, next) == opponent(bishop_side)) {
             break;
         }
         --next.row;
         --next.column;
-        next_side = side_at(state, next);
     }
     // Down-Right
     next = position;
     --next.row;
     ++next.column;
-    next_side = side_at(state, next);
-    while (is_valid(next) < 9 && next_side != bishop_side) {
+    while (is_valid(next) && side_at(state, next) != bishop_side) {
         valid_moves.push_back(next);
-        if (next_side == opponent(bishop_side)) {
+        if (side_at(state, next) == opponent(bishop_side)) {
             break;
         }
         --next.row;
         ++next.column;
-        next_side = side_at(state, next);
     }
     return valid_moves;
 }
 
 // KING - - - - - - -
 typename Rules::Positions Rules::get_king_moves(const State& state,
-                                                const Position& position) {
+                                                Position position) {
     Positions valid_moves;
-    Color king_side{side_at(state, position)};
+    Side king_side{side_at(state, position)};
     Position next = position;
 
     // Up
@@ -189,9 +191,9 @@ typename Rules::Positions Rules::get_king_moves(const State& state,
 
 // KNIGHT - - - - - - -
 typename Rules::Positions Rules::get_knight_moves(const State& state,
-                                                  const Position& position) {
+                                                  Position position) {
     Positions valid_moves;
-    Color knight_side{side_at(state, position)};
+    Side knight_side{side_at(state, position)};
     Position next = position;
 
     // Top Left
@@ -253,15 +255,18 @@ typename Rules::Positions Rules::get_knight_moves(const State& state,
 
 // PAWN - - - - - - -
 typename Rules::Positions Rules::get_pawn_moves(const State& state,
-                                                const Position& position) {
+                                                Position position) {
     Positions valid_moves;
-    Color pawn_side{side_at(state, position)};
-    int direction{pawn_side == Color::Black ? -1 : 1};
+    Side pawn_side{side_at(state, position)};
+    int direction{pawn_side == Side::Black ? -1 : 1};
     Position next{position};
 
     // First Move - Row can move 2 spaces.
-    if ((pawn_side == Color::White && position.row == 2) ||
-        pawn_side == Color::Black && position.row == 7) {
+    Position one_ahead{position.row + direction, position.column};
+    bool blocked = side_at(state, one_ahead) != Side::None;
+    if (((pawn_side == Side::White && position.row == 2) ||
+         (pawn_side == Side::Black && position.row == 7)) &&
+        !blocked) {
         next.row += 2 * direction;
         if (side_at(state, next) == Side::None) {
             valid_moves.push_back(next);
@@ -295,9 +300,9 @@ typename Rules::Positions Rules::get_pawn_moves(const State& state,
 
 // QUEEN - - - - - - -
 typename Rules::Positions Rules::get_queen_moves(const State& state,
-                                                 const Position& position) {
+                                                 Position position) {
     Positions valid_moves;
-    Color queen_side{side_at(state, position)};
+    Side queen_side{side_at(state, position)};
     Position next{position};
 
     // Up-Left
@@ -313,7 +318,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         --next.column;
     }
     // Up-Right
-    next = pos;
+    next = position;
     ++next.row;
     ++next.column;
     while (is_valid(next) && side_at(state, next) != queen_side) {
@@ -325,7 +330,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         ++next.column;
     }
     // Down-Left
-    next = pos;
+    next = position;
     --next.row;
     --next.column;
     while (is_valid(next) && side_at(state, next) != queen_side) {
@@ -337,7 +342,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         --next.column;
     }
     // Down-Right
-    next = pos;
+    next = position;
     --next.row;
     ++next.column;
     while (is_valid(next) && side_at(state, next) != queen_side) {
@@ -349,7 +354,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         ++next.column;
     }
     // Up
-    next = pos;
+    next = position;
     ++next.row;
     while (is_valid(next) && side_at(state, next) != queen_side) {
         valid_moves.push_back(next);
@@ -359,7 +364,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         ++next.row;
     }
     // Down
-    next = pos;
+    next = position;
     --next.row;
     while (is_valid(next) && side_at(state, next) != queen_side) {
         valid_moves.push_back(next);
@@ -369,7 +374,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         --next.row;
     }
     // Left
-    next = pos;
+    next = position;
     --next.column;
     while (is_valid(next) && side_at(state, next) != queen_side) {
         valid_moves.push_back(next);
@@ -379,7 +384,7 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
         --next.column;
     }
     // Right
-    next = pos;
+    next = position;
     ++next.column;
     while (is_valid(next) && side_at(state, next) != queen_side) {
         valid_moves.push_back(next);
@@ -393,9 +398,9 @@ typename Rules::Positions Rules::get_queen_moves(const State& state,
 
 // ROOK - - - - - - -
 typename Rules::Positions Rules::get_rook_moves(const State& state,
-                                                const Position& position) {
+                                                Position position) {
     Positions valid_moves;
-    Color rook_side{side_at(state, position)};
+    Side rook_side{side_at(state, position)};
     Position next{position};
 
     // Up
