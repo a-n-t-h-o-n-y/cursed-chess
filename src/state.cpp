@@ -6,6 +6,8 @@
 
 #include <utility>
 
+#include <fstream>  // temp
+
 State::Piece_in_play::Piece_in_play(Piece piece_, Position position_)
     : piece{piece_}, position{position_} {}
 
@@ -67,8 +69,8 @@ void State::reset() {
     pieces_.emplace_back(Piece{Figure::Rook, Side::White}, Position{1, 1});
     pieces_.emplace_back(Piece{Figure::Knight, Side::White}, Position{1, 2});
     pieces_.emplace_back(Piece{Figure::Bishop, Side::White}, Position{1, 3});
-    pieces_.emplace_back(Piece{Figure::King, Side::White}, Position{1, 4});
-    pieces_.emplace_back(Piece{Figure::Queen, Side::White}, Position{1, 5});
+    pieces_.emplace_back(Piece{Figure::Queen, Side::White}, Position{1, 4});
+    pieces_.emplace_back(Piece{Figure::King, Side::White}, Position{1, 5});
     pieces_.emplace_back(Piece{Figure::Bishop, Side::White}, Position{1, 6});
     pieces_.emplace_back(Piece{Figure::Knight, Side::White}, Position{1, 7});
     pieces_.emplace_back(Piece{Figure::Rook, Side::White}, Position{1, 8});
@@ -85,8 +87,8 @@ void State::reset() {
     pieces_.emplace_back(Piece{Figure::Rook, Side::Black}, Position{8, 1});
     pieces_.emplace_back(Piece{Figure::Knight, Side::Black}, Position{8, 2});
     pieces_.emplace_back(Piece{Figure::Bishop, Side::Black}, Position{8, 3});
-    pieces_.emplace_back(Piece{Figure::King, Side::Black}, Position{8, 4});
-    pieces_.emplace_back(Piece{Figure::Queen, Side::Black}, Position{8, 5});
+    pieces_.emplace_back(Piece{Figure::Queen, Side::Black}, Position{8, 4});
+    pieces_.emplace_back(Piece{Figure::King, Side::Black}, Position{8, 5});
     pieces_.emplace_back(Piece{Figure::Bishop, Side::Black}, Position{8, 6});
     pieces_.emplace_back(Piece{Figure::Knight, Side::Black}, Position{8, 7});
     pieces_.emplace_back(Piece{Figure::Rook, Side::Black}, Position{8, 8});
@@ -124,6 +126,8 @@ void State::reset() {
     pieces_.emplace_back(Piece{Figure::None, Side::None}, Position{6, 6});
     pieces_.emplace_back(Piece{Figure::None, Side::None}, Position{6, 7});
     pieces_.emplace_back(Piece{Figure::None, Side::None}, Position{6, 8});
+
+    this->board_reset();
 }
 
 // Free Functions
@@ -156,6 +160,8 @@ void make_move(State& state, const Move& move) {
     add(state, move.to, piece);
     remove(state, move.from);
     toggle_current_side(state);
+    // std::ofstream log{"log.txt", std::ios::app};
+    // log << "Move made in state" << std::endl;
     state.move_made(move);
 }
 

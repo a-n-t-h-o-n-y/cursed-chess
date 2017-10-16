@@ -1,12 +1,6 @@
 #include "chess_engine.hpp"
 #include "move.hpp"
 #include "piece.hpp"
-// #include "piece_bishop.hpp"
-// #include "piece_king.hpp"
-// #include "piece_knight.hpp"
-// #include "piece_pawn.hpp"
-// #include "piece_queen.hpp"
-// #include "piece_rook.hpp"
 #include "position.hpp"
 
 #include <algorithm>
@@ -36,7 +30,8 @@ Side opponent(Side side) {
 
 Chess_engine::Chess_engine() {
     this->reset();
-    state_.move_made.connect(this->move_made);
+    state_.move_made.connect([this](const Move& m) { this->move_made(m); });
+    state_.board_reset.connect([this] { this->board_reset(); });
 }
 
 // std::string Chess_engine::status_string() const {
@@ -65,11 +60,12 @@ Chess_engine::Chess_engine() {
 
 void Chess_engine::reset() {
     state_.reset();
-    // move_count_ = 0;
-    // this->status_message_sig("ᴳᵃᵐᵉ ʳᵉˢᵉᵗ\n");
 }
 
 bool Chess_engine::make_move(Move move) {
+    if (rules_.checkmate(state_)) {
+        return true;
+    }
     if (rules_.validate(state_, move)) {
         Piece to_piece{this->at(move.to)};
         if (to_piece.side == opponent(this->current_side())) {
@@ -77,9 +73,11 @@ bool Chess_engine::make_move(Move move) {
         }
         ::make_move(state_, move);
         if (rules_.checkmate(state_)) {
-            checkmate();
+            checkmate(this->current_side());
         } else if (rules_.check(state_)) {
-            check();
+            check(this->current_side());
+        } else if (rules_.stalemate(state_)) {
+            stalemate();
         }
         return true;
     }
@@ -87,7 +85,8 @@ bool Chess_engine::make_move(Move move) {
     return false;
 }
 
-Chess_engine::Positions Chess_engine::get_valid_positions(Position position) {
+Chess_engine::Positions Chess_engine::get_valid_positions(
+    Position position) const {
     return rules_.get_valid_positions(state_, position);
 }
 

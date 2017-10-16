@@ -6,7 +6,7 @@ Row_listing::Row_listing() : Text_display{"⁸⁷⁶⁵⁴³²¹"} {
     this->width_policy.hint(1);
     this->height_policy.type(Size_policy::Fixed);
     this->height_policy.hint(8);
-    set_foreground(*this, Color::Gray);
+    set_foreground(*this, Color::Dark_blue);
     set_background(*this, Color::White);
     this->disable_word_wrap();
 }
@@ -16,7 +16,7 @@ Column_listing::Column_listing() : Text_display{"  ᵃ  ᵇ  ᶜ  ᵈ  ᵉ  ᶠ 
     this->width_policy.hint(26);
     this->height_policy.type(Size_policy::Fixed);
     this->height_policy.hint(1);
-    set_foreground(*this, Color::Gray);
+    set_foreground(*this, Color::Dark_blue);
     set_background(*this, Color::White);
     this->disable_word_wrap();
 }

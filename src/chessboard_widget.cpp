@@ -48,8 +48,16 @@ Chessboard_widget::Chessboard_widget() {
     this->height_policy.hint(8);
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(24);
+    this->trigger_next_move();
 
     engine_.move_made.connect(::slot::trigger_next_move(*this));
+    engine_.move_made.connect([this](Move m) { this->move_made(m); });
+    engine_.capture.connect([this](Piece p) { this->capture(p); });
+    engine_.invalid_move.connect(
+        [this](const Move& m) { this->invalid_move(m); });
+    engine_.checkmate.connect([this](Side s) { this->checkmate(s); });
+    engine_.check.connect([this](Side s) { this->check(s); });
+    engine_.board_reset.connect([this] { this->board_reset(); });
 }
 
 void Chessboard_widget::toggle_show_moves() {
@@ -63,18 +71,28 @@ void Chessboard_widget::reset_game() {
 }
 
 void Chessboard_widget::trigger_next_move() {
+    System::send_event(Paint_event(this));
+    System::paint_buffer()->flush(true);
     Move next_move{Position{-1, -1}, Position{-1, -1}};
     if (engine_.current_side() == Side::Black) {
         next_move = player_black_->get_move();
     } else if (engine_.current_side() == Side::White) {
         next_move = player_white_->get_move();
     }
-    if (next_move.from.row == -1) {
+    if (next_move.from.row == -1 || next_move.from.row == 0) {
         return;
     }
     if (!engine_.make_move(next_move)) {
         this->trigger_next_move();
     }
+}
+
+void Chessboard_widget::make_move(const Move& move) {
+    engine_.make_move(move);
+}
+
+Side Chessboard_widget::current_side() const {
+    return engine_.current_side();
 }
 
 namespace slot {
@@ -98,14 +116,20 @@ sig::Slot<void()> reset_game(Chessboard_widget& cbw) {
     return slot;
 }
 
+sig::Slot<void(Move)> make_move(Chessboard_widget& cbw) {
+    sig::Slot<void(Move)> slot{[&cbw](Move m) { cbw.make_move(m); }};
+    slot.track(cbw.destroyed);
+    return slot;
+}
+
 }  // namespace slot
 
 bool Chessboard_widget::paint_event() {
     Painter p{this};
     // Light Gray Tiles
     Glyph_string cell1{"   ", background(cppurses::Color::Light_gray)};
-    // Brown Tiles
-    Glyph_string cell2{"   ", background(cppurses::Color::Brown)};
+    // Gray Tiles
+    Glyph_string cell2{"   ", background(cppurses::Color::Dark_blue)};
 
     // Checkerboard
     for (int i{0}; i < 4; ++i) {
@@ -173,7 +197,7 @@ cppurses::Color Chessboard_widget::get_tile_color(Position p) {
     }
     if (p.row % 2 == 0) {
         if (p.column % 2 == 0) {
-            return cppurses::Color::Brown;
+            return cppurses::Color::Dark_blue;
         }
         return cppurses::Color::Light_gray;
     }
@@ -181,7 +205,7 @@ cppurses::Color Chessboard_widget::get_tile_color(Position p) {
         if (p.column % 2 == 0) {
             return cppurses::Color::Light_gray;
         }
-        return cppurses::Color::Brown;
+        return cppurses::Color::Dark_blue;
     }
     return cppurses::Color::Orange;
 }

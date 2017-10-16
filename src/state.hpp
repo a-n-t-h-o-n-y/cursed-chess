@@ -27,6 +27,7 @@ class State {
 
     // Signals
     sig::Signal<void(const Move&)> move_made;
+    sig::Signal<void()> board_reset;
 
    private:
     struct Piece_in_play {

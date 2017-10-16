@@ -20,7 +20,7 @@ class Chess_engine {
     void reset();
     bool make_move(Move move);
 
-    Positions get_valid_positions(Position position);
+    Positions get_valid_positions(Position position) const;
     Piece at(Position p) const noexcept(false);
     Positions find_positions(Piece piece) const;
     Side current_side() const;
@@ -29,12 +29,14 @@ class Chess_engine {
     sig::Signal<void(const Move&)> move_made;
     sig::Signal<void(Piece)> capture;
     sig::Signal<void(const Move&)> invalid_move;
-    sig::Signal<void()> checkmate;
-    sig::Signal<void()> check;
+    sig::Signal<void(Side)> checkmate;
+    sig::Signal<void(Side)> check;
+    sig::Signal<void()> stalemate;
+    sig::Signal<void()> board_reset;
 
    private:
     State state_;
-    Rules rules_;
+    const Rules rules_;
 };
 
 // Responsible for making moves, retrieving potential moves from positions

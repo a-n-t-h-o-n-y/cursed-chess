@@ -1,4 +1,5 @@
 #include "chess_full_ui.hpp"
+
 #include <cppurses/cppurses.hpp>
 
 using namespace cppurses;

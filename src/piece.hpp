@@ -1,11 +1,11 @@
 #ifndef PIECE_HPP
 #define PIECE_HPP
+#include "position.hpp"
 
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <vector>
-#include "position.hpp"
 
 enum class Side { None, White, Black };
 
@@ -15,6 +15,8 @@ struct Piece {
     Figure figure;
     Side side;
 };
+
+std::string figure_to_text(Figure f);
 
 // class Piece {
 //    public:
