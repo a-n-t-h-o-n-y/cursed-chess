@@ -1,20 +1,20 @@
-#ifndef CHESS_FULL_UI_HPP
-#define CHESS_FULL_UI_HPP
+#ifndef CHESS_UI_HPP
+#define CHESS_UI_HPP
 #include "chessboard_borders.hpp"
-#include "side_pane.hpp"
 #include "lower_pane.hpp"
 #include "settings_pane.hpp"
+#include "side_pane.hpp"
 
-#include <signals/slot.hpp>
 #include <cppurses/cppurses.hpp>
+#include <signals/slot.hpp>
 
 #include <string>
 
 using namespace cppurses;
 
-class Chess_full_UI : public Horizontal_layout {
+class Chess_UI : public Horizontal_layout {
    public:
-    Chess_full_UI();
+    Chess_UI();
 
     void toggle_logs();
 
@@ -31,11 +31,11 @@ class Chess_full_UI : public Horizontal_layout {
 
 namespace slot {
 
-sig::Slot<void()> toggle_logs(Chess_full_UI& cfui);
+sig::Slot<void()> toggle_logs(Chess_UI& cfui);
 
 sig::Slot<void(const std::string&)> set_player(Chessboard_widget& board,
                                                Side side);
 
 }  // namespace slot
 
-#endif  // CHESS_FULL_UI_HPP
+#endif  // CHESS_UI_HPP

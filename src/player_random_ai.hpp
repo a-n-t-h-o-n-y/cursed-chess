@@ -3,8 +3,8 @@
 #include "chess_engine.hpp"
 #include "player.hpp"
 
-#include <cstddef>
 #include <chrono>
+#include <cstddef>
 #include <random>
 #include <thread>
 

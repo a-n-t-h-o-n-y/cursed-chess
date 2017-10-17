@@ -1,7 +1,7 @@
 #ifndef PLAYER_HUMAN_HPP
 #define PLAYER_HUMAN_HPP
-#include "player.hpp"
 #include "move.hpp"
+#include "player.hpp"
 
 class Chess_engine;
 

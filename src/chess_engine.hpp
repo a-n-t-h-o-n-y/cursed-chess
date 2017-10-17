@@ -2,8 +2,8 @@
 #define CHESS_ENGINE_HPP
 #include "piece.hpp"
 #include "position.hpp"
-#include "state.hpp"
 #include "rules.hpp"
+#include "state.hpp"
 
 #include <signals/signal.hpp>
 

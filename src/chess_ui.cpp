@@ -1,4 +1,4 @@
-#include "chess_full_ui.hpp"
+#include "chess_ui.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
 
@@ -6,7 +6,7 @@
 
 #include <string>
 
-Chess_full_UI::Chess_full_UI() {
+Chess_UI::Chess_UI() {
     stack.set_active_page(0);
     vl.width_policy.type(Size_policy::Fixed);
     vl.width_policy.hint(26);
@@ -74,7 +74,7 @@ Chess_full_UI::Chess_full_UI() {
         [this] { lower_pane.toggle_status(board.chessboard); });
 }
 
-void Chess_full_UI::toggle_logs() {
+void Chess_UI::toggle_logs() {
     bool side_on{true};
     if (lower_pane.visible()) {
         side_on = false;
@@ -94,7 +94,7 @@ void Chess_full_UI::toggle_logs() {
 
 namespace slot {
 
-sig::Slot<void()> toggle_logs(Chess_full_UI& cfui) {
+sig::Slot<void()> toggle_logs(Chess_UI& cfui) {
     sig::Slot<void()> slot{[&cfui] { cfui.toggle_logs(); }};
     slot.track(cfui.destroyed);
     return slot;

@@ -12,7 +12,7 @@ include_directories("/usr/local/include/cppurses")
 
 set(SOURCES "src/main.cpp" "src/chessboard_widget.cpp" "src/position.cpp"
     "src/chess_engine.cpp" "src/invalid_position.cpp" "src/rules.cpp"
-    "src/state.cpp" "src/chessboard_borders.cpp" "src/chess_full_ui.cpp"
+    "src/state.cpp" "src/chessboard_borders.cpp" "src/chess_ui.cpp"
     "src/side_pane.cpp" "src/settings_pane.cpp" "src/lower_pane.cpp"
     "src/move_input.cpp" "src/piece.cpp" "src/move.cpp"
     )

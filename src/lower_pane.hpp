@@ -1,7 +1,7 @@
 #ifndef LOWER_PANE_HPP
 #define LOWER_PANE_HPP
-#include "move_input.hpp"
 #include "chessboard_widget.hpp"
+#include "move_input.hpp"
 
 #include <cppurses/cppurses.hpp>
 #include <signals/slot.hpp>

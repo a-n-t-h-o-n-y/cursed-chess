@@ -1,9 +1,9 @@
 #include "chessboard_widget.hpp"
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
-#include <algorithm>
 
 using namespace cppurses;
 

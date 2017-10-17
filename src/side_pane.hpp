@@ -1,9 +1,9 @@
 #ifndef SIDE_PANE_HPP
 #define SIDE_PANE_HPP
-#include "move.hpp"
-#include "piece.hpp"
-#include "move_input.hpp"
 #include "chessboard_widget.hpp"
+#include "move.hpp"
+#include "move_input.hpp"
+#include "piece.hpp"
 
 #include <cppurses/cppurses.hpp>
 

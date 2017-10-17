@@ -6,9 +6,9 @@
 
 struct Move {
     Position from;
-    Position to; 
+    Position to;
 };
 
 std::string move_to_text(const Move& m);
 
-#endif // MOVE_HPP
+#endif  // MOVE_HPP
