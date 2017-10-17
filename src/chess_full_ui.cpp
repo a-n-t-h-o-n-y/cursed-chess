@@ -1,6 +1,6 @@
 #include "chess_full_ui.hpp"
-#include "player_random_ai.hpp"
 #include "player_human.hpp"
+#include "player_random_ai.hpp"
 
 #include <signals/slot.hpp>
 
@@ -33,8 +33,6 @@ Chess_full_UI::Chess_full_UI() {
 
     // Reset Button
     settings.reset_btn.clicked.connect(::slot::reset_game(board.chessboard));
-    settings.reset_btn.clicked.connect(
-        cppurses::slot::clear(side_pane.chess_log));
 
     // Side Pane
     side_pane.settings_btn.clicked.connect(
@@ -56,6 +54,8 @@ Chess_full_UI::Chess_full_UI() {
         ::slot::make_move(board.chessboard));
     board.chessboard.board_reset.connect(
         [this] { side_pane.toggle_status(board.chessboard); });
+    board.chessboard.board_reset.connect(
+        cppurses::slot::clear(side_pane.chess_log));
 
     // Lower Pane
     board.chessboard.move_made.connect(
