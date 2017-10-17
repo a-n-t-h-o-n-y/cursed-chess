@@ -1,5 +1,10 @@
 #include "chessboard_widget.hpp"
 
+#include <cstddef>
+#include <cstdint>
+#include <iterator>
+#include <algorithm>
+
 using namespace cppurses;
 
 namespace {

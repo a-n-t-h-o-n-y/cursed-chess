@@ -11,7 +11,11 @@
 #include <signals/signals.hpp>
 #include <optional/optional.hpp>
 
+#include <cstddef>
+#include <cstdint>
 #include <string>
+#include <memory>
+#include <utility>
 
 using namespace cppurses;
 

@@ -7,9 +7,6 @@
 
 #include <signals/signal.hpp>
 
-#include <memory>
-#include <string>
-#include <utility>
 #include <vector>
 
 class Chess_engine {

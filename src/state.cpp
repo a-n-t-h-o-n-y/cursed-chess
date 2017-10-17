@@ -4,7 +4,8 @@
 #include "piece.hpp"
 #include "position.hpp"
 
-#include <utility>
+#include <algorithm>
+#include <iterator>
 
 State::Piece_in_play::Piece_in_play(Piece piece_, Position position_)
     : piece{piece_}, position{position_} {}

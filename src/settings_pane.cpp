@@ -4,7 +4,7 @@
 
 Settings_pane::Settings_pane() {
     enable_border(*this);
-    // once you fix border overprinting you can get rid of noth_east and just
+    // Once border overprinting is fixed you can get rid of noth_east and just
     // disable noth_east
     this->border.north_east = "─";
     this->border.north_west = "╭";

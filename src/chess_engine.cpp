@@ -3,11 +3,6 @@
 #include "piece.hpp"
 #include "position.hpp"
 
-#include <algorithm>
-#include <iterator>
-#include <map>
-#include <string>
-#include <utility>
 #include <vector>
 
 namespace {

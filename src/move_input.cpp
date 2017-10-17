@@ -2,6 +2,8 @@
 #include "position.hpp"
 
 #include <cctype>
+#include <utility>
+#include <string>
 
 using namespace cppurses;
 

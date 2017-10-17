@@ -5,7 +5,6 @@
 
 #include <signals/signal.hpp>
 
-#include <utility>
 #include <vector>
 
 struct Move;

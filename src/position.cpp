@@ -1,4 +1,5 @@
 #include "position.hpp"
+
 #include <sstream>
 #include <string>
 

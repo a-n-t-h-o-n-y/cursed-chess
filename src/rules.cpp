@@ -2,6 +2,10 @@
 #include "move.hpp"
 #include "state.hpp"
 
+#include <algorithm>
+#include <iterator>
+#include <vector>
+
 namespace {
 
 Side side_at(const State& state, Position position) {
