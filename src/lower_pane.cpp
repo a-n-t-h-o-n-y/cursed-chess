@@ -15,15 +15,10 @@ Lower_pane::Lower_pane() {
     set_background_recursive(*this, Color::Dark_blue);
     set_foreground_recursive(*this, Color::Light_gray);
 
-    // settings_btn
-
     // move_input
     enable_border(move_input);
     move_input.border.west = Glyph{"│", foreground(Color::Blue)};
     move_input.border.east = Glyph{"│", foreground(Color::Blue)};
-    // move_input.clear_on_enter();
-    // move_input.background_tile = Glyph{" ", Attribute::Underline};
-    // move_input.brush.add_attributes(Attribute::Underline);
 
     // status
     enable_border(status);

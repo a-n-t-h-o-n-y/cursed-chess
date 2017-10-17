@@ -74,9 +74,6 @@ sig::Slot<void()> reset_game(Chessboard_widget& cbw);
 sig::Slot<void(const Move&)> trigger_next_move(Chessboard_widget& cbw);
 sig::Slot<void(Move)> make_move(Chessboard_widget& cbw);
 
-// template <typename T, typename... Args>
-// sig::Slot<void()> set_player(Side side, Args... args) {}
-
 }  // namespace slot
 
 #endif  // CHESSBOARD_WIDGET_HPP

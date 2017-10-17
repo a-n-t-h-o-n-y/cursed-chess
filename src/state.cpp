@@ -6,8 +6,6 @@
 
 #include <utility>
 
-#include <fstream>  // temp
-
 State::Piece_in_play::Piece_in_play(Piece piece_, Position position_)
     : piece{piece_}, position{position_} {}
 
@@ -160,8 +158,6 @@ void make_move(State& state, const Move& move) {
     add(state, move.to, piece);
     remove(state, move.from);
     toggle_current_side(state);
-    // std::ofstream log{"log.txt", std::ios::app};
-    // log << "Move made in state" << std::endl;
     state.move_made(move);
 }
 

@@ -1,4 +1,5 @@
 #include "chessboard_borders.hpp"
+
 #include <cppurses/cppurses.hpp>
 
 Row_listing::Row_listing() : Text_display{"⁸⁷⁶⁵⁴³²¹"} {

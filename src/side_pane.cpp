@@ -14,16 +14,6 @@ Side_pane::Side_pane() {
     hl_status.height_policy.hint(2);
     set_background_recursive(hl_status, Color::Dark_blue);
     set_foreground_recursive(hl_status, Color::Light_gray);
-    // disable_walls(hl_status.border);
-    // disable_corners(hl_status.border);
-    // enable_border(hl_status);
-    // hl_status.border.west_enabled = true;
-    // hl_status.border.west = Glyph{"╮", foreground(Color::Blue)};
-
-    // status_label
-    // status_label.width_policy.type(Size_policy::Preferred);
-    // status_label.width_policy.hint(4);
-    // set_background(status_label, Color::Light_gray);
 
     // status bar
     status.width_policy.type(Size_policy::Fixed);
@@ -38,12 +28,8 @@ Side_pane::Side_pane() {
     status.border.south = Glyph{"─", foreground(Color::Blue)};
     status.border.south_west_enabled = true;
     status.border.south_west = Glyph{"├", foreground(Color::Blue)};
-    // status.set_alignment(Alignment::Left);
-    // set_background(status, Color::Light_gray);
-    // set_foreground(status, Color::Dark_blue);
 
     // move_input
-    // move_input.clear_on_enter();
     disable_walls(move_input.border);
     disable_corners(move_input.border);
     enable_border(move_input);
@@ -55,17 +41,13 @@ Side_pane::Side_pane() {
     move_input.border.north_west = Glyph{"├", foreground(Color::Blue)};
     set_foreground(move_input, Color::Light_gray);
     move_input.height_policy.hint(2);
-    // move_input.background_tile = Glyph{" ", Attribute::Underline};
 
     // settings_btn
-    // settings_btn.set_alignment(Alignment::Center);
     settings_btn.width_policy.type(Size_policy::Preferred);
     settings_btn.width_policy.hint(12);
-    // settings_btn.set_alignment(Alignment::Left);
     disable_walls(settings_btn.border);
     disable_corners(settings_btn.border);
     enable_border(settings_btn);
-    // set_foreground(settings_btn, Color::Light_gray);
     settings_btn.border.south_enabled = true;
     settings_btn.border.south = Glyph{"─", foreground(Color::Blue)};
     settings_btn.border.west_enabled = true;
@@ -76,9 +58,6 @@ Side_pane::Side_pane() {
     settings_btn.border.south_west = Glyph{"┴", foreground(Color::Blue)};
     settings_btn.border.south_east_enabled = true;
     settings_btn.border.south_east = Glyph{"┴", foreground(Color::Blue)};
-    // settings_btn.border.north_west_enabled = true;
-    // settings_btn.border.north_west = Glyph{"╥", foreground(Color::Blue)};
-    // settings_btn.height_policy.hint(2);
 
     // Blank Space
     enable_border(blank_space);
@@ -90,7 +69,6 @@ Side_pane::Side_pane() {
     // log
     chess_log.hide_cursor();
     chess_log.focus_policy = Focus_policy::None;
-    // chess_log.set_alignment(Alignment::Right);
     chess_log.height_policy.type(Size_policy::Fixed);
     chess_log.height_policy.hint(6);
     set_background(chess_log, Color::Dark_blue);
@@ -101,14 +79,6 @@ Side_pane::Side_pane() {
     enable_border(chess_log);
     chess_log.border.west_enabled = true;
     chess_log.border.west = Glyph{"│", foreground(Color::Blue)};
-    // chess_log.border.north_enabled = true;
-    // chess_log.border.north = Glyph{"─", foreground(Color::Blue)};
-    // chess_log.border.north_west_enabled = true;
-    // chess_log.border.north_west = Glyph{"├", foreground(Color::Blue)};
-    // chess_log.border.south_enabled = true;
-    // chess_log.border.south = Glyph{"─", foreground(Color::Blue)};
-    // chess_log.border.south_west_enabled = true;
-    // chess_log.border.south_west = Glyph{"├", foreground(Color::Blue)};
 
     // hl - bottom
     set_background_recursive(hl, Color::Dark_blue);
