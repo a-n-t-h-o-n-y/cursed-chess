@@ -17,6 +17,6 @@ set(SOURCES "src/main.cpp" "src/chessboard_widget.cpp" "src/position.cpp"
     "src/move_input.cpp" "src/piece.cpp" "src/move.cpp"
     )
 
-add_executable(chess ${SOURCES})
+add_executable(chess EXCLUDE_FROM_ALL ${SOURCES})
 
 target_link_libraries(chess /usr/local/lib64/libcppurses.a ncurses)
