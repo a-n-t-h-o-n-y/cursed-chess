@@ -8,7 +8,7 @@ add_custom_target(compile_commands ALL
 
 set(CMAKE_CXX_FLAGS "-std=c++14 -g -Wall")
 
-include_directories("/usr/local/include/cppurses")
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(SOURCES "src/main.cpp" "src/chessboard_widget.cpp" "src/position.cpp"
     "src/chess_engine.cpp" "src/invalid_position.cpp" "src/rules.cpp"
