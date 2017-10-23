@@ -33,12 +33,6 @@ namespace slot {
 
 sig::Slot<void()> toggle_logs(Chess_UI& cfui);
 
-sig::Slot<void(const std::string&)> set_player(Chessboard_widget& board,
-                                               Side side);
-
-// Cyclebox should return signal on add_option(), map of signal and strings
-sig::Slot<void(const std::string&)> parse_set_ruleset(Chessboard_widget& board);
-
 }  // namespace slot
 
 #endif  // CHESS_UI_HPP

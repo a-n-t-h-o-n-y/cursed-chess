@@ -1,8 +1,8 @@
 #include "chess_ui.hpp"
+#include "no_rules.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
 #include "standard_rules.hpp"
-#include "no_rules.hpp"
 
 #include <signals/slot.hpp>
 
@@ -27,14 +27,23 @@ Chess_UI::Chess_UI() {
 
     settings.hide_log_box.toggled.connect(::slot::toggle_logs(*this));
 
-    settings.black_ai.option_changed.connect(
-        ::slot::set_player(board.chessboard, Side::Black));
+    // Black AI
+    settings.black_ai.add_option("Human").connect(
+        ::slot::set_player<Player_human>(board.chessboard, Side::Black));
+    settings.black_ai.add_option("Random").connect(
+        ::slot::set_player<Player_random_ai>(board.chessboard, Side::Black));
 
-    settings.white_ai.option_changed.connect(
-        ::slot::set_player(board.chessboard, Side::White));
+    // White AI
+    settings.white_ai.add_option("Human").connect(
+        ::slot::set_player<Player_human>(board.chessboard, Side::White));
+    settings.white_ai.add_option("Random").connect(
+        ::slot::set_player<Player_random_ai>(board.chessboard, Side::White));
 
-    settings.ruleset.option_changed.connect(
-        ::slot::parse_set_ruleset(board.chessboard));
+    // Rulesets
+    settings.ruleset.add_option("Standard Chess")
+        .connect(::slot::set_ruleset<Standard_rules>(board.chessboard));
+    settings.ruleset.add_option("No Rules")
+        .connect(::slot::set_ruleset<No_rules>(board.chessboard));
 
     // Reset Button
     settings.reset_btn.clicked.connect(::slot::reset_game(board.chessboard));
@@ -84,10 +93,11 @@ void Chess_UI::toggle_logs() {
     if (lower_pane.visible()) {
         side_on = false;
         settings.border.south_west = "╰";
-        settings.border.north_east = "─";
+        settings.border.south_west_enabled = true;
+        settings.border.north_east_enabled = false;
     } else {
         settings.border.south_west = "│";
-        settings.border.north_east = "╮";
+        settings.border.north_east_enabled = true;
     }
     side_pane.set_visible(!side_on);
     side_pane.set_enabled(!side_on);
@@ -102,33 +112,6 @@ namespace slot {
 sig::Slot<void()> toggle_logs(Chess_UI& cfui) {
     sig::Slot<void()> slot{[&cfui] { cfui.toggle_logs(); }};
     slot.track(cfui.destroyed);
-    return slot;
-}
-
-sig::Slot<void(const std::string&)> set_player(Chessboard_widget& board,
-                                               Side side) {
-    sig::Slot<void(const std::string&)> slot{
-        [&board, side](const std::string& name) {
-            if (name == "Human") {
-                board.set_player<Player_human>(side);
-            } else if (name == "Random") {
-                board.set_player<Player_random_ai>(side);
-            }
-        }};
-    slot.track(board.destroyed);
-    return slot;
-}
-
-sig::Slot<void(const std::string&)> parse_set_ruleset(
-    Chessboard_widget& board) {
-    sig::Slot<void(const std::string&)> slot{[&board](const std::string& rs) {
-        if (rs == "Standard Chess") {
-            board.set_ruleset<Standard_rules>();
-        } else if (rs == "No Rules") {
-            board.set_ruleset<No_rules>();
-        }
-    }};
-    slot.track(board.destroyed);
     return slot;
 }
 

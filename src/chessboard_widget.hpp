@@ -88,9 +88,20 @@ sig::Slot<void()> reset_game(Chessboard_widget& cbw);
 sig::Slot<void(const Move&)> trigger_next_move(Chessboard_widget& cbw);
 sig::Slot<void(Move)> make_move(Chessboard_widget& cbw);
 
+template <typename Player_t, typename... Args>
+sig::Slot<void()> set_player(Chessboard_widget& cbw,
+                             Side side,
+                             Args&&... args) {
+    sig::Slot<void()> slot{[&cbw, side, args...] {
+        cbw.set_player<Player_t>(side, std::forward<Args>(args)...);
+    }};
+    slot.track(cbw.destroyed);
+    return slot;
+}
+
 template <typename Rule_t, typename... Args>
 sig::Slot<void()> set_ruleset(Chessboard_widget& cbw, Args&&... args) {
-    sig::Slot<void()> slot{[&cbw, &args...] {
+    sig::Slot<void()> slot{[&cbw, args...] {
         cbw.set_ruleset<Rule_t>(std::forward<Args>(args)...);
     }};
     slot.track(cbw.destroyed);
