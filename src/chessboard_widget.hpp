@@ -40,6 +40,9 @@ class Chessboard_widget : public Widget {
         }
     }
 
+    template <typename Rule_t, typename... Args>
+    void set_ruleset(Args&&... args);
+
     // Signals
     sig::Signal<void(Move)> move_made;
     sig::Signal<void(Piece)> capture;
@@ -71,12 +74,28 @@ class Chessboard_widget : public Widget {
     cppurses::Color get_tile_color(Position p);
 };
 
+// Template Implementations - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template <typename Rule_t, typename... Args>
+void Chessboard_widget::set_ruleset(Args&&... args) {
+    engine_.set_ruleset<Rule_t>(std::forward<Args>(args)...);
+}
+
 namespace slot {
 
 sig::Slot<void()> toggle_show_moves(Chessboard_widget& cbw);
 sig::Slot<void()> reset_game(Chessboard_widget& cbw);
 sig::Slot<void(const Move&)> trigger_next_move(Chessboard_widget& cbw);
 sig::Slot<void(Move)> make_move(Chessboard_widget& cbw);
+
+template <typename Rule_t, typename... Args>
+sig::Slot<void()> set_ruleset(Chessboard_widget& cbw, Args&&... args) {
+    sig::Slot<void()> slot{[&cbw, &args...] {
+        cbw.set_ruleset<Rule_t>(std::forward<Args>(args)...);
+    }};
+    slot.track(cbw.destroyed);
+    return slot;
+}
 
 }  // namespace slot
 

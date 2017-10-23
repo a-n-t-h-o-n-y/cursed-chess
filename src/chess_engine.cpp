@@ -2,25 +2,9 @@
 #include "move.hpp"
 #include "piece.hpp"
 #include "position.hpp"
+#include "rules.hpp"
 
 #include <vector>
-
-namespace {
-
-Side opponent(Side side) {
-    switch (side) {
-        case Side::White:
-            return Side::Black;
-
-        case Side::Black:
-            return Side::White;
-
-        default:
-            return Side::None;
-    }
-}
-
-}  // namespace
 
 Chess_engine::Chess_engine() {
     this->reset();
@@ -33,20 +17,20 @@ void Chess_engine::reset() {
 }
 
 bool Chess_engine::make_move(Move move) {
-    if (rules_.checkmate(state_)) {
+    if (rules_->checkmate(state_)) {
         return true;
     }
-    if (rules_.validate(state_, move)) {
+    if (rules_->validate(state_, move)) {
         Piece to_piece{this->at(move.to)};
         if (to_piece.side == opponent(this->current_side())) {
             this->capture(to_piece);
         }
         ::make_move(state_, move);
-        if (rules_.checkmate(state_)) {
+        if (rules_->checkmate(state_)) {
             checkmate(this->current_side());
-        } else if (rules_.check(state_)) {
+        } else if (rules_->check(state_)) {
             check(this->current_side());
-        } else if (rules_.stalemate(state_)) {
+        } else if (rules_->stalemate(state_)) {
             stalemate();
         }
         return true;
@@ -57,7 +41,7 @@ bool Chess_engine::make_move(Move move) {
 
 Chess_engine::Positions Chess_engine::get_valid_positions(
     Position position) const {
-    return rules_.get_valid_positions(state_, position);
+    return rules_->get_valid_positions(state_, position);
 }
 
 Piece Chess_engine::at(Position position) const {

@@ -1,6 +1,7 @@
 #ifndef RULES_HPP
 #define RULES_HPP
 #include "position.hpp"
+#include "piece.hpp"
 
 #include <vector>
 
@@ -18,13 +19,23 @@ class Rules {
     bool checkmate(const State& state) const;
     bool stalemate(const State& state) const;
 
-   private:
-    Positions get_bishop_moves(const State& state, Position position) const;
-    Positions get_king_moves(const State& state, Position position) const;
-    Positions get_knight_moves(const State& state, Position position) const;
-    Positions get_pawn_moves(const State& state, Position position) const;
-    Positions get_queen_moves(const State& state, Position position) const;
-    Positions get_rook_moves(const State& state, Position position) const;
+   protected:
+    virtual Positions get_bishop_moves(const State& state,
+                                       Position position) const = 0;
+    virtual Positions get_king_moves(const State& state,
+                                     Position position) const = 0;
+    virtual Positions get_knight_moves(const State& state,
+                                       Position position) const = 0;
+    virtual Positions get_pawn_moves(const State& state,
+                                     Position position) const = 0;
+    virtual Positions get_queen_moves(const State& state,
+                                      Position position) const = 0;
+    virtual Positions get_rook_moves(const State& state,
+                                     Position position) const = 0;
 };
+
+// Helper Functions
+Side opponent(Side side);
+bool is_valid(Position p);
 
 #endif  // RULES_HPP

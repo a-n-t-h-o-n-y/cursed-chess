@@ -3,10 +3,12 @@
 #include "piece.hpp"
 #include "position.hpp"
 #include "rules.hpp"
+#include "standard_rules.hpp"
 #include "state.hpp"
 
 #include <signals/signal.hpp>
 
+#include <memory>
 #include <vector>
 
 class Chess_engine {
@@ -22,6 +24,9 @@ class Chess_engine {
     Positions find_positions(Piece piece) const;
     Side current_side() const;
 
+    template <typename Rule_t, typename... Args>
+    void set_ruleset(Args&&... args);
+
     // Signals
     sig::Signal<void(const Move&)> move_made;
     sig::Signal<void(Piece)> capture;
@@ -33,7 +38,14 @@ class Chess_engine {
 
    private:
     State state_;
-    const Rules rules_;
+    std::unique_ptr<const Rules> rules_{std::make_unique<Standard_rules>()};
 };
+
+// Template Implementations - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template <typename Rule_t, typename... Args>
+void Chess_engine::set_ruleset(Args&&... args) {
+    rules_ = std::make_unique<Rule_t>(std::forward<Args>(args)...);
+}
 
 #endif  // CHESS_ENGINE_HPP

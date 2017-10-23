@@ -1,6 +1,8 @@
 #include "chess_ui.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
+#include "standard_rules.hpp"
+#include "no_rules.hpp"
 
 #include <signals/slot.hpp>
 
@@ -30,6 +32,9 @@ Chess_UI::Chess_UI() {
 
     settings.white_ai.option_changed.connect(
         ::slot::set_player(board.chessboard, Side::White));
+
+    settings.ruleset.option_changed.connect(
+        ::slot::parse_set_ruleset(board.chessboard));
 
     // Reset Button
     settings.reset_btn.clicked.connect(::slot::reset_game(board.chessboard));
@@ -110,6 +115,19 @@ sig::Slot<void(const std::string&)> set_player(Chessboard_widget& board,
                 board.set_player<Player_random_ai>(side);
             }
         }};
+    slot.track(board.destroyed);
+    return slot;
+}
+
+sig::Slot<void(const std::string&)> parse_set_ruleset(
+    Chessboard_widget& board) {
+    sig::Slot<void(const std::string&)> slot{[&board](const std::string& rs) {
+        if (rs == "Standard Chess") {
+            board.set_ruleset<Standard_rules>();
+        } else if (rs == "No Rules") {
+            board.set_ruleset<No_rules>();
+        }
+    }};
     slot.track(board.destroyed);
     return slot;
 }

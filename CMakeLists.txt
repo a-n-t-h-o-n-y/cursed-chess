@@ -14,9 +14,10 @@ set(SOURCES "src/main.cpp" "src/chessboard_widget.cpp" "src/position.cpp"
     "src/chess_engine.cpp" "src/invalid_position.cpp" "src/rules.cpp"
     "src/state.cpp" "src/chessboard_borders.cpp" "src/chess_ui.cpp"
     "src/side_pane.cpp" "src/settings_pane.cpp" "src/lower_pane.cpp"
-    "src/move_input.cpp" "src/piece.cpp" "src/move.cpp"
+    "src/move_input.cpp" "src/piece.cpp" "src/move.cpp" "src/standard_rules.cpp"
+    "src/no_rules.cpp"
     )
 
-add_executable(chess EXCLUDE_FROM_ALL ${SOURCES})
+add_executable(chess ${SOURCES})
 
 target_link_libraries(chess /usr/local/lib64/libcppurses.a ncurses)
