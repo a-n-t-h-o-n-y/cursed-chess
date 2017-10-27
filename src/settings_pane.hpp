@@ -14,9 +14,12 @@ struct Settings_pane : public Vertical_layout {
     Blank_height& space_1_{this->make_child<Blank_height>()};
 
    public:
-    Cycle_box& black_ai{this->make_child<Cycle_box>("Black AI ")};
-    Cycle_box& white_ai{this->make_child<Cycle_box>("White AI ")};
-    Cycle_box& ruleset{this->make_child<Cycle_box>("Ruleset  ")};
+    Labeled_cycle_box& black_ai{
+        this->make_child<Labeled_cycle_box>("Black AI ")};
+    Labeled_cycle_box& white_ai{
+        this->make_child<Labeled_cycle_box>("White AI ")};
+    Labeled_cycle_box& ruleset{
+        this->make_child<Labeled_cycle_box>("Ruleset  ")};
     Push_button& reset_btn{this->make_child<Push_button>(
         Glyph_string{" Reset Game ", Attribute::Underline})};
     Push_button& return_btn{this->make_child<Push_button>("Return to Board")};

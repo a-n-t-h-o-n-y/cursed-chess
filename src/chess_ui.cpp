@@ -28,21 +28,21 @@ Chess_UI::Chess_UI() {
     settings.hide_log_box.toggled.connect(::slot::toggle_logs(*this));
 
     // Black AI
-    settings.black_ai.add_option("Human").connect(
+    settings.black_ai.cycle_box.add_option("Human").connect(
         ::slot::set_player<Player_human>(board.chessboard, Side::Black));
-    settings.black_ai.add_option("Random").connect(
+    settings.black_ai.cycle_box.add_option("Random").connect(
         ::slot::set_player<Player_random_ai>(board.chessboard, Side::Black));
 
     // White AI
-    settings.white_ai.add_option("Human").connect(
+    settings.white_ai.cycle_box.add_option("Human").connect(
         ::slot::set_player<Player_human>(board.chessboard, Side::White));
-    settings.white_ai.add_option("Random").connect(
+    settings.white_ai.cycle_box.add_option("Random").connect(
         ::slot::set_player<Player_random_ai>(board.chessboard, Side::White));
 
     // Rulesets
-    settings.ruleset.add_option("Standard Chess")
+    settings.ruleset.cycle_box.add_option("Standard Chess")
         .connect(::slot::set_ruleset<Standard_rules>(board.chessboard));
-    settings.ruleset.add_option("No Rules")
+    settings.ruleset.cycle_box.add_option("No Rules")
         .connect(::slot::set_ruleset<No_rules>(board.chessboard));
 
     // Reset Button
