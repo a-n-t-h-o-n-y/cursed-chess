@@ -168,13 +168,11 @@ bool Chessboard_widget::paint_event() {
 }
 
 bool Chessboard_widget::mouse_press_event(Mouse_button button,
-                                          std::size_t global_x,
-                                          std::size_t global_y,
-                                          std::size_t local_x,
-                                          std::size_t local_y,
+                                          Point global,
+                                          Point local,
                                           std::uint8_t device_id) {
-    int loc_x = static_cast<int>(local_x);
-    int loc_y = static_cast<int>(local_y);
+    int loc_x = static_cast<int>(local.x);
+    int loc_y = static_cast<int>(local.y);
     Position clicked_pos = screen_to_board_position(Position{loc_x, loc_y});
     Piece piece_clicked{engine_.at(clicked_pos)};
     selected_position_ = clicked_pos;
@@ -187,8 +185,7 @@ bool Chessboard_widget::mouse_press_event(Mouse_button button,
         selected_position_ = opt::none;
     }
     this->update();
-    return Widget::mouse_press_event(button, global_x, global_y, local_x,
-                                     local_y, device_id);
+    return Widget::mouse_press_event(button, global, local, device_id);
 }
 
 cppurses::Color Chessboard_widget::get_tile_color(Position p) {
