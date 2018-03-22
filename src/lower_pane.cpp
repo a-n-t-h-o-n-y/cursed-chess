@@ -17,14 +17,14 @@ Lower_pane::Lower_pane() {
 
     // move_input
     enable_border(move_input);
-    move_input.border.west = Glyph{"│", foreground(Color::Blue)};
-    move_input.border.east = Glyph{"│", foreground(Color::Blue)};
+    move_input.border.west = Glyph{L'│', foreground(Color::Blue)};
+    move_input.border.east = Glyph{L'│', foreground(Color::Blue)};
 
     // status
     enable_border(status);
     disable_corners(status.border);
     status.border.east_enabled = false;
-    status.border.west = Glyph{"╰", foreground(Color::Blue)};
+    status.border.west = Glyph{L'╰', foreground(Color::Blue)};
     status.width_policy.type(Size_policy::Fixed);
     status.width_policy.hint(4);
 }

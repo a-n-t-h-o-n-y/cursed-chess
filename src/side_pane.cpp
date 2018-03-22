@@ -23,22 +23,22 @@ Side_pane::Side_pane() {
     disable_walls(status.border);
     disable_corners(status.border);
     status.border.west_enabled = true;
-    status.border.west = Glyph{"╮", foreground(Color::Blue)};
+    status.border.west = Glyph{L'╮', foreground(Color::Blue)};
     status.border.south_enabled = true;
-    status.border.south = Glyph{"─", foreground(Color::Blue)};
+    status.border.south = Glyph{L'─', foreground(Color::Blue)};
     status.border.south_west_enabled = true;
-    status.border.south_west = Glyph{"├", foreground(Color::Blue)};
+    status.border.south_west = Glyph{L'├', foreground(Color::Blue)};
 
     // move_input
     disable_walls(move_input.border);
     disable_corners(move_input.border);
     enable_border(move_input);
     move_input.border.west_enabled = true;
-    move_input.border.west = Glyph{"│", foreground(Color::Blue)};
+    move_input.border.west = Glyph{L'│', foreground(Color::Blue)};
     move_input.border.north_enabled = true;
-    move_input.border.north = Glyph{"─", foreground(Color::Blue)};
+    move_input.border.north = Glyph{L'─', foreground(Color::Blue)};
     move_input.border.north_west_enabled = true;
-    move_input.border.north_west = Glyph{"├", foreground(Color::Blue)};
+    move_input.border.north_west = Glyph{L'├', foreground(Color::Blue)};
     set_foreground(move_input, Color::Light_gray);
     move_input.height_policy.hint(2);
 
@@ -49,22 +49,22 @@ Side_pane::Side_pane() {
     disable_corners(settings_btn.border);
     enable_border(settings_btn);
     settings_btn.border.south_enabled = true;
-    settings_btn.border.south = Glyph{"─", foreground(Color::Blue)};
+    settings_btn.border.south = Glyph{L'─', foreground(Color::Blue)};
     settings_btn.border.west_enabled = true;
-    settings_btn.border.west = Glyph{"│", foreground(Color::Blue)};
+    settings_btn.border.west = Glyph{L'│', foreground(Color::Blue)};
     settings_btn.border.east_enabled = true;
-    settings_btn.border.east = Glyph{"│", foreground(Color::Blue)};
+    settings_btn.border.east = Glyph{L'│', foreground(Color::Blue)};
     settings_btn.border.south_west_enabled = true;
-    settings_btn.border.south_west = Glyph{"┴", foreground(Color::Blue)};
+    settings_btn.border.south_west = Glyph{L'┴', foreground(Color::Blue)};
     settings_btn.border.south_east_enabled = true;
-    settings_btn.border.south_east = Glyph{"┴", foreground(Color::Blue)};
+    settings_btn.border.south_east = Glyph{L'┴', foreground(Color::Blue)};
 
     // Blank Space
     enable_border(blank_space);
     disable_walls(blank_space.border);
     disable_corners(blank_space.border);
     blank_space.border.south_enabled = true;
-    blank_space.border.south = Glyph{"─", foreground(Color::Blue)};
+    blank_space.border.south = Glyph{L'─', foreground(Color::Blue)};
 
     // log
     chess_log.hide_cursor();
@@ -78,7 +78,7 @@ Side_pane::Side_pane() {
     disable_corners(chess_log.border);
     enable_border(chess_log);
     chess_log.border.west_enabled = true;
-    chess_log.border.west = Glyph{"│", foreground(Color::Blue)};
+    chess_log.border.west = Glyph{L'│', foreground(Color::Blue)};
 
     // hl - bottom
     set_background_recursive(hl, Color::Dark_blue);

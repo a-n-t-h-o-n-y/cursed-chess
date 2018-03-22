@@ -13,23 +13,23 @@ Glyph piece_to_glyph(Piece piece) {
     Glyph symbol;
     // Character
     if (piece.figure == Figure::Bishop) {
-        symbol = "♝";
+        symbol = L'♝';
     } else if (piece.figure == Figure::King) {
-        symbol = "♚";
+        symbol = L'♚';
     } else if (piece.figure == Figure::Knight) {
-        symbol = "♞";
+        symbol = L'♞';
     } else if (piece.figure == Figure::Pawn) {
-        symbol = "♟";
+        symbol = L'♟';
     } else if (piece.figure == Figure::Queen) {
-        symbol = "♛";
+        symbol = L'♛';
     } else if (piece.figure == Figure::Rook) {
-        symbol = "♜";
+        symbol = L'♜';
     }
     // Side
     if (piece.side == Side::Black) {
-        symbol.brush().set_foreground(cppurses::Color::Black);
+        symbol.brush.set_foreground(cppurses::Color::Black);
     } else if (piece.side == Side::White) {
-        symbol.brush().set_foreground(cppurses::Color::White);
+        symbol.brush.set_foreground(cppurses::Color::White);
     }
     return symbol;
 }
@@ -160,7 +160,7 @@ bool Chessboard_widget::paint_event() {
         engine_.find_positions(Piece{Figure::None, Side::None});
     for (Position piece_position : piece_positions) {
         Glyph piece_visual{piece_to_glyph(engine_.at(piece_position))};
-        piece_visual.brush().set_background(get_tile_color(piece_position));
+        piece_visual.brush.set_background(get_tile_color(piece_position));
         Position where = board_to_screen_position(piece_position);
         p.put(piece_visual, where.row, where.column);
     }

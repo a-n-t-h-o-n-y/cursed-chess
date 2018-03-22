@@ -92,11 +92,11 @@ void Chess_UI::toggle_logs() {
     bool side_on{true};
     if (lower_pane.visible()) {
         side_on = false;
-        settings.border.south_west = "╰";
-        settings.border.north_east = "─";
+        settings.border.south_west = L'╰';
+        settings.border.north_east = L'─';
     } else {
-        settings.border.south_west = "│";
-        settings.border.north_east = "╮";
+        settings.border.south_west = L'│';
+        settings.border.north_east = L'╮';
     }
     side_pane.set_visible(!side_on);
     side_pane.set_enabled(!side_on);
