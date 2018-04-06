@@ -18,4 +18,4 @@ set(SOURCES "src/main.cpp" "src/chessboard_widget.cpp" "src/position.cpp"
 
 add_executable(chess ${SOURCES})
 
-target_link_libraries(chess /usr/local/lib64/libcppurses.a ncurses tinfo)
+target_link_libraries(chess /usr/local/lib64/liblibcppurses.a ncurses tinfo)

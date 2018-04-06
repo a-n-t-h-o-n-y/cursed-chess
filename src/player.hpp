@@ -7,6 +7,8 @@ class Chess_engine;
 class Player {
    public:
     Player(const Chess_engine& engine) : engine_{engine} {}
+    virtual ~Player() = default;
+
     virtual Move get_move() = 0;
 
    protected:
