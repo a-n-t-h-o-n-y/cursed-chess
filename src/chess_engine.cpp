@@ -1,10 +1,11 @@
 #include "chess_engine.hpp"
+
+#include <vector>
+
 #include "move.hpp"
 #include "piece.hpp"
 #include "position.hpp"
 #include "rules.hpp"
-
-#include <vector>
 
 Chess_engine::Chess_engine() {
     this->reset();

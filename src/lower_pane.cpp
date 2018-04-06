@@ -1,7 +1,8 @@
 #include "lower_pane.hpp"
-#include "chessboard_widget.hpp"
 
 #include <cppurses/cppurses.hpp>
+
+#include "chessboard_widget.hpp"
 
 using namespace cppurses;
 

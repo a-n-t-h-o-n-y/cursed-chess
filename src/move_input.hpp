@@ -1,9 +1,9 @@
 #ifndef MOVE_INPUT_HPP
 #define MOVE_INPUT_HPP
-#include "move.hpp"
-
 #include <cppurses/cppurses.hpp>
 #include <signals/signals.hpp>
+
+#include "move.hpp"
 
 using namespace cppurses;
 

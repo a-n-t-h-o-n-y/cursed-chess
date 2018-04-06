@@ -1,14 +1,14 @@
 #ifndef CHESS_UI_HPP
 #define CHESS_UI_HPP
-#include "chessboard_borders.hpp"
-#include "lower_pane.hpp"
-#include "settings_pane.hpp"
-#include "side_pane.hpp"
+#include <string>
 
 #include <cppurses/cppurses.hpp>
 #include <signals/slot.hpp>
 
-#include <string>
+#include "chessboard_borders.hpp"
+#include "lower_pane.hpp"
+#include "settings_pane.hpp"
+#include "side_pane.hpp"
 
 using namespace cppurses;
 

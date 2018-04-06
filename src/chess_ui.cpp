@@ -1,12 +1,13 @@
 #include "chess_ui.hpp"
+
+#include <string>
+
+#include <signals/slot.hpp>
+
 #include "no_rules.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
 #include "standard_rules.hpp"
-
-#include <signals/slot.hpp>
-
-#include <string>
 
 Chess_UI::Chess_UI() {
     stack.set_active_page(0);

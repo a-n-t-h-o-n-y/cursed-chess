@@ -1,10 +1,11 @@
 #include "rules.hpp"
-#include "move.hpp"
-#include "state.hpp"
 
 #include <algorithm>
 #include <iterator>
 #include <vector>
+
+#include "move.hpp"
+#include "state.hpp"
 
 namespace {
 

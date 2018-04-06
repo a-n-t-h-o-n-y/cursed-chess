@@ -1,10 +1,10 @@
 #ifndef LOWER_PANE_HPP
 #define LOWER_PANE_HPP
-#include "chessboard_widget.hpp"
-#include "move_input.hpp"
-
 #include <cppurses/cppurses.hpp>
 #include <signals/slot.hpp>
+
+#include "chessboard_widget.hpp"
+#include "move_input.hpp"
 
 using namespace cppurses;
 

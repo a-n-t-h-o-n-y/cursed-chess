@@ -1,8 +1,8 @@
 #ifndef CHESSBOARD_BORDERS_HPP
 #define CHESSBOARD_BORDERS_HPP
-#include "chessboard_widget.hpp"
-
 #include <cppurses/cppurses.hpp>
+
+#include "chessboard_widget.hpp"
 
 class Row_listing : public Text_display {
    public:

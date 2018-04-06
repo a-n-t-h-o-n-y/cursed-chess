@@ -1,11 +1,11 @@
 #ifndef STATE_HPP
 #define STATE_HPP
-#include "piece.hpp"
-#include "position.hpp"
+#include <vector>
 
 #include <signals/signal.hpp>
 
-#include <vector>
+#include "piece.hpp"
+#include "position.hpp"
 
 struct Move;
 

@@ -1,9 +1,10 @@
 #include "move_input.hpp"
-#include "position.hpp"
 
 #include <cctype>
 #include <string>
 #include <utility>
+
+#include "position.hpp"
 
 using namespace cppurses;
 

@@ -1,7 +1,8 @@
 #include "side_pane.hpp"
-#include "chessboard_widget.hpp"
 
 #include <sstream>
+
+#include "chessboard_widget.hpp"
 
 Side_pane::Side_pane() {
     this->width_policy.max(26);

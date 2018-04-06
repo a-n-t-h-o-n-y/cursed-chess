@@ -1,8 +1,9 @@
 #include "invalid_position.hpp"
-#include "position.hpp"
 
 #include <sstream>
 #include <string>
+
+#include "position.hpp"
 
 namespace {
 

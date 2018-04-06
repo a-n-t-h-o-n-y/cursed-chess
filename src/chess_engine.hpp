@@ -1,15 +1,15 @@
 #ifndef CHESS_ENGINE_HPP
 #define CHESS_ENGINE_HPP
+#include <memory>
+#include <vector>
+
+#include <signals/signal.hpp>
+
 #include "piece.hpp"
 #include "position.hpp"
 #include "rules.hpp"
 #include "standard_rules.hpp"
 #include "state.hpp"
-
-#include <signals/signal.hpp>
-
-#include <memory>
-#include <vector>
 
 class Chess_engine {
    public:

@@ -1,11 +1,12 @@
 #include "state.hpp"
+
+#include <algorithm>
+#include <iterator>
+
 #include "invalid_position.hpp"
 #include "move.hpp"
 #include "piece.hpp"
 #include "position.hpp"
-
-#include <algorithm>
-#include <iterator>
 
 State::Piece_in_play::Piece_in_play(Piece piece_, Position position_)
     : piece{piece_}, position{position_} {}
