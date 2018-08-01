@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <iterator>
 
+// #include <cppurses/painter/detail/flush.hpp>
+
 using namespace cppurses;
 
 namespace {
@@ -76,8 +78,9 @@ void Chessboard_widget::reset_game() {
 }
 
 void Chessboard_widget::trigger_next_move() {
+    // TODO what is going on with the send and flush?
     System::send_event(Paint_event(this));
-    System::paint_buffer()->flush(true);
+    System::paint_buffer().flush(System::find_event_loop().staged_changes());
     Move next_move{Position{-1, -1}, Position{-1, -1}};
     if (engine_.current_side() == Side::Black) {
         next_move = player_black_->get_move();
@@ -130,13 +133,13 @@ sig::Slot<void(Move)> make_move(Chessboard_widget& cbw) {
 }  // namespace slot
 
 bool Chessboard_widget::paint_event() {
-    Painter p{this};
     // Light Gray Tiles
     Glyph_string cell1{"   ", background(cppurses::Color::Light_gray)};
     // Gray Tiles
     Glyph_string cell2{"   ", background(cppurses::Color::Dark_blue)};
 
     // Checkerboard
+    Painter p{this};
     for (int i{0}; i < 4; ++i) {
         p.put(cell1 + cell2 + cell1 + cell2 + cell1 + cell2 + cell1 + cell2, 0,
               i * 2);

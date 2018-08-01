@@ -29,7 +29,7 @@ Move_input::Move_input(Glyph_string initial_text)
     : Line_edit{std::move(initial_text)} {
     this->clear_on_enter();
     this->brush.add_attributes(Attribute::Underline);
-    this->background_tile = Glyph{L' ', Attribute::Underline};
+    this->set_background_tile(Glyph{L' ', Attribute::Underline});
     this->editing_finished.connect(
         [this](std::string text) { process_action(text); });
     this->set_validator(
