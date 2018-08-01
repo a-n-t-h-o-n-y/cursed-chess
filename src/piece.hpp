@@ -1,8 +1,8 @@
 #ifndef PIECE_HPP
 #define PIECE_HPP
-#include "position.hpp"
-
 #include <string>
+
+#include "position.hpp"
 
 enum class Side { None, White, Black };
 

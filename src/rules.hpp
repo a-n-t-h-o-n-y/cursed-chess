@@ -1,9 +1,9 @@
 #ifndef RULES_HPP
 #define RULES_HPP
-#include "position.hpp"
-#include "piece.hpp"
-
 #include <vector>
+
+#include "piece.hpp"
+#include "position.hpp"
 
 class State;
 struct Move;
@@ -11,6 +11,8 @@ struct Move;
 class Rules {
    public:
     using Positions = std::vector<Position>;
+
+    virtual ~Rules() = default;
 
     bool validate(const State& state, const Move& move) const;
     Positions get_valid_positions(const State& state, Position position) const;

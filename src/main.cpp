@@ -1,6 +1,6 @@
-#include "chess_ui.hpp"
-
 #include <cppurses/cppurses.hpp>
+
+#include "chess_ui.hpp"
 
 using namespace cppurses;
 int main() {

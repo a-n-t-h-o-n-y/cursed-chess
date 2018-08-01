@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <iterator>
 
+// #include <cppurses/painter/detail/flush.hpp>
+
 using namespace cppurses;
 
 namespace {
@@ -13,23 +15,23 @@ Glyph piece_to_glyph(Piece piece) {
     Glyph symbol;
     // Character
     if (piece.figure == Figure::Bishop) {
-        symbol = "♝";
+        symbol = L'♝';
     } else if (piece.figure == Figure::King) {
-        symbol = "♚";
+        symbol = L'♚';
     } else if (piece.figure == Figure::Knight) {
-        symbol = "♞";
+        symbol = L'♞';
     } else if (piece.figure == Figure::Pawn) {
-        symbol = "♟";
+        symbol = L'♟';
     } else if (piece.figure == Figure::Queen) {
-        symbol = "♛";
+        symbol = L'♛';
     } else if (piece.figure == Figure::Rook) {
-        symbol = "♜";
+        symbol = L'♜';
     }
     // Side
     if (piece.side == Side::Black) {
-        symbol.brush().set_foreground(cppurses::Color::Black);
+        symbol.brush.set_foreground(cppurses::Color::Black);
     } else if (piece.side == Side::White) {
-        symbol.brush().set_foreground(cppurses::Color::White);
+        symbol.brush.set_foreground(cppurses::Color::White);
     }
     return symbol;
 }
@@ -76,8 +78,9 @@ void Chessboard_widget::reset_game() {
 }
 
 void Chessboard_widget::trigger_next_move() {
+    // TODO what is going on with the send and flush?
     System::send_event(Paint_event(this));
-    System::paint_buffer()->flush(true);
+    System::paint_buffer().flush(System::find_event_loop().staged_changes());
     Move next_move{Position{-1, -1}, Position{-1, -1}};
     if (engine_.current_side() == Side::Black) {
         next_move = player_black_->get_move();
@@ -130,13 +133,13 @@ sig::Slot<void(Move)> make_move(Chessboard_widget& cbw) {
 }  // namespace slot
 
 bool Chessboard_widget::paint_event() {
-    Painter p{this};
     // Light Gray Tiles
     Glyph_string cell1{"   ", background(cppurses::Color::Light_gray)};
     // Gray Tiles
     Glyph_string cell2{"   ", background(cppurses::Color::Dark_blue)};
 
     // Checkerboard
+    Painter p{this};
     for (int i{0}; i < 4; ++i) {
         p.put(cell1 + cell2 + cell1 + cell2 + cell1 + cell2 + cell1 + cell2, 0,
               i * 2);
@@ -160,7 +163,7 @@ bool Chessboard_widget::paint_event() {
         engine_.find_positions(Piece{Figure::None, Side::None});
     for (Position piece_position : piece_positions) {
         Glyph piece_visual{piece_to_glyph(engine_.at(piece_position))};
-        piece_visual.brush().set_background(get_tile_color(piece_position));
+        piece_visual.brush.set_background(get_tile_color(piece_position));
         Position where = board_to_screen_position(piece_position);
         p.put(piece_visual, where.row, where.column);
     }

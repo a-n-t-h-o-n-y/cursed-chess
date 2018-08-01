@@ -4,9 +4,9 @@
 
 Settings_pane::Settings_pane() {
     enable_border(*this);
-    this->border.north_east = "─";
-    this->border.north_west = "╭";
-    this->border.south_west = "╰";
+    this->border.north_east = L'─';
+    this->border.north_west = L'╭';
+    this->border.south_west = L'╰';
     this->border.south_enabled = false;
     this->border.east_enabled = false;
     this->border.south_east_enabled = false;

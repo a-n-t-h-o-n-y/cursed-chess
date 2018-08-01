@@ -1,8 +1,8 @@
 #ifndef INVALID_POSITION_HPP
 #define INVALID_POSITION_HPP
-#include "position.hpp"
-
 #include <stdexcept>
+
+#include "position.hpp"
 
 class Invalid_position : public std::out_of_range {
    public:

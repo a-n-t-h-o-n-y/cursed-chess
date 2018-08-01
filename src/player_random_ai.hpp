@@ -1,12 +1,12 @@
 #ifndef PLAYER_RANDOM_AI_HPP
 #define PLAYER_RANDOM_AI_HPP
-#include "chess_engine.hpp"
-#include "player.hpp"
-
 #include <chrono>
 #include <cstddef>
 #include <random>
 #include <thread>
+
+#include "chess_engine.hpp"
+#include "player.hpp"
 
 class Player_random_ai : public Player {
    public:

@@ -1,12 +1,13 @@
 #include "chess_ui.hpp"
+
+#include <string>
+
+#include <signals/slot.hpp>
+
 #include "no_rules.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
 #include "standard_rules.hpp"
-
-#include <signals/slot.hpp>
-
-#include <string>
 
 Chess_UI::Chess_UI() {
     stack.set_active_page(0);
@@ -92,11 +93,11 @@ void Chess_UI::toggle_logs() {
     bool side_on{true};
     if (lower_pane.visible()) {
         side_on = false;
-        settings.border.south_west = "╰";
-        settings.border.north_east = "─";
+        settings.border.south_west = L'╰';
+        settings.border.north_east = L'─';
     } else {
-        settings.border.south_west = "│";
-        settings.border.north_east = "╮";
+        settings.border.south_west = L'│';
+        settings.border.north_east = L'╮';
     }
     side_pane.set_visible(!side_on);
     side_pane.set_enabled(!side_on);

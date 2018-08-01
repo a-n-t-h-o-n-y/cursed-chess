@@ -1,21 +1,21 @@
 #ifndef CHESSBOARD_WIDGET_HPP
 #define CHESSBOARD_WIDGET_HPP
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include <cppurses/cppurses.hpp>
+#include <optional/optional.hpp>
+#include <signals/signals.hpp>
+
 #include "chess_engine.hpp"
 #include "move.hpp"
 #include "player.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
 #include "position.hpp"
-
-#include <cppurses/cppurses.hpp>
-#include <optional/optional.hpp>
-#include <signals/signals.hpp>
-
-#include <cstddef>
-#include <cstdint>
-#include <memory>
-#include <string>
-#include <utility>
 
 using namespace cppurses;
 
