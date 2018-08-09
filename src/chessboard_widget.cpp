@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <iterator>
 
-// #include <cppurses/painter/detail/flush.hpp>
+#include <cppurses/painter/paint_buffer.hpp>
 
 using namespace cppurses;
 
@@ -80,7 +80,10 @@ void Chessboard_widget::reset_game() {
 void Chessboard_widget::trigger_next_move() {
     // TODO what is going on with the send and flush?
     System::send_event(Paint_event(this));
-    System::paint_buffer().flush(System::find_event_loop().staged_changes());
+
+    detail::Staged_changes& changes{System::find_event_loop().staged_changes()};
+    System::paint_buffer().flush(changes);
+    changes.clear();
     Move next_move{Position{-1, -1}, Position{-1, -1}};
     if (engine_.current_side() == Side::Black) {
         next_move = player_black_->get_move();
