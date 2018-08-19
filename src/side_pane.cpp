@@ -68,7 +68,7 @@ Side_pane::Side_pane() {
     blank_space.border.south = Glyph{L'─', foreground(Color::Blue)};
 
     // log
-    chess_log.hide_cursor();
+    chess_log.cursor.disable();
     chess_log.focus_policy = Focus_policy::None;
     chess_log.height_policy.type(Size_policy::Fixed);
     chess_log.height_policy.hint(6);

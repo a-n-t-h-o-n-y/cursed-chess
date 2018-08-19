@@ -10,6 +10,7 @@
 #include "standard_rules.hpp"
 
 Chess_UI::Chess_UI() {
+    this->set_name("Chess_UI - main chess widget");
     stack.set_active_page(0);
     vl.width_policy.type(Size_policy::Fixed);
     vl.width_policy.hint(26);
@@ -78,7 +79,7 @@ Chess_UI::Chess_UI() {
     lower_pane.settings_btn.clicked.connect(
         cppurses::slot::set_active_page(stack, 1));
 
-    lower_pane.set_visible(false);
+    lower_pane.disable();
     blank_.height_policy.type(Size_policy::Expanding);
     lower_pane.move_input.reset_requested.connect(
         ::slot::reset_game(board.chessboard));
@@ -91,7 +92,7 @@ Chess_UI::Chess_UI() {
 
 void Chess_UI::toggle_logs() {
     bool side_on{true};
-    if (lower_pane.visible()) {
+    if (lower_pane.enabled()) {
         side_on = false;
         settings.border.south_west = L'╰';
         settings.border.north_east = L'─';
@@ -99,10 +100,9 @@ void Chess_UI::toggle_logs() {
         settings.border.south_west = L'│';
         settings.border.north_east = L'╮';
     }
-    side_pane.set_visible(!side_on);
-    side_pane.set_enabled(!side_on);
-    lower_pane.set_visible(side_on);
-    lower_pane.set_enabled(side_on);
+    side_pane.enable(!side_on);
+    lower_pane.enable(side_on);
+
     Focus::clear_focus();
     this->update();
 }
