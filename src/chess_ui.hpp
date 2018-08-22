@@ -18,6 +18,9 @@ class Chess_UI : public Horizontal_layout {
 
     void toggle_logs();
 
+    void enable(bool enable = true,
+                bool post_child_polished_event = true) override;
+
    private:
     Vertical_layout& vl{this->make_child<Vertical_layout>()};
     Widget_stack& stack{vl.make_child<Widget_stack>()};
@@ -27,6 +30,8 @@ class Chess_UI : public Horizontal_layout {
     Side_pane& side_pane{this->make_child<Side_pane>()};
     Lower_pane& lower_pane{vl.make_child<Lower_pane>()};
     Widget& blank_{vl.make_child<Widget>()};
+
+    bool lower_pane_enabled_{false};
 };
 
 namespace slot {

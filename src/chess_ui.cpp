@@ -79,7 +79,7 @@ Chess_UI::Chess_UI() {
     lower_pane.settings_btn.clicked.connect(
         cppurses::slot::set_active_page(stack, 1));
 
-    lower_pane.disable();
+    // lower_pane.disable();
     blank_.height_policy.type(Size_policy::Expanding);
     lower_pane.move_input.reset_requested.connect(
         ::slot::reset_game(board.chessboard));
@@ -91,20 +91,27 @@ Chess_UI::Chess_UI() {
 }
 
 void Chess_UI::toggle_logs() {
-    bool side_on{true};
-    if (lower_pane.enabled()) {
-        side_on = false;
+    if (lower_pane_enabled_) {
+        // side_on = false;
         settings.border.south_west = L'╰';
         settings.border.north_east = L'─';
     } else {
         settings.border.south_west = L'│';
         settings.border.north_east = L'╮';
     }
-    side_pane.enable(!side_on);
-    lower_pane.enable(side_on);
-
+    this->enable();
     Focus::clear_focus();
     this->update();
+}
+
+void Chess_UI::enable(bool enable, bool post_child_polished_event) {
+    this->enable_and_post_events(enable, post_child_polished_event);
+    this->vl.enable(enable, post_child_polished_event);
+    if (lower_pane_enabled_) {
+        lower_pane.enable(enable, post_child_polished_event);
+    } else {
+        side_pane.enable(enable, post_child_polished_event);
+    }
 }
 
 namespace slot {
