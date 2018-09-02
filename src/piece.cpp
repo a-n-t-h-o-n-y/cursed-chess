@@ -2,6 +2,10 @@
 
 #include <string>
 
+#include "figure.hpp"
+
+using namespace chess;
+
 std::string figure_to_text(Figure f) {
     switch (f) {
         case Figure::Bishop:
@@ -16,8 +20,6 @@ std::string figure_to_text(Figure f) {
             return "Queen";
         case Figure::Rook:
             return "Rook";
-        case Figure::None:
-            return "";
     }
     return "";
 }

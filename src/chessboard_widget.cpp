@@ -5,9 +5,16 @@
 #include <cstdint>
 #include <iterator>
 
-#include <cppurses/painter/paint_buffer.hpp>
+#include <cppurses/system/system.hpp>
+
+#include "chess_move_request_event.hpp"
+#include "figure.hpp"
+#include "move.hpp"
+#include "shared_user_input.hpp"
+#include "side.hpp"
 
 using namespace cppurses;
+using namespace chess;
 
 namespace {
 
@@ -51,20 +58,25 @@ Position screen_to_board_position(Position screen_position) {
 }  // namespace
 
 Chessboard_widget::Chessboard_widget() {
+    this->set_name("Chessboard_widget");
+
     this->height_policy.type(Size_policy::Fixed);
     this->height_policy.hint(8);
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(24);
-    this->trigger_next_move();
 
-    engine_.move_made.connect(::slot::trigger_next_move(*this));
+    // engine_.move_made.connect(::slot::trigger_next_move(*this));
     engine_.move_made.connect([this](Move m) { this->move_made(m); });
+    engine_.move_made.connect([this](Move m) { this->update(); });
     engine_.capture.connect([this](Piece p) { this->capture(p); });
     engine_.invalid_move.connect(
         [this](const Move& m) { this->invalid_move(m); });
     engine_.checkmate.connect([this](Side s) { this->checkmate(s); });
     engine_.check.connect([this](Side s) { this->check(s); });
-    engine_.board_reset.connect([this] { this->board_reset(); });
+    engine_.state().board_reset.connect([this] { this->board_reset(); });
+
+    // launch game loop
+    this->start();
 }
 
 void Chessboard_widget::toggle_show_moves() {
@@ -73,29 +85,8 @@ void Chessboard_widget::toggle_show_moves() {
 }
 
 void Chessboard_widget::reset_game() {
-    engine_.reset();
+    engine_.state().reset();
     this->update();
-}
-
-void Chessboard_widget::trigger_next_move() {
-    // TODO what is going on with the send and flush?
-    System::send_event(Paint_event(this));
-
-    detail::Staged_changes& changes{System::find_event_loop().staged_changes()};
-    System::paint_buffer().flush(changes);
-    changes.clear();
-    Move next_move{Position{-1, -1}, Position{-1, -1}};
-    if (engine_.current_side() == Side::Black) {
-        next_move = player_black_->get_move();
-    } else if (engine_.current_side() == Side::White) {
-        next_move = player_white_->get_move();
-    }
-    if (next_move.from.row == -1 || next_move.from.row == 0) {
-        return;
-    }
-    if (!engine_.make_move(next_move)) {
-        this->trigger_next_move();
-    }
 }
 
 void Chessboard_widget::make_move(const Move& move) {
@@ -103,17 +94,46 @@ void Chessboard_widget::make_move(const Move& move) {
 }
 
 Side Chessboard_widget::current_side() const {
-    return engine_.current_side();
+    return engine_.state().current_side;
+}
+
+void Chessboard_widget::pause() {
+    game_loop_.exit(0);
+}
+
+void Chessboard_widget::start() {
+    game_loop_.wait();
+    game_loop_.run_async();
+}
+
+void Chessboard_widget::take_turn() {
+    Move m;
+    try {
+        if (engine_.state().current_side == Side::Black) {
+            m = engine_.player_black()->get_move();
+        } else {
+            m = engine_.player_white()->get_move();
+        }
+    } catch (System_exit_request e) {
+        game_loop_.exit(0);
+        return;
+    }
+    System::post_event<Chess_move_request_event>(this, m);
+}
+
+void Chessboard_widget::move_request_event(Move m) {
+    engine_.make_move(m);
+}
+
+Chess_engine& Chessboard_widget::engine() {
+    return engine_;
+}
+
+const Chess_engine& Chessboard_widget::engine() const {
+    return engine_;
 }
 
 namespace slot {
-
-sig::Slot<void(const Move&)> trigger_next_move(Chessboard_widget& cbw) {
-    sig::Slot<void(const Move&)> slot{
-        [&cbw](const Move& throw_away) { cbw.trigger_next_move(); }};
-    slot.track(cbw.destroyed);
-    return slot;
-}
 
 sig::Slot<void()> toggle_show_moves(Chessboard_widget& cbw) {
     sig::Slot<void()> slot{[&cbw] { cbw.toggle_show_moves(); }};
@@ -151,8 +171,10 @@ bool Chessboard_widget::paint_event() {
     }
 
     // Valid Moves
+    const chess::State& state{engine_.state()};
     if (show_moves_ && selected_position_ != opt::none &&
-        engine_.at(*selected_position_).side == engine_.current_side()) {
+        state.board.has_piece_at(*selected_position_) &&
+        state.board.at(*selected_position_).side == state.current_side) {
         auto valid_moves = engine_.get_valid_positions(*selected_position_);
         Glyph_string highlight{"   ", background(cppurses::Color::Light_green)};
         for (Position possible_position : valid_moves) {
@@ -161,14 +183,16 @@ bool Chessboard_widget::paint_event() {
         }
     }
 
-    // Pieces
-    auto piece_positions =
-        engine_.find_positions(Piece{Figure::None, Side::None});
-    for (Position piece_position : piece_positions) {
-        Glyph piece_visual{piece_to_glyph(engine_.at(piece_position))};
-        piece_visual.brush.set_background(get_tile_color(piece_position));
-        Position where = board_to_screen_position(piece_position);
-        p.put(piece_visual, where.row, where.column);
+    {
+        std::lock_guard<std::recursive_mutex> lock{state.board.mtx};
+        for (auto& pos_piece : state.board.pieces) {
+            Position piece_position{pos_piece.first};
+            Glyph piece_visual{piece_to_glyph(pos_piece.second)};
+            piece_visual.brush.set_background(get_tile_color(piece_position));
+            // TODO change to be Point.
+            Position where = board_to_screen_position(piece_position);
+            p.put(piece_visual, where.row, where.column);
+        }
     }
     return Widget::paint_event();
 }
@@ -179,14 +203,16 @@ bool Chessboard_widget::mouse_press_event(Mouse_button button,
                                           std::uint8_t device_id) {
     int loc_x = static_cast<int>(local.x);
     int loc_y = static_cast<int>(local.y);
-    Position clicked_pos = screen_to_board_position(Position{loc_x, loc_y});
-    Piece piece_clicked{engine_.at(clicked_pos)};
+    Position clicked_pos{screen_to_board_position(Position{loc_x, loc_y})};
     selected_position_ = clicked_pos;
 
-    if (piece_clicked.side == engine_.current_side()) {
+    const chess::State& state{engine_.state()};
+    if (state.board.has_piece_at(clicked_pos) &&
+        state.board.at(clicked_pos).side == state.current_side) {
         first_position_ = clicked_pos;
     } else if (first_position_ != opt::none) {
-        engine_.make_move(Move{*first_position_, clicked_pos});
+        // Notifies the game_loop_ thread in engine_.
+        Shared_user_input::move.set(Move{*first_position_, clicked_pos});
         first_position_ = opt::none;
         selected_position_ = opt::none;
     }
@@ -195,8 +221,10 @@ bool Chessboard_widget::mouse_press_event(Mouse_button button,
 }
 
 cppurses::Color Chessboard_widget::get_tile_color(Position p) {
+    const State& state{engine_.state()};
     if (show_moves_ && selected_position_ != opt::none &&
-        engine_.at(*selected_position_).side == engine_.current_side()) {
+        state.board.has_piece_at(*selected_position_) &&
+        state.board.at(*selected_position_).side == state.current_side) {
         auto valid_moves = engine_.get_valid_positions(*selected_position_);
         auto at = std::find(std::begin(valid_moves), std::end(valid_moves), p);
         if (at != std::end(valid_moves)) {

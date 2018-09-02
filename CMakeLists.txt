@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
-set(CMAKE_BUILD_TYPE RELEASE)
+# set(CMAKE_BUILD_TYPE RELEASE)
 
 add_executable(chess 
     src/main.cpp
     src/chessboard_widget.cpp
     src/position.cpp
     src/chess_engine.cpp
-    src/invalid_position.cpp
     src/rules.cpp
     src/state.cpp
     src/chessboard_borders.cpp
@@ -19,6 +18,10 @@ add_executable(chess
     src/move.cpp
     src/standard_rules.cpp
     src/no_rules.cpp
+    src/shared_user_input.cpp
+    src/player_human.cpp
+    src/chess_event_loop.cpp
+    src/chess_move_request_event.cpp
 )
 
 target_link_libraries(chess /usr/local/lib64/liblibcppurses.a ncurses)

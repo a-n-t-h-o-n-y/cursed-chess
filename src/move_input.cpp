@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "position.hpp"
+#include "shared_user_input.hpp"
 
 using namespace cppurses;
 
@@ -43,6 +44,8 @@ void Move_input::process_action(std::string text) {
     if (text == "reset") {
         reset_requested();
     } else {
-        move_requested(text_to_move(text));
+        Move m{text_to_move(text)};
+        chess::Shared_user_input::move.set(m);
+        move_requested(m);
     }
 }

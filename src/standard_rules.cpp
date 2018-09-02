@@ -1,11 +1,17 @@
 #include "standard_rules.hpp"
 
+#include "side.hpp"
 #include "state.hpp"
+
+using namespace chess;
 
 namespace {
 
-Side side_at(const State& state, Position position) {
-    return state.at(position).side;
+Side side_at(const chess::State& state, Position position) {
+    if (!state.board.has_piece_at(position)) {
+        return Side::None;
+    }
+    return state.board.at(position).side;
 }
 
 }  // namespace
@@ -13,9 +19,12 @@ Side side_at(const State& state, Position position) {
 // Piece Rules - - - - - - -
 // BISHOP - - - - - - -
 typename Rules::Positions Standard_rules::get_bishop_moves(
-    const State& state,
+    const chess::State& state,
     Position position) const {
     Positions valid_moves;
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
     Side bishop_side{side_at(state, position)};
 
     // Up-Left
@@ -71,8 +80,11 @@ typename Rules::Positions Standard_rules::get_bishop_moves(
 
 // KING - - - - - - -
 typename Rules::Positions Standard_rules::get_king_moves(
-    const State& state,
+    const chess::State& state,
     Position position) const {
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
     Positions valid_moves;
     Side king_side{side_at(state, position)};
     Position next = position;
@@ -133,8 +145,11 @@ typename Rules::Positions Standard_rules::get_king_moves(
 
 // KNIGHT - - - - - - -
 typename Rules::Positions Standard_rules::get_knight_moves(
-    const State& state,
+    const chess::State& state,
     Position position) const {
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
     Positions valid_moves;
     Side knight_side{side_at(state, position)};
     Position next = position;
@@ -198,8 +213,11 @@ typename Rules::Positions Standard_rules::get_knight_moves(
 
 // PAWN - - - - - - -
 typename Rules::Positions Standard_rules::get_pawn_moves(
-    const State& state,
+    const chess::State& state,
     Position position) const {
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
     Positions valid_moves;
     Side pawn_side{side_at(state, position)};
     int direction{pawn_side == Side::Black ? -1 : 1};
@@ -244,8 +262,11 @@ typename Rules::Positions Standard_rules::get_pawn_moves(
 
 // QUEEN - - - - - - -
 typename Rules::Positions Standard_rules::get_queen_moves(
-    const State& state,
+    const chess::State& state,
     Position position) const {
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
     Positions valid_moves;
     Side queen_side{side_at(state, position)};
     Position next{position};
@@ -343,8 +364,11 @@ typename Rules::Positions Standard_rules::get_queen_moves(
 
 // ROOK - - - - - - -
 typename Rules::Positions Standard_rules::get_rook_moves(
-    const State& state,
+    const chess::State& state,
     Position position) const {
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
     Positions valid_moves;
     Side rook_side{side_at(state, position)};
     Position next{position};

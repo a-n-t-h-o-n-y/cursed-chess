@@ -3,6 +3,7 @@
 #include <cppurses/cppurses.hpp>
 
 #include "chessboard_widget.hpp"
+#include "side.hpp"
 
 using namespace cppurses;
 
@@ -10,7 +11,7 @@ Lower_pane::Lower_pane() {
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(26);
 
-    this->height_policy.type(Size_policy::Preferred);
+    this->height_policy.type(Size_policy::Fixed);
     this->height_policy.hint(1);
 
     set_background_recursive(*this, Color::Dark_blue);
@@ -31,7 +32,7 @@ Lower_pane::Lower_pane() {
 }
 
 void Lower_pane::toggle_status(const Chessboard_widget& board) {
-    if (board.current_side() == Side::Black) {
+    if (board.current_side() == chess::Side::Black) {
         status.set_text(
             Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
     } else {
