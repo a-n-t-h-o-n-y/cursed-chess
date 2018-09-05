@@ -3,9 +3,15 @@
 #include <sstream>
 
 #include "chessboard_widget.hpp"
+#include "figure.hpp"
+
+using namespace chess;
 
 Side_pane::Side_pane() {
+    this->set_name("Chess Side Pane");
+    this->width_policy.type(Size_policy::Maximum);
     this->width_policy.max(26);
+    this->width_policy.hint(26);
 
     hl.height_policy.type(Size_policy::Fixed);
     hl.height_policy.hint(1);
@@ -19,6 +25,7 @@ Side_pane::Side_pane() {
     // status bar
     status.width_policy.type(Size_policy::Fixed);
     status.width_policy.hint(4);
+    status.height_policy.type(Size_policy::Fixed);
     status.height_policy.hint(2);
     enable_border(status);
     disable_walls(status.border);
@@ -29,19 +36,6 @@ Side_pane::Side_pane() {
     status.border.south = Glyph{L'─', foreground(Color::Blue)};
     status.border.south_west_enabled = true;
     status.border.south_west = Glyph{L'├', foreground(Color::Blue)};
-
-    // move_input
-    disable_walls(move_input.border);
-    disable_corners(move_input.border);
-    enable_border(move_input);
-    move_input.border.west_enabled = true;
-    move_input.border.west = Glyph{L'│', foreground(Color::Blue)};
-    move_input.border.north_enabled = true;
-    move_input.border.north = Glyph{L'─', foreground(Color::Blue)};
-    move_input.border.north_west_enabled = true;
-    move_input.border.north_west = Glyph{L'├', foreground(Color::Blue)};
-    set_foreground(move_input, Color::Light_gray);
-    move_input.height_policy.hint(2);
 
     // settings_btn
     settings_btn.width_policy.type(Size_policy::Preferred);
@@ -85,6 +79,19 @@ Side_pane::Side_pane() {
     set_background_recursive(hl, Color::Dark_blue);
     hl.height_policy.type(Size_policy::Fixed);
     hl.height_policy.hint(2);
+
+    // move_input
+    disable_walls(move_input.border);
+    disable_corners(move_input.border);
+    enable_border(move_input);
+    move_input.border.west_enabled = true;
+    move_input.border.west = Glyph{L'│', foreground(Color::Blue)};
+    move_input.border.north_enabled = true;
+    move_input.border.north = Glyph{L'─', foreground(Color::Blue)};
+    move_input.border.north_west_enabled = true;
+    move_input.border.north_west = Glyph{L'├', foreground(Color::Blue)};
+    set_foreground(move_input, Color::Light_gray);
+    move_input.height_policy.hint(2);
 }
 
 void Side_pane::toggle_status(const Chessboard_widget& board) {

@@ -6,6 +6,7 @@
 #include "move.hpp"
 #include "move_input.hpp"
 #include "piece.hpp"
+#include "side.hpp"
 
 using namespace cppurses;
 
@@ -27,8 +28,8 @@ struct Side_pane : public Vertical_layout {
     void post_move_message(const Move& m);
     void post_capture_message(Piece p);
     void post_invalid_move_message(const Move& m);
-    void post_checkmate_message(Side s);
-    void post_check_message(Side s);
+    void post_checkmate_message(chess::Side s);
+    void post_check_message(chess::Side s);
     void post_stalemate_message();
 };
 
@@ -39,9 +40,9 @@ sig::Slot<void(Move)> toggle_status(Side_pane& sp,
                                     const Chessboard_widget& board);
 sig::Slot<void(Piece)> post_capture_message(Side_pane& sp);
 sig::Slot<void(const Move&)> post_invalid_move_message(Side_pane& sp);
-sig::Slot<void(Side)> post_checkmate_message(Side_pane& sp);
-sig::Slot<void(Side)> post_check_message(Side_pane& sp);
-sig::Slot<void(Side)> post_stalemate_message(Side_pane& sp);
+sig::Slot<void(chess::Side)> post_checkmate_message(Side_pane& sp);
+sig::Slot<void(chess::Side)> post_check_message(Side_pane& sp);
+sig::Slot<void(chess::Side)> post_stalemate_message(Side_pane& sp);
 
 }  // namespace slot
 

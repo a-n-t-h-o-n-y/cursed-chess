@@ -2,16 +2,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <mutex>
 #include <vector>
 
+#include "figure.hpp"
 #include "move.hpp"
+#include "side.hpp"
 #include "state.hpp"
+
+using namespace chess;
 
 namespace {
 
-Position current_king_pos(const State& state) {
-    Piece king{Figure::King, state.current_side()};
-    Rules::Positions king_positions{state.find_positions(king)};
+Position current_king_pos(const chess::State& state) {
+    Rules::Positions king_positions{
+        state.board.find_all(Figure::King, state.current_side)};
     if (king_positions.empty()) {
         return Position{-1, -1};
     }
@@ -20,7 +25,7 @@ Position current_king_pos(const State& state) {
 
 }  // namespace
 
-bool Rules::validate(const State& state, const Move& move) const {
+bool Rules::validate(const chess::State& state, const Move& move) const {
     if (!is_valid(move.from) || !is_valid(move.to)) {
         return false;
     }
@@ -29,9 +34,13 @@ bool Rules::validate(const State& state, const Move& move) const {
     return pos != std::end(positions);
 }
 
-typename Rules::Positions Rules::get_valid_positions(const State& state,
+typename Rules::Positions Rules::get_valid_positions(const chess::State& state,
                                                      Position position) const {
-    Piece piece{state.at(position)};
+    if (!state.board.has_piece_at(position)) {
+        return std::vector<Position>{};
+    }
+
+    Piece piece{state.board.at(position)};
     switch (piece.figure) {
         case Figure::Bishop:
             return get_bishop_moves(state, position);
@@ -50,19 +59,16 @@ typename Rules::Positions Rules::get_valid_positions(const State& state,
 
         case Figure::Rook:
             return get_rook_moves(state, position);
-
-        case Figure::None:
-            return std::vector<Position>{};
     }
 }
 
-bool Rules::check(const State& state) const {
+bool Rules::check(const chess::State& state) const {
     Position king_pos{current_king_pos(state)};
     if (king_pos == Position{-1, -1}) {
         return false;
     }
-    Piece opponent_piece{Figure::None, opponent(state.current_side())};
-    Positions opponent_pieces{state.find_positions(opponent_piece)};
+    Positions opponent_pieces{
+        state.board.find_all(opponent(state.current_side))};
     for (Position p : opponent_pieces) {
         Positions valid_positions{get_valid_positions(state, p)};
         auto pos = std::find(std::begin(valid_positions),
@@ -74,7 +80,8 @@ bool Rules::check(const State& state) const {
     return false;
 }
 
-bool Rules::checkmate(const State& state) const {
+// TODO Does not work.
+bool Rules::checkmate(const chess::State& state) const {
     if (!this->check(state)) {
         return false;
     }
@@ -86,24 +93,22 @@ bool Rules::checkmate(const State& state) const {
     return false;
 }
 
-bool Rules::stalemate(const State& state) const {
+bool Rules::stalemate(const chess::State& state) const {
+    // TODO Implement
     return false;
 }
 
 // Helper Functions
+/// Returns the oponent Side to \p side.
 Side opponent(Side side) {
-    switch (side) {
-        case Side::White:
-            return Side::Black;
-
-        case Side::Black:
-            return Side::White;
-
-        default:
-            return Side::None;
+    if (side == Side::None) {
+        return Side::None;
     }
+    return side == Side::White ? Side::Black : Side::White;
 }
 
+/// Validates bounds of a position.
+// TODO change name.
 bool is_valid(Position p) {
     bool row_valid{p.row >= 1 && p.row <= 8};
     bool column_valid{p.column >= 1 && p.column <= 8};

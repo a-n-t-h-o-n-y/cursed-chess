@@ -1,52 +1,62 @@
-#ifndef STATE_HPP
-#define STATE_HPP
-#include <vector>
+#ifndef CHESS_STATE_HPP
+#define CHESS_STATE_HPP
+#include <mutex>
+#include <unordered_map>
 
 #include <signals/signal.hpp>
 
 #include "piece.hpp"
 #include "position.hpp"
+#include "side.hpp"
 
-struct Move;
+namespace chess {
 
-class State {
-   public:
-    using Positions = std::vector<Position>;
+struct Board_state {
+    using Pieces_t = std::unordered_map<Position, Piece>;
+    using Positions_t = std::vector<Position>;
 
-    State();
-    void reset();
+    /// Holds the state with a Position for each Piece currently on the board.
+    Pieces_t pieces;
 
-    Piece& at(Position position) noexcept(false);
-    Piece at(Position position) const noexcept(false);
+    /// Provided for locking over multiple operations. Game loop modifies the
+    /// state from a thread other than the main thread.
+    mutable std::recursive_mutex mtx;
 
-    Positions find_positions(Piece piece) const;
+    /// Returns a copy of the Piece at Position p. Throws std::out_of_range if
+    /// no Piece at \p p. Thread safe.
+    Piece at(Position p) const;
 
-    void set_current_side(Side side);
-    Side current_side() const;
+    /// Returns true if there is a Piece on the board at \p p. Thread safe.
+    bool has_piece_at(Position p) const;
 
-    // Signals
-    sig::Signal<void(const Move&)> move_made;
-    sig::Signal<void()> board_reset;
+    /// Finds all Positions where the Figure appears on the board(Side not used)
+    Positions_t find_all(Figure fig) const;
 
-   private:
-    struct Piece_in_play {
-        Piece_in_play(Piece piece_, Position position_);  // for emplace_back()
-        Piece piece;
-        Position position;
-    };
+    /// Finds all Positions where the Side appears on the board.
+    Positions_t find_all(Side side) const;
 
-    std::vector<Piece_in_play> pieces_;
-    Side current_side_{Side::White};
-
-    Piece& find_piece(Position p);
-    const Piece& find_piece(Position p) const;
+    /// Finds all Positions where the Figure and Side appear together in board.
+    Positions_t find_all(Figure fig, Side side) const;
 };
 
-// Free Functions
+struct State {
+    /// Sets up all the Pieces on the board.
+    State();
 
-bool add(State& state, Position position, Piece piece);
-void remove(State& state, Position position);
-void toggle_current_side(State& state);
-void make_move(State& state, const Move& move);
+    /// Holds the Pieces and their positions in a map, with a provided mutex.
+    Board_state board;
 
-#endif  // STATE_HPP
+    /// This is the Side that will be able to make the next move.
+    Side current_side;
+
+    bool game_over{false};
+
+    /// Sets the Pieces back to their original positions and the current_side.
+    void reset();
+
+    /// Signal is called when the board is reset to its initial state.
+    sig::Signal<void()> board_reset;
+};
+
+}  // namespace chess
+#endif  // CHESS_STATE_HPP

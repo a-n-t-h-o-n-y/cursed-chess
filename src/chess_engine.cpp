@@ -1,36 +1,53 @@
 #include "chess_engine.hpp"
 
-#include <vector>
+#include <mutex>
+#include <unordered_map>
 
+#include "figure.hpp"
 #include "move.hpp"
 #include "piece.hpp"
 #include "position.hpp"
 #include "rules.hpp"
+#include "side.hpp"
+#include "state.hpp"
 
-Chess_engine::Chess_engine() {
-    this->reset();
-    state_.move_made.connect([this](const Move& m) { this->move_made(m); });
-    state_.board_reset.connect([this] { this->board_reset(); });
+using namespace chess;
+
+const State& Chess_engine::state() const {
+    return state_;
 }
 
-void Chess_engine::reset() {
-    state_.reset();
+chess::State& Chess_engine::state() {
+    return state_;
+}
+
+Player* Chess_engine::player_black() const {
+    return player_black_.get();
+}
+
+Player* Chess_engine::player_white() const {
+    return player_white_.get();
 }
 
 bool Chess_engine::make_move(Move move) {
     if (rules_->checkmate(state_)) {
+        state_.game_over = true;
         return true;
     }
     if (rules_->validate(state_, move)) {
-        Piece to_piece{this->at(move.to)};
-        if (to_piece.side == opponent(this->current_side())) {
-            this->capture(to_piece);
+        std::lock_guard<std::recursive_mutex> lock{state_.board.mtx};
+        auto iter = state_.board.pieces.find(move.from);
+        if (iter != std::end(state_.board.pieces)) {
+            state_.board.pieces[move.to] = iter->second;
+            state_.board.pieces.erase(move.from);
         }
-        ::make_move(state_, move);
+        this->toggle_current_side();
+        this->move_made(move);
         if (rules_->checkmate(state_)) {
-            checkmate(this->current_side());
+            checkmate(state_.current_side);
+            state_.game_over = true;
         } else if (rules_->check(state_)) {
-            check(this->current_side());
+            check(state_.current_side);
         } else if (rules_->stalemate(state_)) {
             stalemate();
         }
@@ -42,17 +59,10 @@ bool Chess_engine::make_move(Move move) {
 
 Chess_engine::Positions Chess_engine::get_valid_positions(
     Position position) const {
+    std::lock_guard<std::recursive_mutex> lock{this->mtx};
     return rules_->get_valid_positions(state_, position);
 }
 
-Piece Chess_engine::at(Position position) const {
-    return state_.at(position);
-}
-
-Chess_engine::Positions Chess_engine::find_positions(Piece piece) const {
-    return state_.find_positions(piece);
-}
-
-Side Chess_engine::current_side() const {
-    return state_.current_side();
+void Chess_engine::toggle_current_side() {
+    state_.current_side = opponent(state_.current_side);
 }

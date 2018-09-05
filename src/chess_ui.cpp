@@ -7,104 +7,130 @@
 #include "no_rules.hpp"
 #include "player_human.hpp"
 #include "player_random_ai.hpp"
+#include "side.hpp"
 #include "standard_rules.hpp"
 
-Chess_UI::Chess_UI() {
-    this->set_name("Chess_UI - main chess widget");
-    stack.set_active_page(0);
-    vl.width_policy.type(Size_policy::Fixed);
-    vl.width_policy.hint(26);
-    stack.height_policy.type(Size_policy::Fixed);
-    stack.height_policy.hint(10);
+using namespace chess;
+
+Left_side::Left_side() {
+    this->set_name("Left_side - of Chess_UI");
+    this->width_policy.type(Size_policy::Fixed);
+    this->width_policy.hint(26);
 
     // Stack
+    stack.set_active_page(0);
+    stack.height_policy.type(Size_policy::Fixed);
+    stack.height_policy.hint(10);
     stack.sets_focus_on_change(false);
 
     // Settings Pane
     settings.return_btn.clicked.connect(
         cppurses::slot::set_active_page(stack, 0));
-
     settings.show_moves_box.toggled.connect(
         ::slot::toggle_show_moves(board.chessboard));
 
-    settings.hide_log_box.toggled.connect(::slot::toggle_logs(*this));
-
     // Black AI
     settings.black_ai.cycle_box.add_option("Human").connect(
-        ::slot::set_player<Player_human>(board.chessboard, Side::Black));
+        ::slot::set_player<chess::Player_human>(board.chessboard.engine(),
+                                                Side::Black));
     settings.black_ai.cycle_box.add_option("Random").connect(
-        ::slot::set_player<Player_random_ai>(board.chessboard, Side::Black));
-
+        ::slot::set_player<Player_random_ai>(board.chessboard.engine(),
+                                             Side::Black));
     // White AI
     settings.white_ai.cycle_box.add_option("Human").connect(
-        ::slot::set_player<Player_human>(board.chessboard, Side::White));
+        ::slot::set_player<chess::Player_human>(board.chessboard.engine(),
+                                                Side::White));
     settings.white_ai.cycle_box.add_option("Random").connect(
-        ::slot::set_player<Player_random_ai>(board.chessboard, Side::White));
-
+        ::slot::set_player<Player_random_ai>(board.chessboard.engine(),
+                                             Side::White));
     // Rulesets
-    settings.ruleset.cycle_box.add_option("Standard Chess")
-        .connect(::slot::set_ruleset<Standard_rules>(board.chessboard));
+    settings.ruleset.cycle_box.add_option("Standard")
+        .connect(
+            ::slot::set_ruleset<Standard_rules>(board.chessboard.engine()));
     settings.ruleset.cycle_box.add_option("No Rules")
-        .connect(::slot::set_ruleset<No_rules>(board.chessboard));
+        .connect(::slot::set_ruleset<No_rules>(board.chessboard.engine()));
 
     // Reset Button
     settings.reset_btn.clicked.connect(::slot::reset_game(board.chessboard));
 
-    // Side Pane
-    side_pane.settings_btn.clicked.connect(
-        cppurses::slot::set_active_page(stack, 1));
-
-    board.chessboard.move_made.connect(::slot::post_move_message(side_pane));
-    board.chessboard.move_made.connect(
-        ::slot::toggle_status(side_pane, board.chessboard));
-    board.chessboard.capture.connect(::slot::post_capture_message(side_pane));
-    board.chessboard.invalid_move.connect(
-        ::slot::post_invalid_move_message(side_pane));
-    board.chessboard.checkmate.connect(
-        ::slot::post_checkmate_message(side_pane));
-    board.chessboard.check.connect(::slot::post_check_message(side_pane));
-
-    side_pane.move_input.reset_requested.connect(
-        ::slot::reset_game(board.chessboard));
-    side_pane.move_input.move_requested.connect(
-        ::slot::make_move(board.chessboard));
-    board.chessboard.board_reset.connect(
-        [this] { side_pane.toggle_status(board.chessboard); });
-    board.chessboard.board_reset.connect(
-        cppurses::slot::clear(side_pane.chess_log));
-
-    // Lower Pane
-    board.chessboard.move_made.connect(
-        ::slot::toggle_status(lower_pane, board.chessboard));
+    // Lower_pane
     lower_pane.settings_btn.clicked.connect(
         cppurses::slot::set_active_page(stack, 1));
-
-    lower_pane.disable();
-    blank_.height_policy.type(Size_policy::Expanding);
     lower_pane.move_input.reset_requested.connect(
         ::slot::reset_game(board.chessboard));
-    lower_pane.move_input.move_requested.connect(
-        ::slot::make_move(board.chessboard));
-
+    // lower_pane.move_input.move_requested.connect(
+    //     ::slot::make_move(board.chessboard));
+    board.chessboard.move_made.connect(
+        ::slot::toggle_status(lower_pane, board.chessboard));
     board.chessboard.board_reset.connect(
         [this] { lower_pane.toggle_status(board.chessboard); });
 }
 
-void Chess_UI::toggle_logs() {
-    bool side_on{true};
-    if (lower_pane.enabled()) {
-        side_on = false;
-        settings.border.south_west = L'╰';
-        settings.border.north_east = L'─';
+void Left_side::enable(bool enable, bool post_child_polished_event) {
+    this->enable_and_post_events(enable, post_child_polished_event);
+    stack.enable(enable, post_child_polished_event);
+    if (lower_pane_enabled) {
+        lower_pane.enable(enable, post_child_polished_event);
     } else {
-        settings.border.south_west = L'│';
-        settings.border.north_east = L'╮';
+        lower_pane.disable(enable, post_child_polished_event);
     }
-    side_pane.enable(!side_on);
-    lower_pane.enable(side_on);
+}
 
+Chess_UI::Chess_UI() {
+    this->set_name("Chess_UI - main chess widget");
+
+    // left_side.settings
+    left_side.settings.hide_log_box.toggled.connect(::slot::toggle_logs(*this));
+
+    // left_side.board
+    left_side.board.chessboard.move_made.connect(
+        ::slot::post_move_message(right_side));
+    left_side.board.chessboard.move_made.connect(
+        ::slot::toggle_status(right_side, left_side.board.chessboard));
+    left_side.board.chessboard.capture.connect(
+        ::slot::post_capture_message(right_side));
+    left_side.board.chessboard.invalid_move.connect(
+        ::slot::post_invalid_move_message(right_side));
+    left_side.board.chessboard.checkmate.connect(
+        ::slot::post_checkmate_message(right_side));
+    left_side.board.chessboard.check.connect(
+        ::slot::post_check_message(right_side));
+    left_side.board.chessboard.board_reset.connect(
+        [this] { right_side.toggle_status(left_side.board.chessboard); });
+    left_side.board.chessboard.board_reset.connect(
+        cppurses::slot::clear(right_side.chess_log));
+
+    // right_side
+    right_side.settings_btn.clicked.connect(
+        cppurses::slot::set_active_page(left_side.stack, 1));
+    right_side.move_input.reset_requested.connect(
+        ::slot::reset_game(left_side.board.chessboard));
+    // right_side.move_input.move_requested.connect(
+    //     ::slot::make_move(left_side.board.chessboard));
+}
+
+void Chess_UI::toggle_logs() {
+    left_side.lower_pane_enabled = !left_side.lower_pane_enabled;
+    if (left_side.lower_pane_enabled) {
+        left_side.settings.border.south_west = L'│';
+        left_side.settings.border.north_east = L'╮';
+    } else {
+        left_side.settings.border.south_west = L'╰';
+        left_side.settings.border.north_east = L'─';
+    }
+    this->enable(this->enabled());
     Focus::clear_focus();
     this->update();
+}
+
+void Chess_UI::enable(bool enable, bool post_child_polished_event) {
+    this->enable_and_post_events(enable, post_child_polished_event);
+    left_side.enable(enable, post_child_polished_event);
+    if (left_side.lower_pane_enabled) {
+        right_side.disable(enable, post_child_polished_event);
+    } else {
+        right_side.enable(enable, post_child_polished_event);
+    }
 }
 
 namespace slot {

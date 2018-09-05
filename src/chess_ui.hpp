@@ -12,21 +12,33 @@
 
 using namespace cppurses;
 
+class Left_side : public Vertical_layout {
+   public:
+    Left_side();
+
+    void enable(bool enable = true,
+                bool post_child_polished_event = true) override;
+
+    Widget_stack& stack{this->make_child<Widget_stack>()};
+    Chessboard_with_borders& board{stack.make_page<Chessboard_with_borders>()};
+    Settings_pane& settings{stack.make_page<Settings_pane>()};
+    Lower_pane& lower_pane{this->make_child<Lower_pane>()};
+
+    bool lower_pane_enabled{false};
+};
+
 class Chess_UI : public Horizontal_layout {
    public:
     Chess_UI();
 
     void toggle_logs();
 
-   private:
-    Vertical_layout& vl{this->make_child<Vertical_layout>()};
-    Widget_stack& stack{vl.make_child<Widget_stack>()};
-    Chessboard_with_borders& board{stack.make_page<Chessboard_with_borders>()};
-    Settings_pane& settings{stack.make_page<Settings_pane>()};
+    void enable(bool enable = true,
+                bool post_child_polished_event = true) override;
 
-    Side_pane& side_pane{this->make_child<Side_pane>()};
-    Lower_pane& lower_pane{vl.make_child<Lower_pane>()};
-    Widget& blank_{vl.make_child<Widget>()};
+   private:
+    Left_side& left_side{this->make_child<Left_side>()};
+    Side_pane& right_side{this->make_child<Side_pane>()};
 };
 
 namespace slot {
