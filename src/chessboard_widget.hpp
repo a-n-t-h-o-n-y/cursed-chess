@@ -53,10 +53,7 @@ class Chessboard_widget : public Widget {
 
    protected:
     bool paint_event() override;
-    bool mouse_press_event(Mouse_button button,
-                           Point global,
-                           Point local,
-                           std::uint8_t device_id) override;
+    bool mouse_press_event(const Mouse_data& mouse) override;
 
    private:
     Chess_engine engine_;
