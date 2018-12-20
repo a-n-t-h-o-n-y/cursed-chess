@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <iterator>
 
+#include <cppurses/system/mouse_data.hpp>
 #include <cppurses/system/system.hpp>
 
 #include "chess_move_request_event.hpp"
@@ -197,12 +198,9 @@ bool Chessboard_widget::paint_event() {
     return Widget::paint_event();
 }
 
-bool Chessboard_widget::mouse_press_event(Mouse_button button,
-                                          Point global,
-                                          Point local,
-                                          std::uint8_t device_id) {
-    int loc_x = static_cast<int>(local.x);
-    int loc_y = static_cast<int>(local.y);
+bool Chessboard_widget::mouse_press_event(const Mouse_data& mouse) {
+    int loc_x = static_cast<int>(mouse.local.x);
+    int loc_y = static_cast<int>(mouse.local.y);
     Position clicked_pos{screen_to_board_position(Position{loc_x, loc_y})};
     selected_position_ = clicked_pos;
 
@@ -217,7 +215,7 @@ bool Chessboard_widget::mouse_press_event(Mouse_button button,
         selected_position_ = opt::none;
     }
     this->update();
-    return Widget::mouse_press_event(button, global, local, device_id);
+    return Widget::mouse_press_event(mouse);
 }
 
 cppurses::Color Chessboard_widget::get_tile_color(Position p) {
