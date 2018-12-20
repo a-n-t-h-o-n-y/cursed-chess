@@ -163,7 +163,7 @@ bool Chessboard_widget::paint_event() {
     Glyph_string cell2{"   ", background(cppurses::Color::Dark_blue)};
 
     // Checkerboard
-    Painter p{this};
+    Painter p{*this};
     for (int i{0}; i < 4; ++i) {
         p.put(cell1 + cell2 + cell1 + cell2 + cell1 + cell2 + cell1 + cell2, 0,
               i * 2);
