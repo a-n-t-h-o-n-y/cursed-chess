@@ -8,21 +8,20 @@
 using namespace chess;
 
 Side_pane::Side_pane() {
-    this->set_name("Chess Side Pane");
+    this->set_name("Chess - Side_pane");
     this->width_policy.type(Size_policy::Maximum);
     this->width_policy.max(26);
     this->width_policy.hint(26);
 
-    hl.height_policy.type(Size_policy::Fixed);
-    hl.height_policy.hint(1);
-
     // hl_status
+    hl_status.set_name("hl_status in Chess - Side_pane");
     hl_status.height_policy.type(Size_policy::Fixed);
     hl_status.height_policy.hint(2);
     set_background_recursive(hl_status, Color::Dark_blue);
     set_foreground_recursive(hl_status, Color::Light_gray);
 
     // status bar
+    status.set_name("status in Chess - Side_pane");
     status.width_policy.type(Size_policy::Fixed);
     status.width_policy.hint(4);
     status.height_policy.type(Size_policy::Fixed);
@@ -38,6 +37,7 @@ Side_pane::Side_pane() {
     status.border.south_west = Glyph{L'├', foreground(Color::Blue)};
 
     // settings_btn
+    settings_btn.set_name("settings_btn in Chess - Side_pane");
     settings_btn.width_policy.type(Size_policy::Preferred);
     settings_btn.width_policy.hint(12);
     disable_walls(settings_btn.border);
@@ -55,6 +55,7 @@ Side_pane::Side_pane() {
     settings_btn.border.south_east = Glyph{L'┴', foreground(Color::Blue)};
 
     // Blank Space
+    blank_space.set_name("blank_space in Chess - Side_pane");
     enable_border(blank_space);
     disable_walls(blank_space.border);
     disable_corners(blank_space.border);
@@ -62,6 +63,7 @@ Side_pane::Side_pane() {
     blank_space.border.south = Glyph{L'─', foreground(Color::Blue)};
 
     // log
+    chess_log.set_name("chess_log in Chess - Side_pane");
     chess_log.cursor.disable();
     chess_log.focus_policy = Focus_policy::None;
     chess_log.height_policy.type(Size_policy::Fixed);
@@ -76,11 +78,13 @@ Side_pane::Side_pane() {
     chess_log.border.west = Glyph{L'│', foreground(Color::Blue)};
 
     // hl - bottom
+    hl.set_name("hl in Chess - Side_pane");
     set_background_recursive(hl, Color::Dark_blue);
     hl.height_policy.type(Size_policy::Fixed);
     hl.height_policy.hint(2);
 
     // move_input
+    move_input.set_name("move_input in Chess - Side_pane");
     disable_walls(move_input.border);
     disable_corners(move_input.border);
     enable_border(move_input);

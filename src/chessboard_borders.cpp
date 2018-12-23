@@ -23,6 +23,13 @@ Column_listing::Column_listing() : Text_display{"  ᵃ  ᵇ  ᶜ  ᵈ  ᵉ  ᶠ 
 }
 
 Chessboard_with_borders::Chessboard_with_borders() {
+    top_column.set_name("top_column in Chessboard_with_borders");
+    middle_layout.set_name("middle_layout in Chessboard_with_borders");
+    left_row.set_name("left_row in Chessboard_with_borders");
+    chessboard.set_name("chessboard in Chessboard_with_borders");
+    right_row.set_name("right_row in Chessboard_with_borders");
+    bottom_column.set_name("bottom_column in Chessboard_with_borders");
+
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(26);
 

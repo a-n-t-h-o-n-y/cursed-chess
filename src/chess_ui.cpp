@@ -13,7 +13,10 @@
 using namespace chess;
 
 Left_side::Left_side() {
-    this->set_name("Left_side - of Chess_UI");
+    stack.set_name("stack in Left_side");
+    board.set_name("board in Left_side");
+
+    this->set_name("Left_side");
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(26);
 
@@ -72,7 +75,7 @@ void Left_side::enable(bool enable, bool post_child_polished_event) {
     if (lower_pane_enabled) {
         lower_pane.enable(enable, post_child_polished_event);
     } else {
-        lower_pane.disable(enable, post_child_polished_event);
+        lower_pane.disable(true, post_child_polished_event);
     }
 }
 
@@ -127,7 +130,7 @@ void Chess_UI::enable(bool enable, bool post_child_polished_event) {
     this->enable_and_post_events(enable, post_child_polished_event);
     left_side.enable(enable, post_child_polished_event);
     if (left_side.lower_pane_enabled) {
-        right_side.disable(enable, post_child_polished_event);
+        right_side.disable(true, post_child_polished_event);
     } else {
         right_side.enable(enable, post_child_polished_event);
     }
