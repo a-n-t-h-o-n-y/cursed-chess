@@ -119,7 +119,7 @@ void Chessboard_widget::take_turn() {
         game_loop_.exit(0);
         return;
     }
-    System::post_event<Chess_move_request_event>(this, m);
+    System::post_event<Chess_move_request_event>(*this, m);
 }
 
 void Chessboard_widget::move_request_event(Move m) {
