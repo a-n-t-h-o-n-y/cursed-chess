@@ -2,12 +2,12 @@
 
 #include "chess_ui.hpp"
 
-using namespace cppurses;
 int main() {
+    using namespace cppurses;
     System sys;
 
     Chess_UI w;
 
-    sys.set_head(&w);
+    Tree::set_head(&w);
     return sys.run();
 }
