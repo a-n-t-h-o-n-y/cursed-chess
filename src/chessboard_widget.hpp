@@ -54,6 +54,8 @@ class Chessboard_widget : public Widget {
    protected:
     bool paint_event() override;
     bool mouse_press_event(const Mouse_data& mouse) override;
+    bool enable_event() override;
+    bool disable_event() override;
 
    private:
     Chess_engine engine_;

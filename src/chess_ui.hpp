@@ -36,6 +36,10 @@ class Chess_UI : public Horizontal_layout {
     void enable(bool enable = true,
                 bool post_child_polished_event = true) override;
 
+   // protected:
+   //  bool enable_event() override { left_side.board.chessboard.start(); return Widget::enable_event();}
+   //  bool disable_event() override { left_side.board.chessboard.pause();return Widget::disable_event(); }
+
    private:
     Left_side& left_side{this->make_child<Left_side>()};
     Side_pane& right_side{this->make_child<Side_pane>()};

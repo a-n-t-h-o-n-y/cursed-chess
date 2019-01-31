@@ -22,6 +22,7 @@ add_executable(chess
     src/player_human.cpp
     src/chess_event_loop.cpp
     src/chess_move_request_event.cpp
+    src/shared_move.cpp
 )
 
 target_link_libraries(chess /usr/local/lib64/liblibcppurses.a ncurses)

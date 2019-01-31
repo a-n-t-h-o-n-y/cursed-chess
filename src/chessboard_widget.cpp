@@ -55,7 +55,6 @@ Position screen_to_board_position(Position screen_position) {
     int column = (screen_position.row / 3) + 1;
     return Position{row, column};
 }
-
 }  // namespace
 
 Chessboard_widget::Chessboard_widget() {
@@ -66,7 +65,6 @@ Chessboard_widget::Chessboard_widget() {
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(24);
 
-    // engine_.move_made.connect(::slot::trigger_next_move(*this));
     engine_.move_made.connect([this](Move m) { this->move_made(m); });
     engine_.move_made.connect([this](Move m) { this->update(); });
     engine_.capture.connect([this](Piece p) { this->capture(p); });
@@ -75,9 +73,6 @@ Chessboard_widget::Chessboard_widget() {
     engine_.checkmate.connect([this](Side s) { this->checkmate(s); });
     engine_.check.connect([this](Side s) { this->check(s); });
     engine_.state().board_reset.connect([this] { this->board_reset(); });
-
-    // launch game loop
-    this->start();
 }
 
 void Chessboard_widget::toggle_show_moves() {
@@ -103,6 +98,7 @@ void Chessboard_widget::pause() {
 }
 
 void Chessboard_widget::start() {
+    Shared_user_input::exit_requested = false;
     game_loop_.wait();
     game_loop_.run_async();
 }
@@ -115,7 +111,7 @@ void Chessboard_widget::take_turn() {
         } else {
             m = engine_.player_white()->get_move();
         }
-    } catch (System_exit_request e) {
+    } catch (Chess_loop_exit_request e) {
         game_loop_.exit(0);
         return;
     }
@@ -209,13 +205,22 @@ bool Chessboard_widget::mouse_press_event(const Mouse_data& mouse) {
         state.board.at(clicked_pos).side == state.current_side) {
         first_position_ = clicked_pos;
     } else if (first_position_ != opt::none) {
-        // Notifies the game_loop_ thread in engine_.
         Shared_user_input::move.set(Move{*first_position_, clicked_pos});
         first_position_ = opt::none;
         selected_position_ = opt::none;
     }
     this->update();
     return Widget::mouse_press_event(mouse);
+}
+
+bool Chessboard_widget::enable_event() {
+    this->start();
+    return Widget::enable_event();
+}
+
+bool Chessboard_widget::disable_event() {
+    this->pause();
+    return Widget::disable_event();
 }
 
 cppurses::Color Chessboard_widget::get_tile_color(Position p) {

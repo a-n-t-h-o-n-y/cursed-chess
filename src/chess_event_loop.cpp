@@ -3,6 +3,7 @@
 #include <cppurses/system/event_loop.hpp>
 
 #include "chessboard_widget.hpp"
+#include "shared_user_input.hpp"
 
 namespace chess {
 
@@ -14,6 +15,11 @@ void Chess_event_loop::loop_function() {
         this->exit(0);
     }
     chessboard_widget_.take_turn();
+}
+
+void Chess_event_loop::exit(int return_code) {
+    Shared_user_input::exit_requested = true;
+    Event_loop::exit(return_code);
 }
 
 }  // namespace chess
