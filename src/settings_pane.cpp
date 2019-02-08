@@ -1,10 +1,14 @@
 #include "settings_pane.hpp"
 
-#include <cppurses/cppurses.hpp>
+#include <cppurses/painter/color.hpp>
+#include <cppurses/widget/border.hpp>
+#include <cppurses/widget/widget_free_functions.hpp>
+
+using namespace cppurses;
 
 Settings_pane::Settings_pane() {
     this->set_name("Settings_pane");
-    enable_border(*this);
+    this->border.enabled = true;
     this->border.north_east = L'─';
     this->border.north_west = L'╭';
     this->border.south_west = L'╰';

@@ -1,4 +1,4 @@
-#include <cppurses/cppurses.hpp>
+#include <cppurses/system/system.hpp>
 
 #include "chess_ui.hpp"
 

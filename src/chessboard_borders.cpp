@@ -1,14 +1,18 @@
 #include "chessboard_borders.hpp"
 
-#include <cppurses/cppurses.hpp>
+#include <cppurses/painter/color.hpp>
+#include <cppurses/widget/size_policy.hpp>
+#include <cppurses/widget/widgets/text_display.hpp>
+
+using namespace cppurses;
 
 Row_listing::Row_listing() : Text_display{"⁸⁷⁶⁵⁴³²¹"} {
     this->width_policy.type(Size_policy::Fixed);
     this->width_policy.hint(1);
     this->height_policy.type(Size_policy::Fixed);
     this->height_policy.hint(8);
-    set_foreground(*this, Color::Dark_blue);
-    set_background(*this, Color::White);
+    this->brush.set_foreground(Color::Dark_blue);
+    this->brush.set_background(Color::White);
     this->disable_word_wrap();
 }
 
@@ -17,8 +21,8 @@ Column_listing::Column_listing() : Text_display{"  ᵃ  ᵇ  ᶜ  ᵈ  ᵉ  ᶠ 
     this->width_policy.hint(26);
     this->height_policy.type(Size_policy::Fixed);
     this->height_policy.hint(1);
-    set_foreground(*this, Color::Dark_blue);
-    set_background(*this, Color::White);
+    this->brush.set_foreground(Color::Dark_blue);
+    this->brush.set_background(Color::White);
     this->disable_word_wrap();
 }
 

@@ -1,11 +1,7 @@
 #ifndef CHESSBOARD_WIDGET_HPP
 #define CHESSBOARD_WIDGET_HPP
-#include <cstddef>
-#include <cstdint>
-#include <string>
-#include <utility>
+#include <cppurses/widget/widget.hpp>
 
-#include <cppurses/cppurses.hpp>
 #include <optional/optional.hpp>
 #include <signals/signals.hpp>
 
@@ -15,10 +11,8 @@
 #include "position.hpp"
 #include "side.hpp"
 
-using namespace cppurses;
-
 /// Responsible for displaying the state of the game and for taking user input.
-class Chessboard_widget : public Widget {
+class Chessboard_widget : public cppurses::Widget {
    public:
     Chessboard_widget();
 
@@ -53,7 +47,7 @@ class Chessboard_widget : public Widget {
 
    protected:
     bool paint_event() override;
-    bool mouse_press_event(const Mouse_data& mouse) override;
+    bool mouse_press_event(const cppurses::Mouse_data& mouse) override;
     bool enable_event() override;
     bool disable_event() override;
 

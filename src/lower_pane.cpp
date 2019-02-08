@@ -1,6 +1,10 @@
 #include "lower_pane.hpp"
 
-#include <cppurses/cppurses.hpp>
+#include <cppurses/painter/attribute.hpp>
+#include <cppurses/painter/color.hpp>
+#include <cppurses/painter/glyph.hpp>
+#include <cppurses/widget/size_policy.hpp>
+#include <cppurses/widget/widget_free_functions.hpp>
 
 #include "chessboard_widget.hpp"
 #include "side.hpp"
@@ -52,5 +56,4 @@ sig::Slot<void(Move)> toggle_status(Lower_pane& lp,
     slot.track(board.destroyed);
     return slot;
 }
-
 }  // namespace slot

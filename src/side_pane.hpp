@@ -1,6 +1,14 @@
 #ifndef SIDE_PANE_HPP
 #define SIDE_PANE_HPP
-#include <cppurses/cppurses.hpp>
+#include <cppurses/painter/attribute.hpp>
+#include <cppurses/painter/color.hpp>
+#include <cppurses/painter/glyph_string.hpp>
+#include <cppurses/widget/layouts/horizontal_layout.hpp>
+#include <cppurses/widget/layouts/vertical_layout.hpp>
+#include <cppurses/widget/widgets/blank_height.hpp>
+#include <cppurses/widget/widgets/log.hpp>
+#include <cppurses/widget/widgets/push_button.hpp>
+#include <cppurses/widget/widgets/status_bar.hpp>
 
 #include "chessboard_widget.hpp"
 #include "move.hpp"
@@ -8,20 +16,23 @@
 #include "piece.hpp"
 #include "side.hpp"
 
-using namespace cppurses;
-
-struct Side_pane : public Vertical_layout {
+struct Side_pane : public cppurses::Vertical_layout {
     Side_pane();
 
-    Horizontal_layout& hl_status{this->make_child<Horizontal_layout>()};
-    Status_bar& status{hl_status.make_child<Status_bar>(
-        Glyph_string{" W", Attribute::Bold, foreground(Color::White)})};
-    Push_button& settings_btn{hl_status.make_child<Push_button>("Settings")};
-    Blank_height& blank_space{hl_status.make_child<Blank_height>(2)};
+    cppurses::Horizontal_layout& hl_status{
+        this->make_child<cppurses::Horizontal_layout>()};
+    cppurses::Status_bar& status{hl_status.make_child<cppurses::Status_bar>(
+        cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
+                               foreground(cppurses::Color::White)})};
+    cppurses::Push_button& settings_btn{
+        hl_status.make_child<cppurses::Push_button>("Settings")};
+    cppurses::Blank_height& blank_space{
+        hl_status.make_child<cppurses::Blank_height>(2)};
 
-    Log& chess_log{this->make_child<Log>()};
+    cppurses::Log& chess_log{this->make_child<cppurses::Log>()};
 
-    Horizontal_layout& hl{this->make_child<Horizontal_layout>()};
+    cppurses::Horizontal_layout& hl{
+        this->make_child<cppurses::Horizontal_layout>()};
     Move_input& move_input{hl.make_child<Move_input>("Type Move")};
 
     void toggle_status(const Chessboard_widget& board);
@@ -45,5 +56,4 @@ sig::Slot<void(chess::Side)> post_check_message(Side_pane& sp);
 sig::Slot<void(chess::Side)> post_stalemate_message(Side_pane& sp);
 
 }  // namespace slot
-
 #endif  // SIDE_PANE_HPP

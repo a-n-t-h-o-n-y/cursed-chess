@@ -2,10 +2,19 @@
 
 #include <sstream>
 
+#include <cppurses/painter/attribute.hpp>
+#include <cppurses/painter/color.hpp>
+#include <cppurses/painter/glyph.hpp>
+#include <cppurses/widget/border.hpp>
+#include <cppurses/widget/focus_policy.hpp>
+#include <cppurses/widget/size_policy.hpp>
+#include <cppurses/widget/widget_free_functions.hpp>
+
 #include "chessboard_widget.hpp"
 #include "figure.hpp"
 
 using namespace chess;
+using namespace cppurses;
 
 Side_pane::Side_pane() {
     this->set_name("Chess - Side_pane");
@@ -198,5 +207,4 @@ sig::Slot<void(Side)> post_check_message(Side_pane& sp) {
     slot.track(sp.destroyed);
     return slot;
 }
-
 }  // namespace slot

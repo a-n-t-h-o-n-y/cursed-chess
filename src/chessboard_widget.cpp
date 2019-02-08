@@ -1,12 +1,15 @@
 #include "chessboard_widget.hpp"
 
 #include <algorithm>
-#include <cstddef>
-#include <cstdint>
 #include <iterator>
+#include <mutex>
 
+#include <cppurses/painter/color.hpp>
+#include <cppurses/painter/glyph_string.hpp>
+#include <cppurses/painter/painter.hpp>
 #include <cppurses/system/mouse_data.hpp>
 #include <cppurses/system/system.hpp>
+#include <cppurses/widget/size_policy.hpp>
 
 #include "chess_move_request_event.hpp"
 #include "figure.hpp"

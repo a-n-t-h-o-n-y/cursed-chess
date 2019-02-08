@@ -1,8 +1,8 @@
 #include "chess_ui.hpp"
 
-#include <string>
-
 #include <signals/slot.hpp>
+
+#include <cppurses/system/focus.hpp>
 
 #include "no_rules.hpp"
 #include "player_human.hpp"
@@ -11,6 +11,7 @@
 #include "standard_rules.hpp"
 
 using namespace chess;
+using namespace cppurses;
 
 Left_side::Left_side() {
     stack.set_name("stack in Left_side");
@@ -99,7 +100,7 @@ Chess_UI::Chess_UI() {
     left_side.board.chessboard.board_reset.connect(
         [this] { right_side.toggle_status(left_side.board.chessboard); });
     left_side.board.chessboard.board_reset.connect(
-            [this](){right_side.chess_log.clear();});
+        [this]() { right_side.chess_log.clear(); });
 
     // right_side
     right_side.settings_btn.clicked.connect(

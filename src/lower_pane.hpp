@@ -1,20 +1,25 @@
 #ifndef LOWER_PANE_HPP
 #define LOWER_PANE_HPP
-#include <cppurses/cppurses.hpp>
+#include <cppurses/painter/attribute.hpp>
+#include <cppurses/painter/color.hpp>
+#include <cppurses/widget/layouts/horizontal_layout.hpp>
+#include <cppurses/widget/widgets/push_button.hpp>
+#include <cppurses/widget/widgets/status_bar.hpp>
+
 #include <signals/slot.hpp>
 
 #include "chessboard_widget.hpp"
 #include "move_input.hpp"
 
-using namespace cppurses;
-
-struct Lower_pane : public Horizontal_layout {
+struct Lower_pane : public cppurses::Horizontal_layout {
     Lower_pane();
 
-    Status_bar& status{this->make_child<Status_bar>(
-        Glyph_string{" W", Attribute::Bold, foreground(Color::White)})};
+    cppurses::Status_bar& status{this->make_child<cppurses::Status_bar>(
+        cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
+                               foreground(cppurses::Color::White)})};
     Move_input& move_input{this->make_child<Move_input>("Type Move")};
-    Push_button& settings_btn{this->make_child<Push_button>("Settings")};
+    cppurses::Push_button& settings_btn{
+        this->make_child<cppurses::Push_button>("Settings")};
 
     void toggle_status(const Chessboard_widget& board);
 };
@@ -25,5 +30,4 @@ sig::Slot<void(Move)> toggle_status(Lower_pane& lp,
                                     const Chessboard_widget& board);
 
 }  // namespace slot
-
 #endif  // LOWER_PANE_HPP

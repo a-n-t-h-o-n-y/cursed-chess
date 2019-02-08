@@ -1,28 +1,36 @@
 #ifndef SETTINGS_PANE_HPP
 #define SETTINGS_PANE_HPP
-#include <cppurses/cppurses.hpp>
+#include <cppurses/painter/attribute.hpp>
+#include <cppurses/painter/glyph_string.hpp>
+#include <cppurses/widget/layouts/vertical_layout.hpp>
+#include <cppurses/widget/widgets/blank_height.hpp>
+#include <cppurses/widget/widgets/checkbox.hpp>
+#include <cppurses/widget/widgets/labeled_cycle_box.hpp>
+#include <cppurses/widget/widgets/push_button.hpp>
 
-using namespace cppurses;
-
-struct Settings_pane : public Vertical_layout {
+struct Settings_pane : public cppurses::Vertical_layout {
     Settings_pane();
 
-    Checkbox& show_moves_box{this->make_child<Checkbox>("Show Moves")};
-    Checkbox& hide_log_box{this->make_child<Checkbox>("Hide Log")};
+    cppurses::Checkbox& show_moves_box{
+        this->make_child<cppurses::Checkbox>("Show Moves")};
+    cppurses::Checkbox& hide_log_box{
+        this->make_child<cppurses::Checkbox>("Hide Log")};
 
    private:
-    Blank_height& space_1_{this->make_child<Blank_height>()};
+    cppurses::Blank_height& space_1_{
+        this->make_child<cppurses::Blank_height>()};
 
    public:
-    Labeled_cycle_box& black_ai{
-        this->make_child<Labeled_cycle_box>("Black AI ")};
-    Labeled_cycle_box& white_ai{
-        this->make_child<Labeled_cycle_box>("White AI ")};
-    Labeled_cycle_box& ruleset{
-        this->make_child<Labeled_cycle_box>("Ruleset  ")};
-    Push_button& reset_btn{this->make_child<Push_button>(
-        Glyph_string{" Reset Game ", Attribute::Underline})};
-    Push_button& return_btn{this->make_child<Push_button>("Return to Board")};
+    cppurses::Labeled_cycle_box& black_ai{
+        this->make_child<cppurses::Labeled_cycle_box>("Black AI ")};
+    cppurses::Labeled_cycle_box& white_ai{
+        this->make_child<cppurses::Labeled_cycle_box>("White AI ")};
+    cppurses::Labeled_cycle_box& ruleset{
+        this->make_child<cppurses::Labeled_cycle_box>("Ruleset  ")};
+    cppurses::Push_button& reset_btn{
+        this->make_child<cppurses::Push_button>(cppurses::Glyph_string{
+            " Reset Game ", cppurses::Attribute::Underline})};
+    cppurses::Push_button& return_btn{
+        this->make_child<cppurses::Push_button>("Return to Board")};
 };
-
 #endif  // SETTINGS_PANE_HPP
