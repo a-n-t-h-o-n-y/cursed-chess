@@ -27,7 +27,7 @@ class Chessboard_widget : public Widget {
     void make_move(const Move& move);
     chess::Side current_side() const;
 
-    /// Pauses the game loop.
+    /// Pause the game loop.
     void pause();
 
     /// Start the game loop, possibly after a pause.

@@ -61,8 +61,6 @@ Left_side::Left_side() {
         cppurses::slot::set_active_page(stack, 1));
     lower_pane.move_input.reset_requested.connect(
         ::slot::reset_game(board.chessboard));
-    // lower_pane.move_input.move_requested.connect(
-    //     ::slot::make_move(board.chessboard));
     board.chessboard.move_made.connect(
         ::slot::toggle_status(lower_pane, board.chessboard));
     board.chessboard.board_reset.connect(
@@ -101,15 +99,13 @@ Chess_UI::Chess_UI() {
     left_side.board.chessboard.board_reset.connect(
         [this] { right_side.toggle_status(left_side.board.chessboard); });
     left_side.board.chessboard.board_reset.connect(
-        cppurses::slot::clear(right_side.chess_log));
+            [this](){right_side.chess_log.clear();});
 
     // right_side
     right_side.settings_btn.clicked.connect(
         cppurses::slot::set_active_page(left_side.stack, 1));
     right_side.move_input.reset_requested.connect(
         ::slot::reset_game(left_side.board.chessboard));
-    // right_side.move_input.move_requested.connect(
-    //     ::slot::make_move(left_side.board.chessboard));
 }
 
 void Chess_UI::toggle_logs() {

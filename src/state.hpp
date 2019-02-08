@@ -22,11 +22,11 @@ struct Board_state {
     /// state from a thread other than the main thread.
     mutable std::recursive_mutex mtx;
 
-    /// Returns a copy of the Piece at Position p. Throws std::out_of_range if
+    /// Return a copy of the Piece at Position p. Throws std::out_of_range if
     /// no Piece at \p p. Thread safe.
     Piece at(Position p) const;
 
-    /// Returns true if there is a Piece on the board at \p p. Thread safe.
+    /// Return true if there is a Piece on the board at \p p. Thread safe.
     bool has_piece_at(Position p) const;
 
     /// Finds all Positions where the Figure appears on the board(Side not used)
@@ -40,7 +40,7 @@ struct Board_state {
 };
 
 struct State {
-    /// Sets up all the Pieces on the board.
+    /// Set up all of the Pieces on the board.
     State();
 
     /// Holds the Pieces and their positions in a map, with a provided mutex.
@@ -51,7 +51,7 @@ struct State {
 
     bool game_over{false};
 
-    /// Sets the Pieces back to their original positions and the current_side.
+    /// Set the Pieces back to their original positions and the current_side.
     void reset();
 
     /// Signal is called when the board is reset to its initial state.

@@ -19,7 +19,7 @@ class Rules {
     /// piece and the state of the board.
     bool validate(const chess::State& state, const Move& move) const;
 
-    /// returns a vector of potential end positions from start positions.
+    /// return a vector of potential end positions from start positions.
     Positions get_valid_positions(const chess::State& state,
                                   Position position) const;
 

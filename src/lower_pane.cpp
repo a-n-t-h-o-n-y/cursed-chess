@@ -34,10 +34,10 @@ Lower_pane::Lower_pane() {
 
 void Lower_pane::toggle_status(const Chessboard_widget& board) {
     if (board.current_side() == chess::Side::Black) {
-        status.set_text(
+        status.set_contents(
             Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
     } else {
-        status.set_text(
+        status.set_contents(
             Glyph_string{" W", Attribute::Bold, foreground(Color::White)});
     }
 }

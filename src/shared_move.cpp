@@ -8,7 +8,7 @@
 
 namespace chess {
 
-/// Sets the state of the variable and notifies any threads calling get().
+/// Set the state of the variable and notify any threads calling get().
 void Shared_move::set(const Move& value) {
     {
         std::lock_guard<std::mutex> lock{mtx};

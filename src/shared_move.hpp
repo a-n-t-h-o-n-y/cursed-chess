@@ -14,7 +14,7 @@ struct Chess_loop_exit_request {};
 /** Handles spurious wakeups internally. */
 class Shared_move {
    public:
-    /// Sets the state of the variable and notifies all threads calling get().
+    /// Set the state of the variable and notify all threads calling get().
     void set(const Move& value);
 
     /// Blocking call to retrieve the shared state value.

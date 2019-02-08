@@ -100,10 +100,10 @@ Side_pane::Side_pane() {
 
 void Side_pane::toggle_status(const Chessboard_widget& board) {
     if (board.current_side() == Side::Black) {
-        status.set_text(
+        status.set_contents(
             Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
     } else {
-        status.set_text(
+        status.set_contents(
             Glyph_string{" W", Attribute::Bold, foreground(Color::White)});
     }
 }

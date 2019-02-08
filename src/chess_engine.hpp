@@ -27,10 +27,10 @@ class Chess_engine {
     template <typename Rule_t, typename... Args>
     void set_ruleset(Args&&... args);
 
-    /// Returns a container of positions and pieces. Useful for GUI dispaly.
+    /// Return a container of positions and pieces. Useful for GUI dispaly.
     const chess::State& state() const;
 
-    /// Returns a container of positions and pieces. Useful for GUI dispaly.
+    /// Return a container of positions and pieces. Useful for GUI dispaly.
     chess::State& state();
 
     /// Return a point to the Black Side Player.
@@ -42,7 +42,7 @@ class Chess_engine {
     /// Verifies the move with the Ruleset, if valid will update the State.
     bool make_move(Move move);
 
-    /// Returns potential ending positions if given a starting position.
+    /// Return potential ending positions if given a starting position.
     /// Calculated from the Ruleset. Should be free function that takes in
     /// Ruleset and State.
     Positions get_valid_positions(Position position) const;
