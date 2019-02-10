@@ -27,7 +27,6 @@ Settings_pane::Settings_pane() {
     return_btn.set_name("return_btn in Settings_pane");
 
     // Return Button
-    return_btn.set_alignment(Alignment::Center);
-    set_background(return_btn, Color::Blue);
-    set_foreground(return_btn, Color::White);
+    return_btn.brush.set_background(Color::Blue);
+    return_btn.brush.set_foreground(Color::White);
 }
