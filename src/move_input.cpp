@@ -31,7 +31,7 @@ Move_input::Move_input(Glyph_string initial_text)
     this->clear_on_enter();
     this->brush.add_attributes(Attribute::Underline);
     this->wallpaper = Glyph{L' ', Attribute::Underline};
-    this->editing_finished.connect(
+    this->edit_finished.connect(
         [this](std::string text) { process_action(text); });
     this->set_validator(
         [](char c) { return !std::ispunct(c) && !std::isspace(c); });
