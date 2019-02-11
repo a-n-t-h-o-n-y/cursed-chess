@@ -2,13 +2,13 @@
 #define SETTINGS_PANE_HPP
 #include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/glyph_string.hpp>
-#include <cppurses/widget/layouts/vertical_layout.hpp>
+#include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/blank_height.hpp>
 #include <cppurses/widget/widgets/checkbox.hpp>
 #include <cppurses/widget/widgets/labeled_cycle_box.hpp>
 #include <cppurses/widget/widgets/push_button.hpp>
 
-struct Settings_pane : public cppurses::Vertical_layout {
+struct Settings_pane : public cppurses::layout::Vertical {
     Settings_pane();
 
     cppurses::Checkbox& show_moves_box{

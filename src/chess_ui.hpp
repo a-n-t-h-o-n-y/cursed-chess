@@ -1,6 +1,6 @@
 #ifndef CHESS_UI_HPP
 #define CHESS_UI_HPP
-#include <cppurses/widget/layouts/vertical_layout.hpp>
+#include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/widget_stack.hpp>
 
 #include <signals/slot.hpp>
@@ -10,7 +10,7 @@
 #include "settings_pane.hpp"
 #include "side_pane.hpp"
 
-class Left_side : public cppurses::Vertical_layout {
+class Left_side : public cppurses::layout::Vertical {
    public:
     Left_side();
 
@@ -25,7 +25,7 @@ class Left_side : public cppurses::Vertical_layout {
     bool lower_pane_enabled{false};
 };
 
-class Chess_UI : public cppurses::Horizontal_layout {
+class Chess_UI : public cppurses::layout::Horizontal {
    public:
     Chess_UI();
 

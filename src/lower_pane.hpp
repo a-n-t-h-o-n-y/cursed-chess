@@ -2,7 +2,7 @@
 #define LOWER_PANE_HPP
 #include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
-#include <cppurses/widget/layouts/horizontal_layout.hpp>
+#include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/widgets/push_button.hpp>
 #include <cppurses/widget/widgets/status_bar.hpp>
 
@@ -11,7 +11,7 @@
 #include "chessboard_widget.hpp"
 #include "move_input.hpp"
 
-struct Lower_pane : public cppurses::Horizontal_layout {
+struct Lower_pane : public cppurses::layout::Horizontal {
     Lower_pane();
 
     cppurses::Status_bar& status{this->make_child<cppurses::Status_bar>(

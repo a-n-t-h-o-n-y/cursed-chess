@@ -3,8 +3,8 @@
 #include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph_string.hpp>
-#include <cppurses/widget/layouts/horizontal_layout.hpp>
-#include <cppurses/widget/layouts/vertical_layout.hpp>
+#include <cppurses/widget/layouts/horizontal.hpp>
+#include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/blank_height.hpp>
 #include <cppurses/widget/widgets/log.hpp>
 #include <cppurses/widget/widgets/push_button.hpp>
@@ -16,11 +16,11 @@
 #include "piece.hpp"
 #include "side.hpp"
 
-struct Side_pane : public cppurses::Vertical_layout {
+struct Side_pane : public cppurses::layout::Vertical {
     Side_pane();
 
-    cppurses::Horizontal_layout& hl_status{
-        this->make_child<cppurses::Horizontal_layout>()};
+    cppurses::layout::Horizontal& hl_status{
+        this->make_child<cppurses::layout::Horizontal>()};
     cppurses::Status_bar& status{hl_status.make_child<cppurses::Status_bar>(
         cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
                                foreground(cppurses::Color::White)})};
@@ -31,8 +31,8 @@ struct Side_pane : public cppurses::Vertical_layout {
 
     cppurses::Log& chess_log{this->make_child<cppurses::Log>()};
 
-    cppurses::Horizontal_layout& hl{
-        this->make_child<cppurses::Horizontal_layout>()};
+    cppurses::layout::Horizontal& hl{
+        this->make_child<cppurses::layout::Horizontal>()};
     Move_input& move_input{hl.make_child<Move_input>("Type Move")};
 
     void toggle_status(const Chessboard_widget& board);

@@ -1,7 +1,7 @@
 #ifndef CHESSBOARD_BORDERS_HPP
 #define CHESSBOARD_BORDERS_HPP
-#include <cppurses/widget/layouts/horizontal_layout.hpp>
-#include <cppurses/widget/layouts/vertical_layout.hpp>
+#include <cppurses/widget/layouts/horizontal.hpp>
+#include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/text_display.hpp>
 
 #include "chessboard_widget.hpp"
@@ -16,12 +16,12 @@ class Column_listing : public cppurses::Text_display {
     Column_listing();
 };
 
-struct Chessboard_with_borders : public cppurses::Vertical_layout {
+struct Chessboard_with_borders : public cppurses::layout::Vertical {
     Chessboard_with_borders();
 
     Column_listing& top_column{this->make_child<Column_listing>()};
-    cppurses::Horizontal_layout& middle_layout{
-        this->make_child<cppurses::Horizontal_layout>()};
+    cppurses::layout::Horizontal& middle_layout{
+        this->make_child<cppurses::layout::Horizontal>()};
     Row_listing& left_row{middle_layout.make_child<Row_listing>()};
     Chessboard_widget& chessboard{
         middle_layout.make_child<Chessboard_widget>()};
