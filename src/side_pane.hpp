@@ -5,7 +5,7 @@
 #include <cppurses/painter/glyph_string.hpp>
 #include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
-#include <cppurses/widget/widgets/blank_height.hpp>
+#include <cppurses/widget/widgets/fixed_height.hpp>
 #include <cppurses/widget/widgets/log.hpp>
 #include <cppurses/widget/widgets/push_button.hpp>
 #include <cppurses/widget/widgets/status_bar.hpp>
@@ -26,8 +26,8 @@ struct Side_pane : public cppurses::layout::Vertical {
                                foreground(cppurses::Color::White)})};
     cppurses::Push_button& settings_btn{
         hl_status.make_child<cppurses::Push_button>("Settings")};
-    cppurses::Blank_height& blank_space{
-        hl_status.make_child<cppurses::Blank_height>(2)};
+    cppurses::Fixed_height& blank_space{
+        hl_status.make_child<cppurses::Fixed_height>(2)};
 
     cppurses::Log& chess_log{this->make_child<cppurses::Log>()};
 

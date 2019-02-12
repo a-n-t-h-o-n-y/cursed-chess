@@ -3,8 +3,8 @@
 #include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/glyph_string.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
-#include <cppurses/widget/widgets/blank_height.hpp>
 #include <cppurses/widget/widgets/checkbox.hpp>
+#include <cppurses/widget/widgets/fixed_height.hpp>
 #include <cppurses/widget/widgets/labeled_cycle_box.hpp>
 #include <cppurses/widget/widgets/push_button.hpp>
 
@@ -17,8 +17,8 @@ struct Settings_pane : public cppurses::layout::Vertical {
         this->make_child<cppurses::Checkbox>("Hide Log")};
 
    private:
-    cppurses::Blank_height& space_1_{
-        this->make_child<cppurses::Blank_height>()};
+    cppurses::Fixed_height& space_1_{
+        this->make_child<cppurses::Fixed_height>()};
 
    public:
     cppurses::Labeled_cycle_box& black_ai{
