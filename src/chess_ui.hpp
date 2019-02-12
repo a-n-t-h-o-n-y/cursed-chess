@@ -1,7 +1,7 @@
 #ifndef CHESS_UI_HPP
 #define CHESS_UI_HPP
+#include <cppurses/widget/layouts/stack.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
-#include <cppurses/widget/widgets/widget_stack.hpp>
 
 #include <signals/slot.hpp>
 
@@ -17,7 +17,7 @@ class Left_side : public cppurses::layout::Vertical {
     void enable(bool enable = true,
                 bool post_child_polished_event = true) override;
 
-    cppurses::Widget_stack& stack{this->make_child<cppurses::Widget_stack>()};
+    cppurses::layout::Stack& stack{this->make_child<cppurses::layout::Stack>()};
     Chessboard_with_borders& board{stack.make_page<Chessboard_with_borders>()};
     Settings_pane& settings{stack.make_page<Settings_pane>()};
     Lower_pane& lower_pane{this->make_child<Lower_pane>()};
