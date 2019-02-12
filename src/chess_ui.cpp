@@ -25,7 +25,7 @@ Left_side::Left_side() {
     stack.set_active_page(0);
     stack.height_policy.type(Size_policy::Fixed);
     stack.height_policy.hint(10);
-    stack.sets_focus_on_change(false);
+    stack.give_focus_on_change(false);
 
     // Settings Pane
     settings.return_btn.clicked.connect(
