@@ -18,13 +18,11 @@ Left_side::Left_side() {
     board.set_name("board in Left_side");
 
     this->set_name("Left_side");
-    this->width_policy.type(Size_policy::Fixed);
-    this->width_policy.hint(26);
+    this->width_policy.fixed(26);
 
     // Stack
     stack.set_active_page(0);
-    stack.height_policy.type(Size_policy::Fixed);
-    stack.height_policy.hint(10);
+    stack.height_policy.fixed(10);
     stack.give_focus_on_change(false);
 
     // Settings Pane

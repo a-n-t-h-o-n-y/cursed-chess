@@ -7,7 +7,6 @@
 #include <cppurses/painter/glyph.hpp>
 #include <cppurses/widget/border.hpp>
 #include <cppurses/widget/focus_policy.hpp>
-#include <cppurses/widget/size_policy.hpp>
 #include <cppurses/widget/widget_free_functions.hpp>
 
 #include "chessboard_widget.hpp"
@@ -18,23 +17,19 @@ using namespace cppurses;
 
 Side_pane::Side_pane() {
     this->set_name("Chess - Side_pane");
-    this->width_policy.type(Size_policy::Maximum);
-    this->width_policy.max(26);
-    this->width_policy.hint(26);
+    this->width_policy.maximum(26);
+    this->width_policy.max_size(26);
 
     // hl_status
     hl_status.set_name("hl_status in Chess - Side_pane");
-    hl_status.height_policy.type(Size_policy::Fixed);
-    hl_status.height_policy.hint(2);
+    hl_status.height_policy.fixed(2);
     set_background_recursive(hl_status, Color::Dark_blue);
     set_foreground_recursive(hl_status, Color::Light_gray);
 
     // status bar
     status.set_name("status in Chess - Side_pane");
-    status.width_policy.type(Size_policy::Fixed);
-    status.width_policy.hint(4);
-    status.height_policy.type(Size_policy::Fixed);
-    status.height_policy.hint(2);
+    status.width_policy.fixed(4);
+    status.height_policy.fixed(2);
 
     status.border.enable();
     status.border.segments.disable_all();
@@ -47,8 +42,7 @@ Side_pane::Side_pane() {
 
     // settings_btn
     settings_btn.set_name("settings_btn in Chess - Side_pane");
-    settings_btn.width_policy.type(Size_policy::Preferred);
-    settings_btn.width_policy.hint(12);
+    settings_btn.width_policy.preferred(12);
 
     settings_btn.border.enable();
     settings_btn.border.segments.disable_all();
@@ -77,8 +71,7 @@ Side_pane::Side_pane() {
     chess_log.set_name("chess_log in Chess - Side_pane");
     chess_log.cursor.disable();
     chess_log.focus_policy = Focus_policy::None;
-    chess_log.height_policy.type(Size_policy::Fixed);
-    chess_log.height_policy.hint(6);
+    chess_log.height_policy.fixed(6);
     set_background(chess_log, Color::Dark_blue);
     set_foreground(chess_log, Color::Light_gray);
 
@@ -90,8 +83,7 @@ Side_pane::Side_pane() {
     // hl - bottom
     hl.set_name("hl in Chess - Side_pane");
     set_background_recursive(hl, Color::Dark_blue);
-    hl.height_policy.type(Size_policy::Fixed);
-    hl.height_policy.hint(2);
+    hl.height_policy.fixed(2);
 
     // move_input
     move_input.set_name("move_input in Chess - Side_pane");
@@ -107,7 +99,7 @@ Side_pane::Side_pane() {
         Glyph{L'├', foreground(Color::Blue)};
 
     set_foreground(move_input, Color::Light_gray);
-    move_input.height_policy.hint(2);
+    move_input.height_policy.fixed(2);
 }
 
 void Side_pane::toggle_status(const Chessboard_widget& board) {

@@ -3,7 +3,6 @@
 #include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph.hpp>
-#include <cppurses/widget/size_policy.hpp>
 #include <cppurses/widget/widget_free_functions.hpp>
 
 #include "chessboard_widget.hpp"
@@ -13,11 +12,8 @@ using namespace cppurses;
 
 Lower_pane::Lower_pane() {
     this->set_name("Lower_pane in Left_side");
-    this->width_policy.type(Size_policy::Fixed);
-    this->width_policy.hint(26);
-
-    this->height_policy.type(Size_policy::Fixed);
-    this->height_policy.hint(1);
+    this->width_policy.fixed(26);
+    this->height_policy.fixed(1);
 
     set_background_recursive(*this, Color::Dark_blue);
     set_foreground_recursive(*this, Color::Light_gray);
@@ -28,9 +24,7 @@ Lower_pane::Lower_pane() {
     move_input.border.segments.east = Glyph{L'│', foreground(Color::Blue)};
 
     // status
-    status.width_policy.type(Size_policy::Fixed);
-    status.width_policy.hint(4);
-
+    status.width_policy.fixed(4);
     status.border.enable();
     status.border.segments.disable_all();
     status.border.segments.north.enable();

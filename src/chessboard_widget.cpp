@@ -9,7 +9,6 @@
 #include <cppurses/painter/painter.hpp>
 #include <cppurses/system/mouse_data.hpp>
 #include <cppurses/system/system.hpp>
-#include <cppurses/widget/size_policy.hpp>
 
 #include "chess_move_request_event.hpp"
 #include "figure.hpp"
@@ -62,11 +61,8 @@ Position screen_to_board_position(Position screen_position) {
 
 Chessboard_widget::Chessboard_widget() {
     this->set_name("Chessboard_widget");
-
-    this->height_policy.type(Size_policy::Fixed);
-    this->height_policy.hint(8);
-    this->width_policy.type(Size_policy::Fixed);
-    this->width_policy.hint(24);
+    this->height_policy.fixed(8);
+    this->width_policy.fixed(24);
 
     engine_.move_made.connect([this](Move m) { this->move_made(m); });
     engine_.move_made.connect([this](Move m) { this->update(); });
