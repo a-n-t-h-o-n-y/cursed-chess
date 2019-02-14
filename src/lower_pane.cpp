@@ -23,17 +23,20 @@ Lower_pane::Lower_pane() {
     set_foreground_recursive(*this, Color::Light_gray);
 
     // move_input
-    enable_border(move_input);
-    move_input.border.west = Glyph{L'│', foreground(Color::Blue)};
-    move_input.border.east = Glyph{L'│', foreground(Color::Blue)};
+    move_input.border.enable();
+    move_input.border.segments.west = Glyph{L'│', foreground(Color::Blue)};
+    move_input.border.segments.east = Glyph{L'│', foreground(Color::Blue)};
 
     // status
-    enable_border(status);
-    disable_corners(status.border);
-    status.border.east_enabled = false;
-    status.border.west = Glyph{L'╰', foreground(Color::Blue)};
     status.width_policy.type(Size_policy::Fixed);
     status.width_policy.hint(4);
+
+    status.border.enable();
+    status.border.segments.disable_all();
+    status.border.segments.north.enable();
+    status.border.segments.south.enable();
+    status.border.segments.west.enable();
+    status.border.segments.west = Glyph{L'╰', foreground(Color::Blue)};
 }
 
 void Lower_pane::toggle_status(const Chessboard_widget& board) {

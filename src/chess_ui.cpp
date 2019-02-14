@@ -112,11 +112,11 @@ Chess_UI::Chess_UI() {
 void Chess_UI::toggle_logs() {
     left_side.lower_pane_enabled = !left_side.lower_pane_enabled;
     if (left_side.lower_pane_enabled) {
-        left_side.settings.border.south_west = L'│';
-        left_side.settings.border.north_east = L'╮';
+        left_side.settings.border.segments.south_west = L'│';
+        left_side.settings.border.segments.north_east = L'╮';
     } else {
-        left_side.settings.border.south_west = L'╰';
-        left_side.settings.border.north_east = L'─';
+        left_side.settings.border.segments.south_west = L'╰';
+        left_side.settings.border.segments.north_east = L'─';
     }
     this->enable(this->enabled());
     Focus::clear_focus();

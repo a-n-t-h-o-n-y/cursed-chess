@@ -8,15 +8,17 @@ using namespace cppurses;
 
 Settings_pane::Settings_pane() {
     this->set_name("Settings_pane");
-    this->border.enabled = true;
-    this->border.north_east = L'─';
-    this->border.north_west = L'╭';
-    this->border.south_west = L'╰';
-    this->border.south_enabled = false;
-    this->border.east_enabled = false;
-    this->border.south_east_enabled = false;
+
     set_background_recursive(*this, Color::White);
     set_foreground_recursive(*this, Color::Blue);
+
+    this->border.enable();
+    this->border.segments.north_east = L'─';
+    this->border.segments.north_west = L'╭';
+    this->border.segments.south_west = L'╰';
+    this->border.segments.south.disable();
+    this->border.segments.east.disable();
+    this->border.segments.south_east.disable();
 
     show_moves_box.set_name("show_move_box in Settings_pane");
     hide_log_box.set_name("hide_log_box in Settings_pane");
