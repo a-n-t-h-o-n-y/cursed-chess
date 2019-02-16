@@ -65,7 +65,7 @@ Chessboard_widget::Chessboard_widget() {
     this->width_policy.fixed(24);
 
     engine_.move_made.connect([this](Move m) { this->move_made(m); });
-    engine_.move_made.connect([this](Move m) { this->update(); });
+    engine_.move_made.connect([this](Move) { this->update(); });
     engine_.capture.connect([this](Piece p) { this->capture(p); });
     engine_.invalid_move.connect(
         [this](const Move& m) { this->invalid_move(m); });

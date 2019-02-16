@@ -93,7 +93,7 @@ bool Rules::checkmate(const chess::State& state) const {
     return false;
 }
 
-bool Rules::stalemate(const chess::State& state) const {
+bool Rules::stalemate(const chess::State& /* state */) const {
     // TODO Implement
     return false;
 }
