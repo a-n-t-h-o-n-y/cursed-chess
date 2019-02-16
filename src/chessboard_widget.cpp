@@ -7,7 +7,7 @@
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph_string.hpp>
 #include <cppurses/painter/painter.hpp>
-#include <cppurses/system/mouse_data.hpp>
+#include <cppurses/system/events/mouse.hpp>
 #include <cppurses/system/system.hpp>
 
 #include "chess_move_request_event.hpp"
@@ -193,7 +193,7 @@ bool Chessboard_widget::paint_event() {
     return Widget::paint_event();
 }
 
-bool Chessboard_widget::mouse_press_event(const Mouse_data& mouse) {
+bool Chessboard_widget::mouse_press_event(const Mouse::State& mouse) {
     int loc_x = static_cast<int>(mouse.local.x);
     int loc_y = static_cast<int>(mouse.local.y);
     Position clicked_pos{screen_to_board_position(Position{loc_x, loc_y})};

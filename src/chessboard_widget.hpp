@@ -1,5 +1,6 @@
 #ifndef CHESSBOARD_WIDGET_HPP
 #define CHESSBOARD_WIDGET_HPP
+#include <cppurses/system/events/mouse.hpp>
 #include <cppurses/widget/widget.hpp>
 
 #include <optional/optional.hpp>
@@ -47,7 +48,7 @@ class Chessboard_widget : public cppurses::Widget {
 
    protected:
     bool paint_event() override;
-    bool mouse_press_event(const cppurses::Mouse_data& mouse) override;
+    bool mouse_press_event(const cppurses::Mouse::State& mouse) override;
     bool enable_event() override;
     bool disable_event() override;
 
