@@ -2,15 +2,19 @@
 
 #include <cppurses/painter/color.hpp>
 #include <cppurses/widget/border.hpp>
-#include <cppurses/widget/widget_free_functions.hpp>
 
 using namespace cppurses;
 
 Settings_pane::Settings_pane() {
     this->set_name("Settings_pane");
-
-    set_background_recursive(*this, Color::White);
-    set_foreground_recursive(*this, Color::Blue);
+    this->brush.set_background(Color::White);
+    this->brush.set_foreground(Color::Blue);
+    for (auto& descendant : this->children.get_descendants()) {
+        descendant->brush.set_background(Color::White);
+        descendant->brush.set_foreground(Color::Blue);
+    }
+    return_btn.brush.set_background(Color::Blue);
+    return_btn.brush.set_foreground(Color::White);
 
     this->border.enable();
     this->border.segments.north_east = L'─';
@@ -27,8 +31,4 @@ Settings_pane::Settings_pane() {
     ruleset.set_name("ruleset in Settings_pane");
     reset_btn.set_name("reset_btn in Settings_pane");
     return_btn.set_name("return_btn in Settings_pane");
-
-    // Return Button
-    return_btn.brush.set_background(Color::Blue);
-    return_btn.brush.set_foreground(Color::White);
 }

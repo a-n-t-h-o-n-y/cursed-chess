@@ -3,7 +3,6 @@
 #include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph.hpp>
-#include <cppurses/widget/widget_free_functions.hpp>
 
 #include "chessboard_widget.hpp"
 #include "side.hpp"
@@ -15,8 +14,10 @@ Lower_pane::Lower_pane() {
     this->width_policy.fixed(26);
     this->height_policy.fixed(1);
 
-    set_background_recursive(*this, Color::Dark_blue);
-    set_foreground_recursive(*this, Color::Light_gray);
+    for (auto& child : this->children.get()) {
+        child->brush.set_background(Color::Dark_blue);
+        child->brush.set_foreground(Color::Light_gray);
+    }
 
     // move_input
     move_input.border.enable();

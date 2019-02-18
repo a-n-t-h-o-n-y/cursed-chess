@@ -7,7 +7,6 @@
 #include <cppurses/painter/glyph.hpp>
 #include <cppurses/widget/border.hpp>
 #include <cppurses/widget/focus_policy.hpp>
-#include <cppurses/widget/widget_free_functions.hpp>
 
 #include "chessboard_widget.hpp"
 #include "figure.hpp"
@@ -23,8 +22,11 @@ Side_pane::Side_pane() {
     // hl_status
     hl_status.set_name("hl_status in Chess - Side_pane");
     hl_status.height_policy.fixed(2);
-    set_background_recursive(hl_status, Color::Dark_blue);
-    set_foreground_recursive(hl_status, Color::Light_gray);
+
+    for (auto& child : hl_status.children.get()) {
+        child->brush.set_background(Color::Dark_blue);
+        child->brush.set_foreground(Color::Light_gray);
+    }
 
     // status bar
     status.set_name("status in Chess - Side_pane");
@@ -72,8 +74,8 @@ Side_pane::Side_pane() {
     chess_log.cursor.disable();
     chess_log.focus_policy = Focus_policy::None;
     chess_log.height_policy.fixed(6);
-    set_background(chess_log, Color::Dark_blue);
-    set_foreground(chess_log, Color::Light_gray);
+    chess_log.brush.set_background(Color::Dark_blue);
+    chess_log.brush.set_foreground(Color::Light_gray);
 
     chess_log.border.enable();
     chess_log.border.segments.disable_all();
@@ -82,7 +84,9 @@ Side_pane::Side_pane() {
 
     // hl - bottom
     hl.set_name("hl in Chess - Side_pane");
-    set_background_recursive(hl, Color::Dark_blue);
+    for (auto& child : hl.children.get()) {
+        child->brush.set_background(Color::Dark_blue);
+    }
     hl.height_policy.fixed(2);
 
     // move_input
@@ -98,7 +102,7 @@ Side_pane::Side_pane() {
     move_input.border.segments.north_west =
         Glyph{L'├', foreground(Color::Blue)};
 
-    set_foreground(move_input, Color::Light_gray);
+    move_input.brush.set_foreground(Color::Light_gray);
     move_input.height_policy.fixed(2);
 }
 
