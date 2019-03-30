@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
-# set(CMAKE_BUILD_TYPE RELEASE)
 
 add_executable(chess 
     src/main.cpp
@@ -28,10 +27,3 @@ add_executable(chess
 target_link_libraries(chess /usr/local/lib64/liblibcppurses.a ncurses)
 target_compile_features(chess PUBLIC cxx_std_14)
 target_compile_options(chess PUBLIC -Wall)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-add_custom_target(compile_commands ALL
-	COMMAND [ -f ${CMAKE_SOURCE_DIR}/build/compile_commands.json ] 
-        && mv ${CMAKE_SOURCE_DIR}/build/compile_commands.json
-		${CMAKE_SOURCE_DIR}/compile_commands.json || :)
-
