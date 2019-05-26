@@ -10,7 +10,7 @@ namespace chess {
 /// Thrown when the chess loop has been requested to exit.
 struct Chess_loop_exit_request {};
 
-/// Provide an interface to working with a varaible accessible across threads.
+/// Provide an interface to working with a variable accessible across threads.
 /** Handles spurious wakeups internally. */
 class Shared_move {
    public:

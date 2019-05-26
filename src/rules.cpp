@@ -99,7 +99,7 @@ bool Rules::stalemate(const chess::State& /* state */) const {
 }
 
 // Helper Functions
-/// Return the oponent Side to \p side.
+/// Return the opponent Side to \p side.
 Side opponent(Side side) {
     if (side == Side::None) {
         return Side::None;
