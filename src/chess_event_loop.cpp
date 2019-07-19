@@ -8,16 +8,19 @@
 namespace chess {
 
 Chess_event_loop::Chess_event_loop(Chessboard_widget& cbw)
-    : chessboard_widget_{cbw} {}
+    : chessboard_widget_{cbw}
+{}
 
-void Chess_event_loop::loop_function() {
-    if (chessboard_widget_.engine().state().game_over) {
+auto Chess_event_loop::loop_function() -> bool
+{
+    if (chessboard_widget_.engine().state().game_over)
         this->exit(0);
-    }
     chessboard_widget_.take_turn();
+    return true;
 }
 
-void Chess_event_loop::exit(int return_code) {
+void Chess_event_loop::exit(int return_code)
+{
     Shared_user_input::exit_requested = true;
     Event_loop::exit(return_code);
 }
