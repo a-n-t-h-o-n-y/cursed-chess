@@ -117,7 +117,7 @@ void Chess_UI::toggle_logs() {
         left_side.settings.border.segments.north_east = L'─';
     }
     this->enable(this->enabled());
-    Focus::clear_focus();
+    Focus::clear();
     this->update();
 }
 
