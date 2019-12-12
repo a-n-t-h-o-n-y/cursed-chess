@@ -8,7 +8,8 @@
 #include <cppurses/widget/widgets/labeled_cycle_box.hpp>
 #include <cppurses/widget/widgets/push_button.hpp>
 
-struct Settings_pane : public cppurses::layout::Vertical {
+class Settings_pane : public cppurses::layout::Vertical<> {
+   public:
     Settings_pane();
 
     cppurses::Checkbox& show_moves_box{
@@ -33,4 +34,5 @@ struct Settings_pane : public cppurses::layout::Vertical {
     cppurses::Push_button& return_btn{
         this->make_child<cppurses::Push_button>("Return to Board")};
 };
+
 #endif  // SETTINGS_PANE_HPP

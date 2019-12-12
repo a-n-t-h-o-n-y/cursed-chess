@@ -5,11 +5,12 @@
 
 using namespace cppurses;
 
-Settings_pane::Settings_pane() {
+Settings_pane::Settings_pane()
+{
     this->set_name("Settings_pane");
     this->brush.set_background(Color::White);
     this->brush.set_foreground(Color::Blue);
-    for (auto& descendant : this->children.get_descendants()) {
+    for (auto& descendant : this->Widget::get_descendants()) {
         descendant->brush.set_background(Color::White);
         descendant->brush.set_foreground(Color::Blue);
     }

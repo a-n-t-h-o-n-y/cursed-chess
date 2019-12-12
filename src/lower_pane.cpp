@@ -9,14 +9,15 @@
 
 using namespace cppurses;
 
-Lower_pane::Lower_pane() {
+Lower_pane::Lower_pane()
+{
     this->set_name("Lower_pane in Left_side");
     this->width_policy.fixed(26);
     this->height_policy.fixed(1);
 
-    for (auto& child : this->children.get()) {
-        child->brush.set_background(Color::Dark_blue);
-        child->brush.set_foreground(Color::Light_gray);
+    for (auto& child : this->get_children()) {
+        child.brush.set_background(Color::Dark_blue);
+        child.brush.set_foreground(Color::Light_gray);
     }
 
     // move_input
@@ -34,11 +35,13 @@ Lower_pane::Lower_pane() {
     status.border.segments.west = Glyph{L'╰', foreground(Color::Blue)};
 }
 
-void Lower_pane::toggle_status(const Chessboard_widget& board) {
+void Lower_pane::toggle_status(const Chessboard_widget& board)
+{
     if (board.current_side() == chess::Side::Black) {
         status.set_contents(
             Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
-    } else {
+    }
+    else {
         status.set_contents(
             Glyph_string{" W", Attribute::Bold, foreground(Color::White)});
     }
@@ -47,11 +50,13 @@ void Lower_pane::toggle_status(const Chessboard_widget& board) {
 namespace slot {
 
 sig::Slot<void(Move)> toggle_status(Lower_pane& lp,
-                                    const Chessboard_widget& board) {
+                                    const Chessboard_widget& board)
+{
     sig::Slot<void(Move)> slot{
         [&lp, &board](Move) { lp.toggle_status(board); }};
     slot.track(lp.destroyed);
     slot.track(board.destroyed);
     return slot;
 }
+
 }  // namespace slot

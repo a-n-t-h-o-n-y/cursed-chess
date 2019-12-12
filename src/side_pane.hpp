@@ -16,24 +16,25 @@
 #include "piece.hpp"
 #include "side.hpp"
 
-struct Side_pane : public cppurses::layout::Vertical {
+class Side_pane : public cppurses::layout::Vertical<> {
+    struct Status : cppurses::layout::Horizontal<> {
+        Status();
+
+        cppurses::Status_bar& status{this->make_child<cppurses::Status_bar>(
+            cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
+                                   foreground(cppurses::Color::White)})};
+        cppurses::Push_button& settings_btn{
+            this->make_child<cppurses::Push_button>("Settings")};
+        cppurses::Fixed_height& blank_space{
+            this->make_child<cppurses::Fixed_height>(2)};
+    };
+
+   public:
     Side_pane();
 
-    cppurses::layout::Horizontal& hl_status{
-        this->make_child<cppurses::layout::Horizontal>()};
-    cppurses::Status_bar& status{hl_status.make_child<cppurses::Status_bar>(
-        cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
-                               foreground(cppurses::Color::White)})};
-    cppurses::Push_button& settings_btn{
-        hl_status.make_child<cppurses::Push_button>("Settings")};
-    cppurses::Fixed_height& blank_space{
-        hl_status.make_child<cppurses::Fixed_height>(2)};
-
+    Status& status{this->make_child<Status>()};
     cppurses::Log& chess_log{this->make_child<cppurses::Log>()};
-
-    cppurses::layout::Horizontal& hl{
-        this->make_child<cppurses::layout::Horizontal>()};
-    Move_input& move_input{hl.make_child<Move_input>("Type Move")};
+    Move_input& move_input{this->make_child<Move_input>("Type Move")};
 
     void toggle_status(const Chessboard_widget& board);
     void post_move_message(const Move& m);

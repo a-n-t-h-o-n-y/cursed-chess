@@ -11,13 +11,15 @@
 #include "chessboard_widget.hpp"
 #include "move_input.hpp"
 
-struct Lower_pane : public cppurses::layout::Horizontal {
+struct Lower_pane : public cppurses::layout::Horizontal<> {
     Lower_pane();
 
     cppurses::Status_bar& status{this->make_child<cppurses::Status_bar>(
         cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
                                foreground(cppurses::Color::White)})};
+
     Move_input& move_input{this->make_child<Move_input>("Type Move")};
+
     cppurses::Push_button& settings_btn{
         this->make_child<cppurses::Push_button>("Settings")};
 

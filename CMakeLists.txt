@@ -7,7 +7,6 @@ add_executable(chess
     src/chess_engine.cpp
     src/rules.cpp
     src/state.cpp
-    src/chessboard_borders.cpp
     src/chess_ui.cpp
     src/side_pane.cpp
     src/settings_pane.cpp
