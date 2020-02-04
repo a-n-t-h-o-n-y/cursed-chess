@@ -82,7 +82,7 @@ Board_state::Positions_t Board_state::find_all(Figure fig, Side side) const {
     Positions_t results;
     std::lock_guard<std::recursive_mutex> lock{this->mtx};
     for (const auto& pos_piece : this->pieces) {
-        if (pos_piece.second.figure == fig && pos_piece.second.side == side) {
+        if (pos_piece.second.figure == fig and pos_piece.second.side == side) {
             results.push_back(pos_piece.first);
         }
     }

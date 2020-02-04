@@ -11,7 +11,7 @@ std::string to_text(const Position& pos) {
 }
 
 bool operator==(const Position& p1, const Position& p2) {
-    return p1.row == p2.row && p1.column == p2.column;
+    return p1.row == p2.row and p1.column == p2.column;
 }
 
 namespace std {

@@ -53,7 +53,6 @@ Left_side::Board_and_settings::Board_and_settings()
 
 Left_side::Left_side()
 {
-    this->set_name("Left_side");
     this->width_policy.fixed(26);
 
     // Lower_pane
@@ -81,8 +80,6 @@ void Left_side::enable(bool enable, bool post_child_polished_event)
 
 Chess_UI::Chess_UI()
 {
-    this->set_name("Chess_UI - main chess widget");
-
     auto& settings = left_side.board_and_settings.settings;
     settings.hide_log_box.toggled.connect(::slot::toggle_logs(*this));
 

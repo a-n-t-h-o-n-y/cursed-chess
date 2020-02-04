@@ -11,7 +11,6 @@ using namespace cppurses;
 
 Lower_pane::Lower_pane()
 {
-    this->set_name("Lower_pane in Left_side");
     this->width_policy.fixed(26);
     this->height_policy.fixed(1);
 
@@ -22,8 +21,8 @@ Lower_pane::Lower_pane()
 
     // move_input
     move_input.border.enable();
-    move_input.border.segments.west = Glyph{L'│', foreground(Color::Blue)};
-    move_input.border.segments.east = Glyph{L'│', foreground(Color::Blue)};
+    move_input.border.segments.west = L'│'_g | foreground(Color::Blue);
+    move_input.border.segments.east = L'│'_g | foreground(Color::Blue);
 
     // status
     status.width_policy.fixed(4);
@@ -32,14 +31,15 @@ Lower_pane::Lower_pane()
     status.border.segments.north.enable();
     status.border.segments.south.enable();
     status.border.segments.west.enable();
-    status.border.segments.west = Glyph{L'╰', foreground(Color::Blue)};
+    status.border.segments.west = L'╰'_g | foreground(Color::Blue);
 }
 
 void Lower_pane::toggle_status(const Chessboard_widget& board)
 {
     if (board.current_side() == chess::Side::Black) {
-        status.set_contents(
-            Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
+        status.set_contents(" B"_gs | Attribute::Bold |
+                            foreground(Color::Black));
+        // Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
     }
     else {
         status.set_contents(

@@ -14,7 +14,8 @@ using namespace chess;
 
 namespace {
 
-Position current_king_pos(const chess::State& state) {
+Position current_king_pos(const chess::State& state)
+{
     Rules::Positions king_positions{
         state.board.find_all(Figure::King, state.current_side)};
     if (king_positions.empty()) {
@@ -25,8 +26,9 @@ Position current_king_pos(const chess::State& state) {
 
 }  // namespace
 
-bool Rules::validate(const chess::State& state, const Move& move) const {
-    if (!is_valid(move.from) || !is_valid(move.to)) {
+bool Rules::validate(const chess::State& state, const Move& move) const
+{
+    if (!is_valid(move.from) or !is_valid(move.to)) {
         return false;
     }
     auto positions = get_valid_positions(state, move.from);
@@ -35,34 +37,30 @@ bool Rules::validate(const chess::State& state, const Move& move) const {
 }
 
 typename Rules::Positions Rules::get_valid_positions(const chess::State& state,
-                                                     Position position) const {
+                                                     Position position) const
+{
     if (!state.board.has_piece_at(position)) {
         return std::vector<Position>{};
     }
 
     Piece piece{state.board.at(position)};
     switch (piece.figure) {
-        case Figure::Bishop:
-            return get_bishop_moves(state, position);
+        case Figure::Bishop: return get_bishop_moves(state, position);
 
-        case Figure::King:
-            return get_king_moves(state, position);
+        case Figure::King: return get_king_moves(state, position);
 
-        case Figure::Knight:
-            return get_knight_moves(state, position);
+        case Figure::Knight: return get_knight_moves(state, position);
 
-        case Figure::Pawn:
-            return get_pawn_moves(state, position);
+        case Figure::Pawn: return get_pawn_moves(state, position);
 
-        case Figure::Queen:
-            return get_queen_moves(state, position);
+        case Figure::Queen: return get_queen_moves(state, position);
 
-        case Figure::Rook:
-            return get_rook_moves(state, position);
+        case Figure::Rook: return get_rook_moves(state, position);
     }
 }
 
-bool Rules::check(const chess::State& state) const {
+bool Rules::check(const chess::State& state) const
+{
     Position king_pos{current_king_pos(state)};
     if (king_pos == Position{-1, -1}) {
         return false;
@@ -81,7 +79,8 @@ bool Rules::check(const chess::State& state) const {
 }
 
 // TODO Does not work.
-bool Rules::checkmate(const chess::State& state) const {
+bool Rules::checkmate(const chess::State& state) const
+{
     if (!this->check(state)) {
         return false;
     }
@@ -93,14 +92,16 @@ bool Rules::checkmate(const chess::State& state) const {
     return false;
 }
 
-bool Rules::stalemate(const chess::State& /* state */) const {
+bool Rules::stalemate(const chess::State& /* state */) const
+{
     // TODO Implement
     return false;
 }
 
 // Helper Functions
 /// Return the opponent Side to \p side.
-Side opponent(Side side) {
+Side opponent(Side side)
+{
     if (side == Side::None) {
         return Side::None;
     }
@@ -109,8 +110,9 @@ Side opponent(Side side) {
 
 /// Validates bounds of a position.
 // TODO change name.
-bool is_valid(Position p) {
-    bool row_valid{p.row >= 1 && p.row <= 8};
-    bool column_valid{p.column >= 1 && p.column <= 8};
-    return row_valid && column_valid;
+bool is_valid(Position p)
+{
+    bool row_valid{p.row >= 1 and p.row <= 8};
+    bool column_valid{p.column >= 1 and p.column <= 8};
+    return row_valid and column_valid;
 }

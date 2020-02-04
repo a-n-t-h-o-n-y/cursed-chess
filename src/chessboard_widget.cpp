@@ -21,46 +21,55 @@ using namespace chess;
 
 namespace {
 
-Glyph piece_to_glyph(Piece piece) {
+Glyph piece_to_glyph(Piece piece)
+{
     Glyph symbol;
     // Character
     if (piece.figure == Figure::Bishop) {
         symbol = L'♝';
-    } else if (piece.figure == Figure::King) {
+    }
+    else if (piece.figure == Figure::King) {
         symbol = L'♚';
-    } else if (piece.figure == Figure::Knight) {
+    }
+    else if (piece.figure == Figure::Knight) {
         symbol = L'♞';
-    } else if (piece.figure == Figure::Pawn) {
+    }
+    else if (piece.figure == Figure::Pawn) {
         symbol = L'♟';
-    } else if (piece.figure == Figure::Queen) {
+    }
+    else if (piece.figure == Figure::Queen) {
         symbol = L'♛';
-    } else if (piece.figure == Figure::Rook) {
+    }
+    else if (piece.figure == Figure::Rook) {
         symbol = L'♜';
     }
     // Side
     if (piece.side == Side::Black) {
         symbol.brush.set_foreground(cppurses::Color::Black);
-    } else if (piece.side == Side::White) {
+    }
+    else if (piece.side == Side::White) {
         symbol.brush.set_foreground(cppurses::Color::White);
     }
     return symbol;
 }
 
-Position board_to_screen_position(Position board_position) {
+Position board_to_screen_position(Position board_position)
+{
     int y = 8 - board_position.row;
     int x = 1 + (board_position.column - 1) * 3;
     return Position{x, y};
 }
 
-Position screen_to_board_position(Position screen_position) {
-    int row = 8 - screen_position.column;
+Position screen_to_board_position(Position screen_position)
+{
+    int row    = 8 - screen_position.column;
     int column = (screen_position.row / 3) + 1;
     return Position{row, column};
 }
 }  // namespace
 
-Chessboard_widget::Chessboard_widget() {
-    this->set_name("Chessboard_widget");
+Chessboard_widget::Chessboard_widget()
+{
     this->height_policy.fixed(8);
     this->width_policy.fixed(24);
 
@@ -74,76 +83,76 @@ Chessboard_widget::Chessboard_widget() {
     engine_.state().board_reset.connect([this] { this->board_reset(); });
 }
 
-void Chessboard_widget::toggle_show_moves() {
+void Chessboard_widget::toggle_show_moves()
+{
     show_moves_ = !show_moves_;
     this->update();
 }
 
-void Chessboard_widget::reset_game() {
+void Chessboard_widget::reset_game()
+{
     engine_.state().reset();
     this->update();
 }
 
-void Chessboard_widget::make_move(const Move& move) {
-    engine_.make_move(move);
-}
+void Chessboard_widget::make_move(const Move& move) { engine_.make_move(move); }
 
-Side Chessboard_widget::current_side() const {
+Side Chessboard_widget::current_side() const
+{
     return engine_.state().current_side;
 }
 
-void Chessboard_widget::pause() {
-    game_loop_.exit(0);
-}
+void Chessboard_widget::pause() { game_loop_.exit(0); }
 
-void Chessboard_widget::start() {
+void Chessboard_widget::start()
+{
     Shared_user_input::exit_requested = false;
     game_loop_.wait();
     game_loop_.run_async();
 }
 
-void Chessboard_widget::take_turn() {
+void Chessboard_widget::take_turn()
+{
     Move m;
     try {
         if (engine_.state().current_side == Side::Black) {
             m = engine_.player_black()->get_move();
-        } else {
+        }
+        else {
             m = engine_.player_white()->get_move();
         }
-    } catch (Chess_loop_exit_request e) {
+    }
+    catch (Chess_loop_exit_request e) {
         game_loop_.exit(0);
         return;
     }
     System::post_event<Chess_move_request_event>(*this, m);
 }
 
-void Chessboard_widget::move_request_event(Move m) {
-    engine_.make_move(m);
-}
+void Chessboard_widget::move_request_event(Move m) { engine_.make_move(m); }
 
-Chess_engine& Chessboard_widget::engine() {
-    return engine_;
-}
+Chess_engine& Chessboard_widget::engine() { return engine_; }
 
-const Chess_engine& Chessboard_widget::engine() const {
-    return engine_;
-}
+const Chess_engine& Chessboard_widget::engine() const { return engine_; }
 
 namespace slot {
 
-sig::Slot<void()> toggle_show_moves(Chessboard_widget& cbw) {
+sig::Slot<void()> toggle_show_moves(Chessboard_widget& cbw)
+{
     sig::Slot<void()> slot{[&cbw] { cbw.toggle_show_moves(); }};
     slot.track(cbw.destroyed);
     return slot;
 }
 
-sig::Slot<void()> reset_game(Chessboard_widget& cbw) {
+sig::Slot<void()> reset_game(Chessboard_widget& cbw)
+{
     sig::Slot<void()> slot{[&cbw] { cbw.reset_game(); }};
     slot.track(cbw.destroyed);
     return slot;
 }
 
-sig::Slot<void(Move)> make_move(Chessboard_widget& cbw) {
+sig::Slot<void(Move)> make_move(Chessboard_widget& cbw)
+{
     sig::Slot<void(Move)> slot{[&cbw](Move m) { cbw.make_move(m); }};
     slot.track(cbw.destroyed);
     return slot;
@@ -151,7 +160,8 @@ sig::Slot<void(Move)> make_move(Chessboard_widget& cbw) {
 
 }  // namespace slot
 
-bool Chessboard_widget::paint_event() {
+bool Chessboard_widget::paint_event()
+{
     // Light Gray Tiles
     Glyph_string cell1{"   ", background(cppurses::Color::Light_gray)};
     // Gray Tiles
@@ -168,8 +178,8 @@ bool Chessboard_widget::paint_event() {
 
     // Valid Moves
     const chess::State& state{engine_.state()};
-    if (show_moves_ && selected_position_ != opt::none &&
-        state.board.has_piece_at(*selected_position_) &&
+    if (show_moves_ and selected_position_ != opt::none and
+        state.board.has_piece_at(*selected_position_) and
         state.board.at(*selected_position_).side == state.current_side) {
         auto valid_moves = engine_.get_valid_positions(*selected_position_);
         Glyph_string highlight{"   ", background(cppurses::Color::Light_green)};
@@ -193,39 +203,44 @@ bool Chessboard_widget::paint_event() {
     return Widget::paint_event();
 }
 
-bool Chessboard_widget::mouse_press_event(const Mouse::State& mouse) {
+bool Chessboard_widget::mouse_press_event(const Mouse::State& mouse)
+{
     int loc_x = static_cast<int>(mouse.local.x);
     int loc_y = static_cast<int>(mouse.local.y);
     Position clicked_pos{screen_to_board_position(Position{loc_x, loc_y})};
     selected_position_ = clicked_pos;
 
     const chess::State& state{engine_.state()};
-    if (state.board.has_piece_at(clicked_pos) &&
+    if (state.board.has_piece_at(clicked_pos) and
         state.board.at(clicked_pos).side == state.current_side) {
         first_position_ = clicked_pos;
-    } else if (first_position_ != opt::none) {
+    }
+    else if (first_position_ != opt::none) {
         Shared_user_input::move.set(Move{*first_position_, clicked_pos});
-        first_position_ = opt::none;
+        first_position_    = opt::none;
         selected_position_ = opt::none;
     }
     this->update();
     return Widget::mouse_press_event(mouse);
 }
 
-bool Chessboard_widget::enable_event() {
+bool Chessboard_widget::enable_event()
+{
     this->start();
     return Widget::enable_event();
 }
 
-bool Chessboard_widget::disable_event() {
+bool Chessboard_widget::disable_event()
+{
     this->pause();
     return Widget::disable_event();
 }
 
-cppurses::Color Chessboard_widget::get_tile_color(Position p) {
+cppurses::Color Chessboard_widget::get_tile_color(Position p)
+{
     const State& state{engine_.state()};
-    if (show_moves_ && selected_position_ != opt::none &&
-        state.board.has_piece_at(*selected_position_) &&
+    if (show_moves_ and selected_position_ != opt::none and
+        state.board.has_piece_at(*selected_position_) and
         state.board.at(*selected_position_).side == state.current_side) {
         auto valid_moves = engine_.get_valid_positions(*selected_position_);
         auto at = std::find(std::begin(valid_moves), std::end(valid_moves), p);

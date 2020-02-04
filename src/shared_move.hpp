@@ -19,7 +19,7 @@ class Shared_move {
 
     /// Blocking call to retrieve the shared state value.
     /** Can only be called once per notification from another thread. */
-    Move get(std::unique_lock<std::mutex>& ul) const;
+    Move get(std::unique_lock<std::mutex>& lock) const;
 
     /// Provided so caller can control exclusive access to shared state.
     mutable std::mutex mtx;

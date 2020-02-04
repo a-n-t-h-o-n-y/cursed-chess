@@ -27,11 +27,11 @@ Side_pane::Status::Status()
     status.border.enable();
     status.border.segments.disable_all();
     status.border.segments.west.enable();
-    status.border.segments.west = Glyph{L'╮', foreground(Color::Blue)};
+    status.border.segments.west = L'╮'_g | foreground(Color::Blue);
     status.border.segments.south.enable();
     status.border.segments.south.brush.set_foreground(Color::Blue);
     status.border.segments.south_west.enable();
-    status.border.segments.south_west = Glyph{L'├', foreground(Color::Blue)};
+    status.border.segments.south_west = L'├'_g | foreground(Color::Blue);
 
     settings_btn.width_policy.preferred(12);
     settings_btn.border.enable();
@@ -43,11 +43,9 @@ Side_pane::Status::Status()
     settings_btn.border.segments.east.enable();
     settings_btn.border.segments.east.brush.set_foreground(Color::Blue);
     settings_btn.border.segments.south_west.enable();
-    settings_btn.border.segments.south_west =
-        Glyph{L'┴', foreground(Color::Blue)};
+    settings_btn.border.segments.south_west = L'┴'_g | foreground(Color::Blue);
     settings_btn.border.segments.south_east.enable();
-    settings_btn.border.segments.south_east =
-        Glyph{L'┴', foreground(Color::Blue)};
+    settings_btn.border.segments.south_east = L'┴'_g | foreground(Color::Blue);
 
     blank_space.border.enable();
     blank_space.border.segments.disable_all();
@@ -61,7 +59,6 @@ Side_pane::Side_pane()
     this->width_policy.max_size(26);
 
     // log
-    chess_log.set_name("chess_log in Chess - Side_pane");
     chess_log.cursor.disable();
     chess_log.focus_policy = Focus_policy::None;
     chess_log.height_policy.fixed(6);
@@ -83,8 +80,7 @@ Side_pane::Side_pane()
     move_input.border.segments.north.enable();
     move_input.border.segments.north.brush.set_foreground(Color::Blue);
     move_input.border.segments.north_west.enable();
-    move_input.border.segments.north_west =
-        Glyph{L'├', foreground(Color::Blue)};
+    move_input.border.segments.north_west = L'├'_g | foreground(Color::Blue);
 }
 
 void Side_pane::toggle_status(const Chessboard_widget& board)
