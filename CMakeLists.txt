@@ -24,5 +24,5 @@ add_executable(chess
 )
 
 target_link_libraries(chess /usr/local/lib64/liblibcppurses.a ncurses)
-target_compile_features(chess PUBLIC cxx_std_14)
+target_compile_features(chess PUBLIC cxx_std_17)
 target_compile_options(chess PUBLIC -Wall)
