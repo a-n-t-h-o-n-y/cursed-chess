@@ -2,7 +2,7 @@
 
 #include <signals/slot.hpp>
 
-#include <cppurses/system/focus.hpp>
+#include <cppurses/system/system.hpp>
 
 #include "no_rules.hpp"
 #include "player_human.hpp"
@@ -113,7 +113,7 @@ void Chess_UI::toggle_logs()
         left_side.board_and_settings.border.segments.north_east = L'─';
     }
     this->enable(this->enabled());
-    Focus::clear();
+    System::clear_focus();
     this->update();
 }
 
