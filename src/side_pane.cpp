@@ -56,7 +56,7 @@ Side_pane::Status::Status()
 Side_pane::Side_pane()
 {
     this->width_policy.maximum(26);
-    this->width_policy.max_size(26);
+    this->width_policy.max(26);
 
     // log
     chess_log.cursor.disable();
