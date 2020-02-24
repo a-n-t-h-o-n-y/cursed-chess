@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iterator>
 #include <mutex>
+#include <stdexcept>
 #include <vector>
 
 #include "figure.hpp"
@@ -39,24 +40,19 @@ bool Rules::validate(const chess::State& state, const Move& move) const
 typename Rules::Positions Rules::get_valid_positions(const chess::State& state,
                                                      Position position) const
 {
-    if (!state.board.has_piece_at(position)) {
+    if (!state.board.has_piece_at(position))
         return std::vector<Position>{};
-    }
 
-    Piece piece{state.board.at(position)};
+    auto const piece = state.board.at(position);
     switch (piece.figure) {
         case Figure::Bishop: return get_bishop_moves(state, position);
-
         case Figure::King: return get_king_moves(state, position);
-
         case Figure::Knight: return get_knight_moves(state, position);
-
         case Figure::Pawn: return get_pawn_moves(state, position);
-
         case Figure::Queen: return get_queen_moves(state, position);
-
         case Figure::Rook: return get_rook_moves(state, position);
     }
+    throw std::logic_error{"Unreachable"};
 }
 
 bool Rules::check(const chess::State& state) const
