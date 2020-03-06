@@ -1,9 +1,10 @@
 #ifndef CHESSBOARD_WIDGET_HPP
 #define CHESSBOARD_WIDGET_HPP
+#include <optional>
+
 #include <cppurses/system/events/mouse.hpp>
 #include <cppurses/widget/widget.hpp>
 
-#include <optional/optional.hpp>
 #include <signals/signals.hpp>
 
 #include "chess_engine.hpp"
@@ -56,8 +57,8 @@ class Chessboard_widget : public cppurses::Widget {
     Chess_engine engine_;
     chess::Chess_event_loop game_loop_{*this};
 
-    opt::Optional<Position> first_position_;
-    opt::Optional<Position> selected_position_;
+    std::optional<Position> first_position_;
+    std::optional<Position> selected_position_;
     bool show_moves_{false};
 
     cppurses::Color get_tile_color(Position p);

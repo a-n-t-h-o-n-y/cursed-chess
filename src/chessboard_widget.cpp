@@ -178,7 +178,7 @@ bool Chessboard_widget::paint_event()
 
     // Valid Moves
     const chess::State& state{engine_.state()};
-    if (show_moves_ and selected_position_ != opt::none and
+    if (show_moves_ and selected_position_.has_value() and
         state.board.has_piece_at(*selected_position_) and
         state.board.at(*selected_position_).side == state.current_side) {
         auto valid_moves = engine_.get_valid_positions(*selected_position_);
@@ -215,10 +215,10 @@ bool Chessboard_widget::mouse_press_event(const Mouse::State& mouse)
         state.board.at(clicked_pos).side == state.current_side) {
         first_position_ = clicked_pos;
     }
-    else if (first_position_ != opt::none) {
+    else if (first_position_.has_value()) {
         Shared_user_input::move.set(Move{*first_position_, clicked_pos});
-        first_position_    = opt::none;
-        selected_position_ = opt::none;
+        first_position_    = std::nullopt;
+        selected_position_ = std::nullopt;
     }
     this->update();
     return Widget::mouse_press_event(mouse);
@@ -239,7 +239,7 @@ bool Chessboard_widget::disable_event()
 cppurses::Color Chessboard_widget::get_tile_color(Position p)
 {
     const State& state{engine_.state()};
-    if (show_moves_ and selected_position_ != opt::none and
+    if (show_moves_ and selected_position_.has_value() and
         state.board.has_piece_at(*selected_position_) and
         state.board.at(*selected_position_).side == state.current_side) {
         auto valid_moves = engine_.get_valid_positions(*selected_position_);
