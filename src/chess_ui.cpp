@@ -112,7 +112,7 @@ void Chess_UI::toggle_logs()
         left_side.board_and_settings.border.segments.south_west = L'╰';
         left_side.board_and_settings.border.segments.north_east = L'─';
     }
-    this->enable(this->enabled());
+    this->enable(this->is_enabled());
     System::clear_focus();
     this->update();
 }
