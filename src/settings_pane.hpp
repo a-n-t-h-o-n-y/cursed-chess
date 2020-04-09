@@ -9,13 +9,15 @@
 #include <cppurses/widget/widgets/push_button.hpp>
 
 class Settings_pane : public cppurses::layout::Vertical<> {
+   private:
+    using Checkbox = cppurses::Labeled_checkbox;
+
+   public:
+    Checkbox& show_moves_box = this->make_child<Checkbox>("Show Moves");
+    Checkbox& hide_log_box   = this->make_child<Checkbox>("Hide Log");
+
    public:
     Settings_pane();
-
-    cppurses::Checkbox& show_moves_box{
-        this->make_child<cppurses::Checkbox>("Show Moves")};
-    cppurses::Checkbox& hide_log_box{
-        this->make_child<cppurses::Checkbox>("Hide Log")};
 
    private:
     cppurses::Fixed_height& space_1_{
