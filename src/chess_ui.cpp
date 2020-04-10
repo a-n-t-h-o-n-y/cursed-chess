@@ -20,7 +20,7 @@ Left_side::Board_and_settings::Board_and_settings()
 
     settings.return_btn.clicked.connect(
         cppurses::slot::set_active_page(*this, 0));
-    settings.show_moves_box.checkbox.toggled.connect(
+    settings.show_moves_box.toggled.connect(
         ::slot::toggle_show_moves(board.middle.chessboard));
 
     // Black AI
@@ -81,7 +81,7 @@ void Left_side::enable(bool enable, bool post_child_polished_event)
 Chess_UI::Chess_UI()
 {
     auto& settings = left_side.board_and_settings.settings;
-    settings.hide_log_box.checkbox.toggled.connect(::slot::toggle_logs(*this));
+    settings.hide_log_box.toggled.connect(::slot::toggle_logs(*this));
 
     auto& chessboard = left_side.board_and_settings.board.middle.chessboard;
     chessboard.move_made.connect(::slot::post_move_message(right_side));
