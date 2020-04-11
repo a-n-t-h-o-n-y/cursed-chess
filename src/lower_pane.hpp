@@ -4,7 +4,7 @@
 #include <cppurses/painter/color.hpp>
 #include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/tuple.hpp>
-#include <cppurses/widget/widgets/push_button.hpp>
+#include <cppurses/widget/widgets/button.hpp>
 #include <cppurses/widget/widgets/status_bar.hpp>
 #include <cppurses/widget/widgets/tile.hpp>
 
@@ -22,8 +22,8 @@ class Lower_pane : public cppurses::layout::Horizontal<> {
 
     Move_input& move_input = this->make_child<Move_input>("Type Move");
 
-    cppurses::Push_button& settings_btn =
-        this->make_child<cppurses::Push_button>("Settings");
+    cppurses::Button& settings_btn =
+        this->make_child<cppurses::Button>("Settings");
 
    public:
     Lower_pane();
