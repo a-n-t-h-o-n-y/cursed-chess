@@ -18,7 +18,7 @@ Left_side::Board_and_settings::Board_and_settings()
     this->height_policy.fixed(10);
     this->give_focus_on_change(false);
 
-    settings.return_btn.clicked.connect(
+    settings.return_btn.pressed.connect(
         cppurses::slot::set_active_page(*this, 0));
     settings.show_moves_box.toggled.connect(
         ::slot::toggle_show_moves(board.middle.chessboard));
@@ -47,7 +47,7 @@ Left_side::Board_and_settings::Board_and_settings()
             ::slot::set_ruleset<No_rules>(board.middle.chessboard.engine()));
 
     // Reset Button
-    settings.reset_btn.clicked.connect(
+    settings.reset_btn.pressed.connect(
         ::slot::reset_game(board.middle.chessboard));
 }
 
@@ -56,7 +56,7 @@ Left_side::Left_side()
     this->width_policy.fixed(26);
 
     // Lower_pane
-    lower_pane.settings_btn.clicked.connect(
+    lower_pane.settings_btn.pressed.connect(
         cppurses::slot::set_active_page(board_and_settings, 1));
     lower_pane.move_input.reset_requested.connect(
         ::slot::reset_game(board_and_settings.board.middle.chessboard));
@@ -95,7 +95,7 @@ Chess_UI::Chess_UI()
         [&] { right_side.toggle_status(chessboard); });
     chessboard.board_reset.connect([this]() { right_side.chess_log.clear(); });
 
-    right_side.status.settings_btn.clicked.connect(
+    right_side.status.settings_btn.pressed.connect(
         cppurses::slot::set_active_page(left_side.board_and_settings, 1));
     right_side.move_input.reset_requested.connect(
         ::slot::reset_game(chessboard));

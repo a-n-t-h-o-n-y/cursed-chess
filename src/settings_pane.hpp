@@ -1,7 +1,7 @@
 #ifndef SETTINGS_PANE_HPP
 #define SETTINGS_PANE_HPP
-#include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/glyph_string.hpp>
+#include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/button.hpp>
 #include <cppurses/widget/widgets/checkbox.hpp>
@@ -30,9 +30,8 @@ class Settings_pane : public cppurses::layout::Vertical<> {
         this->make_child<cppurses::Labeled_cycle_box>("White AI ")};
     cppurses::Labeled_cycle_box& ruleset{
         this->make_child<cppurses::Labeled_cycle_box>("Ruleset  ")};
-    cppurses::Button& reset_btn{
-        this->make_child<cppurses::Button>(cppurses::Glyph_string{
-            " Reset Game ", cppurses::Attribute::Underline})};
+    cppurses::Button& reset_btn{this->make_child<cppurses::Button>(
+        cppurses::Glyph_string{" Reset Game ", cppurses::Trait::Underline})};
     cppurses::Button& return_btn{
         this->make_child<cppurses::Button>("Return to Board")};
 };

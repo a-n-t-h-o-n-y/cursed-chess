@@ -1,8 +1,8 @@
 #ifndef SIDE_PANE_HPP
 #define SIDE_PANE_HPP
-#include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph_string.hpp>
+#include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/button.hpp>
@@ -21,7 +21,7 @@ class Side_pane : public cppurses::layout::Vertical<> {
         Status();
 
         cppurses::Status_bar& status{this->make_child<cppurses::Status_bar>(
-            cppurses::Glyph_string{" W", cppurses::Attribute::Bold,
+            cppurses::Glyph_string{" W", cppurses::Trait::Bold,
                                    foreground(cppurses::Color::White)})};
         cppurses::Button& settings_btn{
             this->make_child<cppurses::Button>("Settings")};

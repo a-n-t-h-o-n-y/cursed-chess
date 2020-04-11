@@ -2,9 +2,9 @@
 
 #include <sstream>
 
-#include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph.hpp>
+#include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/border.hpp>
 #include <cppurses/widget/focus_policy.hpp>
 
@@ -87,11 +87,11 @@ void Side_pane::toggle_status(const Chessboard_widget& board)
 {
     if (board.current_side() == Side::Black) {
         status.status.set_contents(
-            Glyph_string{" B", Attribute::Bold, foreground(Color::Black)});
+            Glyph_string{" B", Trait::Bold, foreground(Color::Black)});
     }
     else {
         status.status.set_contents(
-            Glyph_string{" W", Attribute::Bold, foreground(Color::White)});
+            Glyph_string{" W", Trait::Bold, foreground(Color::White)});
     }
 }
 

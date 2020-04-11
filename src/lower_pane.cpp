@@ -1,8 +1,8 @@
 #include "lower_pane.hpp"
 
-#include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph.hpp>
+#include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/pipe.hpp>
 
 #include "chessboard_widget.hpp"
@@ -22,18 +22,17 @@ Lower_pane::Lower_pane()
     status | fixed_width(4);
     status.get<0>().set(L'╰'_g | foreground(Color::Blue));
     status.get<1>().update_status(
-        {" W", Attribute::Bold, foreground(Color::White)});
+        {" W", Trait::Bold, foreground(Color::White)});
 }
 
 void Lower_pane::toggle_status(const Chessboard_widget& board)
 {
     auto& side = status.get<1>();
     if (board.current_side() == chess::Side::Black) {
-        side.update_status(
-            {L" B" | Attribute::Bold | foreground(Color::Black)});
+        side.update_status({L" B" | Trait::Bold | foreground(Color::Black)});
     }
     else
-        side.update_status({" W", Attribute::Bold, foreground(Color::White)});
+        side.update_status({L" W" | Trait::Bold | foreground(Color::White)});
 }
 
 namespace slot {

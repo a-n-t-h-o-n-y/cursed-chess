@@ -1,7 +1,7 @@
 #ifndef LOWER_PANE_HPP
 #define LOWER_PANE_HPP
-#include <cppurses/painter/attribute.hpp>
 #include <cppurses/painter/color.hpp>
+#include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/tuple.hpp>
 #include <cppurses/widget/widgets/button.hpp>
