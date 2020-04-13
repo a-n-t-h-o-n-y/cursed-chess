@@ -5,8 +5,8 @@
 #include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/button.hpp>
 #include <cppurses/widget/widgets/checkbox.hpp>
+#include <cppurses/widget/widgets/cycle_box.hpp>
 #include <cppurses/widget/widgets/fixed_height.hpp>
-#include <cppurses/widget/widgets/labeled_cycle_box.hpp>
 
 class Settings_pane : public cppurses::layout::Vertical<> {
    private:
