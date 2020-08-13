@@ -11,12 +11,11 @@ Chess_event_loop::Chess_event_loop(Chessboard_widget& cbw)
     : chessboard_widget_{cbw}
 {}
 
-auto Chess_event_loop::loop_function() -> bool
+void Chess_event_loop::loop_function()
 {
     if (chessboard_widget_.engine().state().game_over)
         this->exit(0);
     chessboard_widget_.take_turn();
-    return true;
 }
 
 void Chess_event_loop::exit(int return_code)
