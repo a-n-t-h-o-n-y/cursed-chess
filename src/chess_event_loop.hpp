@@ -10,7 +10,7 @@ class Chess_event_loop : public cppurses::Event_loop {
     Chess_event_loop(Chessboard_widget& cbw);
 
     /// Run on each iteration of the event loop.
-    auto loop_function() -> bool override;
+    void loop_function() override;
 
     void exit(int return_code) override;
 
