@@ -6,7 +6,6 @@
 #include <cppurses/widget/widgets/button.hpp>
 #include <cppurses/widget/widgets/checkbox.hpp>
 #include <cppurses/widget/widgets/cycle_box.hpp>
-#include <cppurses/widget/widgets/fixed_height.hpp>
 
 class Settings_pane : public cppurses::layout::Vertical<> {
    private:
@@ -20,8 +19,7 @@ class Settings_pane : public cppurses::layout::Vertical<> {
     Settings_pane();
 
    private:
-    cppurses::Fixed_height& space_1_{
-        this->make_child<cppurses::Fixed_height>()};
+    Widget& space_1_ = this->make_child() | cppurses::pipe::fixed_height(1);
 
    public:
     cppurses::Labeled_cycle_box& black_ai{

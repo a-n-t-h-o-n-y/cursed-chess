@@ -6,7 +6,6 @@
 #include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
 #include <cppurses/widget/widgets/button.hpp>
-#include <cppurses/widget/widgets/fixed_height.hpp>
 #include <cppurses/widget/widgets/log.hpp>
 #include <cppurses/widget/widgets/status_bar.hpp>
 
@@ -20,13 +19,14 @@ class Side_pane : public cppurses::layout::Vertical<> {
     struct Status : cppurses::layout::Horizontal<> {
         Status();
 
-        cppurses::Status_bar& status{this->make_child<cppurses::Status_bar>(
-            cppurses::Glyph_string{" W", cppurses::Trait::Bold,
-                                   foreground(cppurses::Color::White)})};
-        cppurses::Button& settings_btn{
-            this->make_child<cppurses::Button>("Settings")};
-        cppurses::Fixed_height& blank_space{
-            this->make_child<cppurses::Fixed_height>(2)};
+        cppurses::Status_bar& status = this->make_child<cppurses::Status_bar>(
+            L" W" | cppurses::Trait::Bold | foreground(cppurses::Color::White));
+
+        cppurses::Button& settings_btn =
+            this->make_child<cppurses::Button>("Settings");
+
+        Widget& blank_space =
+            this->make_child() | cppurses::pipe::fixed_height(2);
     };
 
    public:
