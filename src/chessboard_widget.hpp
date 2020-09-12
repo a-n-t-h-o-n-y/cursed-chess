@@ -2,7 +2,7 @@
 #define CHESSBOARD_WIDGET_HPP
 #include <optional>
 
-#include <cppurses/system/events/mouse.hpp>
+#include <cppurses/system/mouse.hpp>
 #include <cppurses/widget/widget.hpp>
 
 #include <signals/signals.hpp>
@@ -49,7 +49,7 @@ class Chessboard_widget : public cppurses::Widget {
 
    protected:
     bool paint_event() override;
-    bool mouse_press_event(const cppurses::Mouse::State& mouse) override;
+    bool mouse_press_event(const cppurses::Mouse& m) override;
     bool enable_event() override;
     bool disable_event() override;
 

@@ -7,7 +7,7 @@
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph_string.hpp>
 #include <cppurses/painter/painter.hpp>
-#include <cppurses/system/events/mouse.hpp>
+#include <cppurses/system/mouse.hpp>
 #include <cppurses/system/system.hpp>
 
 #include "chess_move_request_event.hpp"
@@ -126,7 +126,7 @@ void Chessboard_widget::take_turn()
         game_loop_.exit(0);
         return;
     }
-    System::post_event<Chess_move_request_event>(*this, m);
+    System::post_event(chess_move_request_event(*this, m));
 }
 
 void Chessboard_widget::move_request_event(Move m) { engine_.make_move(m); }
@@ -203,10 +203,10 @@ bool Chessboard_widget::paint_event()
     return Widget::paint_event();
 }
 
-bool Chessboard_widget::mouse_press_event(const Mouse::State& mouse)
+bool Chessboard_widget::mouse_press_event(const Mouse& m)
 {
-    int loc_x = static_cast<int>(mouse.local.x);
-    int loc_y = static_cast<int>(mouse.local.y);
+    int loc_x = static_cast<int>(m.local.x);
+    int loc_y = static_cast<int>(m.local.y);
     Position clicked_pos{screen_to_board_position(Position{loc_x, loc_y})};
     selected_position_ = clicked_pos;
 
@@ -221,7 +221,7 @@ bool Chessboard_widget::mouse_press_event(const Mouse::State& mouse)
         selected_position_ = std::nullopt;
     }
     this->update();
-    return Widget::mouse_press_event(mouse);
+    return Widget::mouse_press_event(m);
 }
 
 bool Chessboard_widget::enable_event()

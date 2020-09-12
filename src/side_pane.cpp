@@ -85,14 +85,10 @@ Side_pane::Side_pane()
 
 void Side_pane::toggle_status(const Chessboard_widget& board)
 {
-    if (board.current_side() == Side::Black) {
-        status.status.set_contents(
-            Glyph_string{" B", Trait::Bold, foreground(Color::Black)});
-    }
-    else {
-        status.status.set_contents(
-            Glyph_string{" W", Trait::Bold, foreground(Color::White)});
-    }
+    if (board.current_side() == Side::Black)
+        status.status.set_text(L" B" | Trait::Bold | foreground(Color::Black));
+    else
+        status.status.set_text(L" W" | Trait::Bold | foreground(Color::White));
 }
 
 void Side_pane::post_move_message(const Move& m)

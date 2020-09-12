@@ -19,7 +19,6 @@ add_executable(chess
     src/shared_user_input.cpp
     src/player_human.cpp
     src/chess_event_loop.cpp
-    src/chess_move_request_event.cpp
     src/shared_move.cpp
 )
 
