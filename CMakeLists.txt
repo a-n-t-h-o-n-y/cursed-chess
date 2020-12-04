@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
-add_executable(chess 
+add_executable(chess
     src/main.cpp
     src/chessboard_widget.cpp
     src/position.cpp

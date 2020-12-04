@@ -1,8 +1,9 @@
 #include "chess_ui.hpp"
 
-#include <signals/slot.hpp>
+#include <signals_light/signal.hpp>
 
 #include <cppurses/system/system.hpp>
+#include <cppurses/widget/detail/link_lifetimes.hpp>
 
 #include "no_rules.hpp"
 #include "player_human.hpp"
@@ -129,11 +130,10 @@ void Chess_UI::enable(bool enable, bool post_child_polished_event)
 
 namespace slot {
 
-sig::Slot<void()> toggle_logs(Chess_UI& cfui)
+auto toggle_logs(Chess_UI& cfui) -> sl::Slot<void()>
 {
-    sig::Slot<void()> slot{[&cfui] { cfui.toggle_logs(); }};
-    slot.track(cfui.destroyed);
-    return slot;
+    return cppurses::slot::link_lifetimes([&cfui] { cfui.toggle_logs(); },
+                                          cfui);
 }
 
 }  // namespace slot

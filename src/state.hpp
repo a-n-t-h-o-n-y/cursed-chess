@@ -3,7 +3,7 @@
 #include <mutex>
 #include <unordered_map>
 
-#include <signals/signal.hpp>
+#include <signals_light/signal.hpp>
 
 #include "piece.hpp"
 #include "position.hpp"
@@ -12,7 +12,7 @@
 namespace chess {
 
 struct Board_state {
-    using Pieces_t = std::unordered_map<Position, Piece>;
+    using Pieces_t    = std::unordered_map<Position, Piece>;
     using Positions_t = std::vector<Position>;
 
     /// Holds the state with a Position for each Piece currently on the board.
@@ -55,7 +55,7 @@ struct State {
     void reset();
 
     /// Signal is called when the board is reset to its initial state.
-    sig::Signal<void()> board_reset;
+    sl::Signal<void()> board_reset;
 };
 
 }  // namespace chess

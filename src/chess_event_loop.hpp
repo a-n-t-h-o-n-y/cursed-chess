@@ -9,10 +9,9 @@ class Chess_event_loop : public cppurses::Event_loop {
    public:
     Chess_event_loop(Chessboard_widget& cbw);
 
+   protected:
     /// Run on each iteration of the event loop.
     void loop_function() override;
-
-    void exit(int return_code) override;
 
    private:
     Chessboard_widget& chessboard_widget_;

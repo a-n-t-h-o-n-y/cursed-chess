@@ -5,7 +5,7 @@
 #include <cppurses/system/mouse.hpp>
 #include <cppurses/widget/widget.hpp>
 
-#include <signals/signals.hpp>
+#include <signals_light/signal.hpp>
 
 #include "chess_engine.hpp"
 #include "chess_event_loop.hpp"
@@ -18,6 +18,9 @@ class Chessboard_widget : public cppurses::Widget {
    public:
     Chessboard_widget();
 
+    ~Chessboard_widget() { this->exit_game_loop(); }
+
+   public:
     void toggle_show_moves();
     void reset_game();
     void make_move(const Move& move);
@@ -40,12 +43,12 @@ class Chessboard_widget : public cppurses::Widget {
     const Chess_engine& engine() const;
 
     // Signals
-    sig::Signal<void(Move)> move_made;
-    sig::Signal<void(Piece)> capture;
-    sig::Signal<void(const Move&)> invalid_move;
-    sig::Signal<void(chess::Side)> checkmate;
-    sig::Signal<void(chess::Side)> check;
-    sig::Signal<void()> board_reset;
+    sl::Signal<void(Move)> move_made;
+    sl::Signal<void(Piece)> capture;
+    sl::Signal<void(const Move&)> invalid_move;
+    sl::Signal<void(chess::Side)> checkmate;
+    sl::Signal<void(chess::Side)> check;
+    sl::Signal<void()> board_reset;
 
    protected:
     bool paint_event() override;
@@ -61,14 +64,19 @@ class Chessboard_widget : public cppurses::Widget {
     std::optional<Position> selected_position_;
     bool show_moves_{false};
 
-    cppurses::Color get_tile_color(Position p);
+   private:
+    auto get_tile_color(Position p) -> cppurses::Color;
+
+    void exit_game_loop();
 };
 
 namespace slot {
 
-sig::Slot<void()> toggle_show_moves(Chessboard_widget& cbw);
-sig::Slot<void()> reset_game(Chessboard_widget& cbw);
-sig::Slot<void(Move)> make_move(Chessboard_widget& cbw);
+auto toggle_show_moves(Chessboard_widget& cbw) -> sl::Slot<void()>;
+
+auto reset_game(Chessboard_widget& cbw) -> sl::Slot<void()>;
+
+auto make_move(Chessboard_widget& cbw) -> sl::Slot<void(Move)>;
 
 }  // namespace slot
 #endif  // CHESSBOARD_WIDGET_HPP

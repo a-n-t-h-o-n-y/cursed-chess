@@ -4,11 +4,14 @@
 #include <iterator>
 #include <mutex>
 
+#include <signals_light/signal.hpp>
+
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph_string.hpp>
 #include <cppurses/painter/painter.hpp>
 #include <cppurses/system/mouse.hpp>
 #include <cppurses/system/system.hpp>
+#include <cppurses/widget/detail/link_lifetimes.hpp>
 
 #include "chess_move_request_event.hpp"
 #include "figure.hpp"
@@ -102,7 +105,14 @@ Side Chessboard_widget::current_side() const
     return engine_.state().current_side;
 }
 
-void Chessboard_widget::pause() { game_loop_.exit(0); }
+void Chessboard_widget::exit_game_loop()
+{
+    Shared_user_input::exit_requested = true;
+    game_loop_.exit(0);
+    game_loop_.wait();
+}
+
+void Chessboard_widget::pause() { this->exit_game_loop(); }
 
 void Chessboard_widget::start()
 {
@@ -123,7 +133,7 @@ void Chessboard_widget::take_turn()
         }
     }
     catch (Chess_loop_exit_request e) {
-        game_loop_.exit(0);
+        this->exit_game_loop();
         return;
     }
     System::post_event(chess_move_request_event(*this, m));
@@ -137,25 +147,21 @@ const Chess_engine& Chessboard_widget::engine() const { return engine_; }
 
 namespace slot {
 
-sig::Slot<void()> toggle_show_moves(Chessboard_widget& cbw)
+using cppurses::slot::link_lifetimes;
+
+auto toggle_show_moves(Chessboard_widget& cbw) -> sl::Slot<void()>
 {
-    sig::Slot<void()> slot{[&cbw] { cbw.toggle_show_moves(); }};
-    slot.track(cbw.destroyed);
-    return slot;
+    return link_lifetimes([&cbw] { cbw.toggle_show_moves(); }, cbw);
 }
 
-sig::Slot<void()> reset_game(Chessboard_widget& cbw)
+auto reset_game(Chessboard_widget& cbw) -> sl::Slot<void()>
 {
-    sig::Slot<void()> slot{[&cbw] { cbw.reset_game(); }};
-    slot.track(cbw.destroyed);
-    return slot;
+    return link_lifetimes([&cbw] { cbw.reset_game(); }, cbw);
 }
 
-sig::Slot<void(Move)> make_move(Chessboard_widget& cbw)
+auto make_move(Chessboard_widget& cbw) -> sl::Slot<void(Move)>
 {
-    sig::Slot<void(Move)> slot{[&cbw](Move m) { cbw.make_move(m); }};
-    slot.track(cbw.destroyed);
-    return slot;
+    return link_lifetimes([&cbw](Move m) { cbw.make_move(m); }, cbw);
 }
 
 }  // namespace slot

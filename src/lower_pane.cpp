@@ -1,8 +1,11 @@
 #include "lower_pane.hpp"
 
+#include <signals_light/signal.hpp>
+
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph.hpp>
 #include <cppurses/painter/trait.hpp>
+#include <cppurses/widget/detail/link_lifetimes.hpp>
 #include <cppurses/widget/pipe.hpp>
 
 #include "chessboard_widget.hpp"
@@ -37,13 +40,12 @@ void Lower_pane::toggle_status(const Chessboard_widget& board)
 
 namespace slot {
 
-sig::Slot<void(Move)> toggle_status(Lower_pane& lp,
-                                    const Chessboard_widget& board)
+using cppurses::slot::link_lifetimes;
+
+auto toggle_status(Lower_pane& lp, const Chessboard_widget& board)
+    -> sl::Slot<void(Move)>
 {
-    auto slot = sig::Slot<void(Move)>{[&](Move) { lp.toggle_status(board); }};
-    slot.track(lp.destroyed);
-    slot.track(board.destroyed);
-    return slot;
+    return link_lifetimes([&](Move) { lp.toggle_status(board); }, lp, board);
 }
 
 }  // namespace slot

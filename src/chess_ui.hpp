@@ -3,7 +3,7 @@
 #include <cppurses/widget/layouts/stack.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
 
-#include <signals/slot.hpp>
+#include <signals_light/signal.hpp>
 
 #include "chessboard_borders.hpp"
 #include "lower_pane.hpp"
@@ -49,7 +49,8 @@ class Chess_UI : public cppurses::layout::Horizontal<> {
 
 namespace slot {
 
-sig::Slot<void()> toggle_logs(Chess_UI& cfui);
+auto toggle_logs(Chess_UI& cfui) -> sl::Slot<void()>;
 
 }  // namespace slot
+
 #endif  // CHESS_UI_HPP

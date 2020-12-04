@@ -1,5 +1,7 @@
 #ifndef LOWER_PANE_HPP
 #define LOWER_PANE_HPP
+#include <signals_light/signal.hpp>
+
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/layouts/horizontal.hpp>
@@ -7,8 +9,6 @@
 #include <cppurses/widget/widgets/button.hpp>
 #include <cppurses/widget/widgets/status_bar.hpp>
 #include <cppurses/widget/widgets/tile.hpp>
-
-#include <signals/slot.hpp>
 
 #include "chessboard_widget.hpp"
 #include "move_input.hpp"
@@ -33,8 +33,8 @@ class Lower_pane : public cppurses::layout::Horizontal<> {
 
 namespace slot {
 
-sig::Slot<void(Move)> toggle_status(Lower_pane& lp,
-                                    const Chessboard_widget& board);
+auto toggle_status(Lower_pane& lp, const Chessboard_widget& board)
+    -> sl::Slot<void(Move)>;
 
 }  // namespace slot
 #endif  // LOWER_PANE_HPP

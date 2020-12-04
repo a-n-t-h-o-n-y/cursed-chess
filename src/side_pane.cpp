@@ -2,10 +2,13 @@
 
 #include <sstream>
 
+#include <signals_light/signal.hpp>
+
 #include <cppurses/painter/color.hpp>
 #include <cppurses/painter/glyph.hpp>
 #include <cppurses/painter/trait.hpp>
 #include <cppurses/widget/border.hpp>
+#include <cppurses/widget/detail/link_lifetimes.hpp>
 #include <cppurses/widget/focus_policy.hpp>
 
 #include "chessboard_widget.hpp"
@@ -147,49 +150,39 @@ void Side_pane::post_stalemate_message()
 
 namespace slot {
 
-sig::Slot<void(Move)> post_move_message(Side_pane& sp)
+using cppurses::slot::link_lifetimes;
+
+auto post_move_message(Side_pane& sp) -> sl::Slot<void(Move)>
 {
-    sig::Slot<void(Move)> slot{[&sp](Move m) { sp.post_move_message(m); }};
-    slot.track(sp.destroyed);
-    return slot;
+    return link_lifetimes([&sp](Move m) { sp.post_move_message(m); }, sp);
 }
 
-sig::Slot<void(Move)> toggle_status(Side_pane& sp,
-                                    const Chessboard_widget& board)
+auto toggle_status(Side_pane& sp, const Chessboard_widget& board)
+    -> sl::Slot<void(Move)>
 {
-    sig::Slot<void(Move)> slot{
-        [&sp, &board](Move) { sp.toggle_status(board); }};
-    slot.track(sp.destroyed);
-    slot.track(board.destroyed);
-    return slot;
+    return link_lifetimes([&sp, &board](Move) { sp.toggle_status(board); }, sp,
+                          board);
 }
 
-sig::Slot<void(Piece)> post_capture_message(Side_pane& sp)
+auto post_capture_message(Side_pane& sp) -> sl::Slot<void(Piece)>
 {
-    sig::Slot<void(Piece)> slot{[&sp](Piece p) { sp.post_capture_message(p); }};
-    slot.track(sp.destroyed);
-    return slot;
+    return link_lifetimes([&sp](Piece p) { sp.post_capture_message(p); }, sp);
 }
 
-sig::Slot<void(const Move&)> post_invalid_move_message(Side_pane& sp)
+auto post_invalid_move_message(Side_pane& sp) -> sl::Slot<void(const Move&)>
 {
-    sig::Slot<void(const Move&)> slot{
-        [&sp](const Move& m) { sp.post_invalid_move_message(m); }};
-    slot.track(sp.destroyed);
-    return slot;
+    return link_lifetimes(
+        [&sp](const Move& m) { sp.post_invalid_move_message(m); }, sp);
 }
 
-sig::Slot<void(Side)> post_checkmate_message(Side_pane& sp)
+auto post_checkmate_message(Side_pane& sp) -> sl::Slot<void(Side)>
 {
-    sig::Slot<void(Side)> slot{[&sp](Side s) { sp.post_checkmate_message(s); }};
-    slot.track(sp.destroyed);
-    return slot;
+    return link_lifetimes([&sp](Side s) { sp.post_checkmate_message(s); }, sp);
 }
 
-sig::Slot<void(Side)> post_check_message(Side_pane& sp)
+auto post_check_message(Side_pane& sp) -> sl::Slot<void(Side)>
 {
-    sig::Slot<void(Side)> slot{[&sp](Side s) { sp.post_check_message(s); }};
-    slot.track(sp.destroyed);
-    return slot;
+    return link_lifetimes([&sp](Side s) { sp.post_check_message(s); }, sp);
 }
+
 }  // namespace slot

@@ -4,7 +4,9 @@
 #include <mutex>
 #include <vector>
 
-#include <signals/signal.hpp>
+#include <signals_light/signal.hpp>
+
+#include <cppurses/widget/detail/link_lifetimes.hpp>
 
 #include "piece.hpp"
 #include "player.hpp"
@@ -48,14 +50,16 @@ class Chess_engine {
     Positions get_valid_positions(Position position) const;
 
     // Signals
-    sig::Signal<void(const Move&)> move_made;
-    sig::Signal<void(const Move&)> invalid_move;
-    sig::Signal<void(Piece)> capture;
-    sig::Signal<void(chess::Side)> checkmate;
-    sig::Signal<void(chess::Side)> check;
-    sig::Signal<void()> stalemate;
+    sl::Signal<void(const Move&)> move_made;
+    sl::Signal<void(const Move&)> invalid_move;
+    sl::Signal<void(Piece)> capture;
+    sl::Signal<void(chess::Side)> checkmate;
+    sl::Signal<void(chess::Side)> check;
+    sl::Signal<void()> stalemate;
 
     mutable std::recursive_mutex mtx;
+
+    sl::Lifetime lifetime;
 
    private:
     chess::State state_;
@@ -73,39 +77,43 @@ class Chess_engine {
 // Template Implementations - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename T, typename... Args>
-void Chess_engine::set_player(chess::Side side, Args... args) {
+void Chess_engine::set_player(chess::Side side, Args... args)
+{
     if (side == chess::Side::Black) {
         player_black_ = std::make_unique<T>(*this, std::forward<Args>(args)...);
-    } else if (side == chess::Side::White) {
+    }
+    else if (side == chess::Side::White) {
         player_white_ = std::make_unique<T>(*this, std::forward<Args>(args)...);
     }
 }
 
 template <typename Rule_t, typename... Args>
-void Chess_engine::set_ruleset(Args&&... args) {
+void Chess_engine::set_ruleset(Args&&... args)
+{
     rules_ = std::make_unique<Rule_t>(std::forward<Args>(args)...);
 }
 
 namespace slot {
 
 template <typename Player_t, typename... Args>
-sig::Slot<void()> set_player(Chess_engine& engine,
-                             chess::Side side,
-                             Args&&... args) {
-    sig::Slot<void()> slot{[&engine, side, args...] {
-        engine.set_player<Player_t>(side, std::forward<Args>(args)...);
-    }};
-    slot.track(engine.capture);
-    return slot;
+auto set_player(Chess_engine& engine, chess::Side side, Args&&... args)
+    -> sl::Slot<void()>
+{
+    return cppurses::slot::link_lifetimes(
+        [&engine, side, args...] {
+            engine.set_player<Player_t>(side, std::forward<Args>(args)...);
+        },
+        engine);
 }
 
 template <typename Rule_t, typename... Args>
-sig::Slot<void()> set_ruleset(Chess_engine& engine, Args&&... args) {
-    sig::Slot<void()> slot{[&engine, args...] {
-        engine.set_ruleset<Rule_t>(std::forward<Args>(args)...);
-    }};
-    slot.track(engine.capture);
-    return slot;
+auto set_ruleset(Chess_engine& engine, Args&&... args) -> sl::Slot<void()>
+{
+    return cppurses::slot::link_lifetimes(
+        [&engine, args...] {
+            engine.set_ruleset<Rule_t>(std::forward<Args>(args)...);
+        },
+        engine);
 }
 
 }  // namespace slot

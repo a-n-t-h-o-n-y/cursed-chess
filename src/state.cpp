@@ -46,17 +46,20 @@ typename Board_state::Pieces_t initial_state{
 
 namespace chess {
 
-Piece Board_state::at(Position p) const {
+Piece Board_state::at(Position p) const
+{
     std::lock_guard<std::recursive_mutex> lock{this->mtx};
     return this->pieces.at(p);
 }
 
-bool Board_state::has_piece_at(Position p) const {
+bool Board_state::has_piece_at(Position p) const
+{
     std::lock_guard<std::recursive_mutex> lock{this->mtx};
     return this->pieces.count(p) == 1;
 }
 
-Board_state::Positions_t Board_state::find_all(Figure fig) const {
+Board_state::Positions_t Board_state::find_all(Figure fig) const
+{
     Positions_t results;
     std::lock_guard<std::recursive_mutex> lock{this->mtx};
     for (const auto& pos_piece : this->pieces) {
@@ -67,7 +70,8 @@ Board_state::Positions_t Board_state::find_all(Figure fig) const {
     return results;
 }
 
-Board_state::Positions_t Board_state::find_all(Side side) const {
+Board_state::Positions_t Board_state::find_all(Side side) const
+{
     Positions_t results;
     std::lock_guard<std::recursive_mutex> lock{this->mtx};
     for (const auto& pos_piece : this->pieces) {
@@ -78,7 +82,8 @@ Board_state::Positions_t Board_state::find_all(Side side) const {
     return results;
 }
 
-Board_state::Positions_t Board_state::find_all(Figure fig, Side side) const {
+Board_state::Positions_t Board_state::find_all(Figure fig, Side side) const
+{
     Positions_t results;
     std::lock_guard<std::recursive_mutex> lock{this->mtx};
     for (const auto& pos_piece : this->pieces) {
@@ -89,11 +94,10 @@ Board_state::Positions_t Board_state::find_all(Figure fig, Side side) const {
     return results;
 }
 
-State::State() {
-    this->reset();
-}
+State::State() { this->reset(); }
 
-void State::reset() {
+void State::reset()
+{
     current_side = Side::White;
     board.pieces = initial_state;
     this->board_reset();
