@@ -22,7 +22,7 @@ class Side_pane : public cppurses::layout::Vertical<> {
         Status();
 
         cppurses::Status_bar& status = this->make_child<cppurses::Status_bar>(
-            L" W" | cppurses::Trait::Bold | foreground(cppurses::Color::White));
+            L" W" | cppurses::Trait::Bold | fg(cppurses::Color::White));
 
         cppurses::Button& settings_btn =
             this->make_child<cppurses::Button>("Settings");

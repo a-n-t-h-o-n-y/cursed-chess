@@ -30,11 +30,11 @@ Side_pane::Status::Status()
     status.border.enable();
     status.border.segments.disable_all();
     status.border.segments.west.enable();
-    status.border.segments.west = L'╮'_g | foreground(Color::Blue);
+    status.border.segments.west = L'╮'_g | fg(Color::Blue);
     status.border.segments.south.enable();
     status.border.segments.south.brush.set_foreground(Color::Blue);
     status.border.segments.south_west.enable();
-    status.border.segments.south_west = L'├'_g | foreground(Color::Blue);
+    status.border.segments.south_west = L'├'_g | fg(Color::Blue);
 
     settings_btn.width_policy.preferred(12);
     settings_btn.border.enable();
@@ -46,9 +46,9 @@ Side_pane::Status::Status()
     settings_btn.border.segments.east.enable();
     settings_btn.border.segments.east.brush.set_foreground(Color::Blue);
     settings_btn.border.segments.south_west.enable();
-    settings_btn.border.segments.south_west = L'┴'_g | foreground(Color::Blue);
+    settings_btn.border.segments.south_west = L'┴'_g | fg(Color::Blue);
     settings_btn.border.segments.south_east.enable();
-    settings_btn.border.segments.south_east = L'┴'_g | foreground(Color::Blue);
+    settings_btn.border.segments.south_east = L'┴'_g | fg(Color::Blue);
 
     blank_space.border.enable();
     blank_space.border.segments.disable_all();
@@ -83,15 +83,15 @@ Side_pane::Side_pane()
     move_input.border.segments.north.enable();
     move_input.border.segments.north.brush.set_foreground(Color::Blue);
     move_input.border.segments.north_west.enable();
-    move_input.border.segments.north_west = L'├'_g | foreground(Color::Blue);
+    move_input.border.segments.north_west = L'├'_g | fg(Color::Blue);
 }
 
 void Side_pane::toggle_status(const Chessboard_widget& board)
 {
     if (board.current_side() == Side::Black)
-        status.status.set_text(L" B" | Trait::Bold | foreground(Color::Black));
+        status.status.set_text(L" B" | Trait::Bold | fg(Color::Black));
     else
-        status.status.set_text(L" W" | Trait::Bold | foreground(Color::White));
+        status.status.set_text(L" W" | Trait::Bold | fg(Color::White));
 }
 
 void Side_pane::post_move_message(const Move& m)
@@ -108,9 +108,9 @@ void Side_pane::post_capture_message(Piece p)
     }
     Glyph_string side_str;
     if (p.side == Side::Black)
-        side_str = Glyph_string{"Black", foreground(Color::Black)};
+        side_str = Glyph_string{"Black", fg(Color::Black)};
     else
-        side_str = Glyph_string{"White", foreground(Color::White)};
+        side_str = Glyph_string{"White", fg(Color::White)};
     Glyph_string figure_str{figure_to_text(p.figure)};
     chess_log.post_message(side_str + " " + figure_str + " " + "Captured");
 }
@@ -124,9 +124,9 @@ void Side_pane::post_checkmate_message(Side s)
 {
     Glyph_string side;
     if (s == Side::Black)
-        side = Glyph_string{"Black", foreground(Color::Black)};
+        side = Glyph_string{"Black", fg(Color::Black)};
     else
-        side = Glyph_string{"White", foreground(Color::White)};
+        side = Glyph_string{"White", fg(Color::White)};
     chess_log.post_message("Checkmate");
     chess_log.post_message(side + " Looses");
 }
@@ -135,10 +135,10 @@ void Side_pane::post_check_message(Side s)
 {
     Glyph_string side;
     if (s == Side::Black) {
-        side = Glyph_string{"Black", foreground(Color::Black)};
+        side = Glyph_string{"Black", fg(Color::Black)};
     }
     else {
-        side = Glyph_string{"White", foreground(Color::White)};
+        side = Glyph_string{"White", fg(Color::White)};
     }
     chess_log.post_message(side + " in Check");
 }

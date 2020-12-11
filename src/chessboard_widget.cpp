@@ -168,14 +168,12 @@ auto make_move(Chessboard_widget& cbw) -> sl::Slot<void(Move)>
 
 bool Chessboard_widget::paint_event()
 {
-    // Light Gray Tiles
-    Glyph_string cell1{"   ", background(cppurses::Color::Light_gray)};
-    // Gray Tiles
-    Glyph_string cell2{"   ", background(cppurses::Color::Dark_blue)};
+    auto const cell1 = Glyph_string{"   ", bg(cppurses::Color::Light_gray)};
+    auto const cell2 = Glyph_string{"   ", bg(cppurses::Color::Dark_blue)};
 
     // Checkerboard
-    Painter p{*this};
-    for (int i{0}; i < 4; ++i) {
+    auto p = Painter{*this};
+    for (auto i = 0; i < 4; ++i) {
         p.put(cell1 + cell2 + cell1 + cell2 + cell1 + cell2 + cell1 + cell2, 0,
               i * 2);
         p.put(cell2 + cell1 + cell2 + cell1 + cell2 + cell1 + cell2 + cell1, 0,
@@ -183,26 +181,29 @@ bool Chessboard_widget::paint_event()
     }
 
     // Valid Moves
-    const chess::State& state{engine_.state()};
-    if (show_moves_ and selected_position_.has_value() and
-        state.board.has_piece_at(*selected_position_) and
+    chess::State const& state = engine_.state();
+    if (show_moves_ && selected_position_.has_value() &&
+        state.board.has_piece_at(*selected_position_) &&
         state.board.at(*selected_position_).side == state.current_side) {
-        auto valid_moves = engine_.get_valid_positions(*selected_position_);
-        Glyph_string highlight{"   ", background(cppurses::Color::Light_green)};
+        auto const valid_moves =
+            engine_.get_valid_positions(*selected_position_);
+        auto const highlight =
+            Glyph_string{"   ", bg(cppurses::Color::Light_green)};
         for (Position possible_position : valid_moves) {
-            Position where = board_to_screen_position(possible_position);
+            Position const where = board_to_screen_position(possible_position);
             p.put(highlight, where.row - 1, where.column);
         }
     }
 
     {
-        std::lock_guard<std::recursive_mutex> lock{state.board.mtx};
+        auto const lock =
+            std::lock_guard<std::recursive_mutex>{state.board.mtx};
         for (auto& pos_piece : state.board.pieces) {
-            Position piece_position{pos_piece.first};
-            Glyph piece_visual{piece_to_glyph(pos_piece.second)};
+            auto const piece_position = pos_piece.first;
+            auto piece_visual         = piece_to_glyph(pos_piece.second);
             piece_visual.brush.set_background(get_tile_color(piece_position));
             // TODO change to be Point.
-            Position where = board_to_screen_position(piece_position);
+            auto const where = board_to_screen_position(piece_position);
             p.put(piece_visual, where.row, where.column);
         }
     }
