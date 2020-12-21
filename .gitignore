@@ -1,6 +1,11 @@
-build
+build*/
+out.*/
+.clangd/
+.cache/
 *.json
 *.vim
 *.txt
+*.[ao]
+*.so
 !CMakeLists.txt
 tags
