@@ -1,5 +1,7 @@
 # Cursed Chess
 
+## Temporarily Out of Service
+
 Curses style chess game, built with
 [TermOx](https://github.com/a-n-t-h-o-n-y/CPPurses.git) and [Chess
 Stuff](https://github.com/a-n-t-h-o-n-y/chess-stuff.git).
