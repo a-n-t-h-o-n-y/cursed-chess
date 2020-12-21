@@ -9,15 +9,20 @@
 
 #include "move.hpp"
 
+namespace chess {
+
 class Move_input : public cppurses::Line_edit {
    public:
-    Move_input(cppurses::Glyph_string initial_text);
+    // TODO nothing uses move_request right now.. hook it up.
+    sl::Signal<void(Move)> move_request;
+    sl::Signal<void()> reset_request;
 
-    // Signals
-    sl::Signal<void(Move)> move_requested;
-    sl::Signal<void()> reset_requested;
+   public:
+    Move_input(cppurses::Glyph_string initial_text);
 
    private:
     void process_action(std::string text);
 };
+
+}  // namespace chess
 #endif  // MOVE_INPUT_HPP

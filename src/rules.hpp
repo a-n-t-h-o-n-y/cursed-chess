@@ -7,6 +7,7 @@
 #include "position.hpp"
 #include "state.hpp"
 
+namespace chess {
 struct Move;
 
 class Rules {
@@ -62,4 +63,5 @@ class Rules {
 chess::Side opponent(chess::Side side);
 bool is_valid(Position p);
 
+}  // namespace chess
 #endif  // RULES_HPP

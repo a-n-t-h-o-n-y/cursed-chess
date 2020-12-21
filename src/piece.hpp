@@ -6,6 +6,8 @@
 #include "position.hpp"
 #include "side.hpp"
 
+namespace chess {
+
 struct Piece {
     chess::Figure figure;
     chess::Side side;
@@ -13,4 +15,5 @@ struct Piece {
 
 std::string figure_to_text(chess::Figure f);
 
+}  // namespace chess
 #endif  // CHESS_PIECE_HPP

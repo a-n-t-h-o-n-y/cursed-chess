@@ -4,22 +4,30 @@
 #include <sstream>
 #include <string>
 
-std::string to_text(const Position& pos) {
-    std::stringstream ss;
+namespace chess {
+
+auto to_text(Position pos) -> std::string
+{
+    auto ss = std::stringstream{};
     ss << static_cast<char>(pos.column - 1 + 'a') << pos.row;
     return ss.str();
 }
 
-bool operator==(const Position& p1, const Position& p2) {
+auto operator==(Position p1, Position p2) -> bool
+{
     return p1.row == p2.row and p1.column == p2.column;
 }
 
+}  // namespace chess
+
 namespace std {
-typename hash<Position>::result_type hash<Position>::operator()(
-    const argument_type& position) const noexcept {
-    const result_type h1(std::hash<decltype(position.row)>{}(position.row));
-    const result_type h2(
-        std::hash<decltype(position.column)>{}(position.column));
+
+auto hash<chess::Position>::operator()(argument_type position) const noexcept ->
+    typename hash<chess::Position>::result_type
+{
+    auto const h1 = std::hash<decltype(position.row)>{}(position.row);
+    auto const h2 = std::hash<decltype(position.column)>{}(position.column);
     return h1 ^ (h2 << 1);
 }
+
 }  // namespace std

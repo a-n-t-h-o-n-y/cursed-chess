@@ -11,9 +11,8 @@
 #include "side.hpp"
 #include "state.hpp"
 
-using namespace chess;
-
 namespace {
+using namespace chess;
 
 Position current_king_pos(const chess::State& state)
 {
@@ -26,6 +25,8 @@ Position current_king_pos(const chess::State& state)
 }
 
 }  // namespace
+
+namespace chess {
 
 bool Rules::validate(const chess::State& state, const Move& move) const
 {
@@ -112,3 +113,5 @@ bool is_valid(Position p)
     bool column_valid{p.column >= 1 and p.column <= 8};
     return row_valid and column_valid;
 }
+
+}  // namespace chess

@@ -1,16 +1,24 @@
 #ifndef CHESS_PLAYER_HUMAN_HPP
 #define CHESS_PLAYER_HUMAN_HPP
-#include "player.hpp"
+#include <mutex>
 
-class Chess_engine;
+#include "move.hpp"
+#include "player.hpp"
+#include "shared_user_input.hpp"
 
 namespace chess {
-
-class Player_human : public Player {
-   public:
-    Player_human(const Chess_engine& engine);
-    Move get_move() override;
-};
-
+class Chess_engine;
 }  // namespace chess
+
+namespace chess::player {
+
+inline auto human() -> Player
+{
+    return {"Human", [](Chess_engine const&) {
+                auto lock = std::unique_lock{Shared_user_input::move.mtx};
+                return Shared_user_input::move.get(lock);
+            }};
+}
+
+}  // namespace chess::player
 #endif  // CHESS_PLAYER_HUMAN_HPP

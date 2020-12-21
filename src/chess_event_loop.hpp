@@ -2,12 +2,12 @@
 #define CHESS_CHESS_EVENT_LOOP_HPP
 #include <cppurses/system/event_loop.hpp>
 
-class Chessboard_widget;
 namespace chess {
+class Chessboard_widget;
 
 class Chess_event_loop : public cppurses::Event_loop {
    public:
-    Chess_event_loop(Chessboard_widget& cbw);
+    Chess_event_loop(Chessboard_widget& cbw) : chessboard_widget_{cbw} {}
 
    protected:
     /// Run on each iteration of the event loop.

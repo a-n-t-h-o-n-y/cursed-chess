@@ -4,6 +4,8 @@
 
 #include "position.hpp"
 
+namespace chess {
+
 struct Move {
     Position from;
     Position to;
@@ -11,4 +13,5 @@ struct Move {
 
 std::string move_to_text(const Move& m);
 
+}  // namespace chess
 #endif  // MOVE_HPP

@@ -8,6 +8,7 @@
 
 namespace {
 using namespace chess;
+
 typename Board_state::Pieces_t initial_state{
     {{2, 1}, {Figure::Pawn, Side::White}},
     {{2, 2}, {Figure::Pawn, Side::White}},

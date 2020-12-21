@@ -5,7 +5,7 @@
 int main() {
     using namespace cppurses;
     System sys;
-    Chess_UI w;
+    chess::Chess_UI w;
     sys.set_head(&w);
     return sys.run();
 }

@@ -1,18 +1,19 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+#include <functional>
+#include <string>
+
 #include "move.hpp"
 
+namespace chess {
 class Chess_engine;
 
-class Player {
-   public:
-    Player(const Chess_engine& engine) : engine_{engine} {}
-    virtual ~Player() = default;
-
-    virtual Move get_move() = 0;
-
-   protected:
-    const Chess_engine& engine_;
+/// A Player is a move generator.
+// TODO maybe rename it to Move_generator?
+struct Player {
+    std::string name;
+    std::function<Move(Chess_engine const&)> get_move;
 };
 
+}  // namespace chess
 #endif  // PLAYER_HPP

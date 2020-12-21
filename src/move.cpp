@@ -3,7 +3,10 @@
 #include <sstream>
 #include <string>
 
-std::string move_to_text(const Move& m) {
+namespace chess {
+
+std::string move_to_text(const Move& m)
+{
     std::stringstream ss;
     ss << static_cast<char>(m.from.column + 'a' - 1);
     ss << m.from.row;
@@ -11,3 +14,5 @@ std::string move_to_text(const Move& m) {
     ss << m.to.row;
     return ss.str();
 }
+
+}  // namespace chess

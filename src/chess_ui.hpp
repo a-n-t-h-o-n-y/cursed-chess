@@ -1,56 +1,42 @@
 #ifndef CHESS_UI_HPP
 #define CHESS_UI_HPP
+#include <cppurses/widget/detail/link_lifetimes.hpp>
+#include <cppurses/widget/layouts/float.hpp>
+#include <cppurses/widget/layouts/horizontal.hpp>
 #include <cppurses/widget/layouts/stack.hpp>
 #include <cppurses/widget/layouts/vertical.hpp>
 
 #include <signals_light/signal.hpp>
 
-#include "chessboard_borders.hpp"
+#include "bordered_chessboard.hpp"
 #include "lower_pane.hpp"
 #include "settings_pane.hpp"
-#include "side_pane.hpp"
+
+namespace chess {
 
 class Left_side : public cppurses::layout::Vertical<> {
-    struct Board_and_settings
-        : cppurses::layout::Stack<cppurses::layout::Vertical<>> {
+   private:
+    class Board_and_settings
+        : public cppurses::layout::Stack<cppurses::layout::Vertical<>> {
+       public:
         Board_and_settings();
 
-        Chessboard_with_borders& board{
-            this->make_page<Chessboard_with_borders>()};
-        Settings_pane& settings{this->make_page<Settings_pane>()};
+       public:
+        Bordered_chessboard& board = make_page<Bordered_chessboard>();
+        Settings_pane& settings    = make_page<Settings_pane>();
     };
 
    public:
-    Left_side();
+    Board_and_settings& board_and_settings = make_child<Board_and_settings>();
+    Lower_pane& lower_pane                 = make_child<Lower_pane>();
 
-    void enable(bool enable                    = true,
-                bool post_child_polished_event = true) override;
-
-    Board_and_settings& board_and_settings{
-        this->make_child<Board_and_settings>()};
-    Lower_pane& lower_pane{this->make_child<Lower_pane>()};
-
-    bool lower_pane_enabled{false};
-};
-
-class Chess_UI : public cppurses::layout::Horizontal<> {
    public:
-    Chess_UI();
-
-    void toggle_logs();
-
-    void enable(bool enable                    = true,
-                bool post_child_polished_event = true) override;
-
-   private:
-    Left_side& left_side{this->make_child<Left_side>()};
-    Side_pane& right_side{this->make_child<Side_pane>()};
+    Left_side();
 };
 
-namespace slot {
+using Chess_UI =
+    cppurses::Float<cppurses::Float<Left_side, cppurses::layout::Horizontal>,
+                    cppurses::layout::Vertical>;
 
-auto toggle_logs(Chess_UI& cfui) -> sl::Slot<void()>;
-
-}  // namespace slot
-
+}  // namespace chess
 #endif  // CHESS_UI_HPP

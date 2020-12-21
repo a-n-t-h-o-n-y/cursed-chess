@@ -4,6 +4,8 @@
 #include "rules.hpp"
 #include "state.hpp"
 
+namespace chess {
+
 class No_rules : public Rules {
    protected:
     Positions get_bishop_moves(const chess::State& state,
@@ -20,4 +22,5 @@ class No_rules : public Rules {
                              Position position) const override;
 };
 
+}  // namespace chess
 #endif  // NO_RULES_HPP

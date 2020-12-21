@@ -10,46 +10,50 @@
 using namespace cppurses;
 
 namespace {
+using namespace chess;
 
-Move text_to_move(const std::string& request_text)
+auto text_to_move(std::string const& request_text) -> Move
 {
-    if (request_text.size() != 4) {
+    if (request_text.size() != 4)
         return Move{};
-    }
-    Position from;
-    Position to;
+    auto from   = Position{};
+    auto to     = Position{};
     from.column = request_text[0] - '`';
     from.row    = request_text[1] - '0';
     to.column   = request_text[2] - '`';
     to.row      = request_text[3] - '0';
-    return Move{from, to};
+    return {from, to};
 }
 
 }  // namespace
 
+namespace chess {
+
 Move_input::Move_input(Glyph_string initial_text)
     : Line_edit{std::move(initial_text)}
 {
+    using namespace cppurses::pipe;
+
+    *this | Trait::Underline | wallpaper(L' ' | Trait::Underline);
+
     this->clear_on_enter();
-    this->brush.add_traits(Trait::Underline);
-    this->set_wallpaper(L' ' | Trait::Underline);
     this->edit_finished.connect(
         [this](std::string text) { process_action(text); });
     this->set_validator(
-        [](char c) { return !std::ispunct(c) and !std::isspace(c); });
+        [](char c) { return !std::ispunct(c) && !std::isspace(c); });
 }
 
 void Move_input::process_action(std::string text)
 {
-    for (char& c : text) {
+    for (char& c : text)
         c = std::tolower(c);
-    }
-    if (text == "reset") {
-        reset_requested();
-    }
+    if (text == "reset")
+        reset_request();
     else {
-        Move m{text_to_move(text)};
+        auto const m = text_to_move(text);
         chess::Shared_user_input::move.set(m);
-        move_requested(m);
+        move_request(m);
     }
 }
+
+}  // namespace chess

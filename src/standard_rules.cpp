@@ -17,6 +17,8 @@ Side side_at(const chess::State& state, Position position)
 
 }  // namespace
 
+namespace chess {
+
 // Piece Rules - - - - - - -
 // BISHOP - - - - - - -
 typename Rules::Positions Standard_rules::get_bishop_moves(
@@ -421,3 +423,5 @@ typename Rules::Positions Standard_rules::get_rook_moves(
     }
     return valid_moves;
 }
+
+}  // namespace chess
